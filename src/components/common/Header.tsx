@@ -20,22 +20,12 @@ export default function Header() {
 
   return (
     <StyledHeader>
-      <div>
-        {userInfo.nickname ? (
-          <>
-            <button>{userInfo.nickname}</button>
-            <button onClick={handleLogout}>로그아웃</button>
-          </>
-        ) : (
-          <>
-            <button className="mobile" onClick={() => navigate("/m/login")}>
-              로그인
-            </button>
-            <button className="desktop" onClick={() => navigate("/login")}>
-              로그인
-            </button>
-          </>
-        )}
+      <div className="LogoWrapper">LOGO</div>
+
+      <div className="UserWrapper">
+        <button>{userInfo.nickname} 님</button>
+        알림
+        <button onClick={handleLogout}>로그아웃</button>
       </div>
     </StyledHeader>
   );
@@ -43,8 +33,11 @@ export default function Header() {
 
 const StyledHeader = styled.header`
   padding: 0 32px;
-  height: 32px;
-  background: linear-gradient(90deg, #9cafe2 0%, #aac9ee 100%);
+  //width: 100%;
+  height: 80px;
+  background: #ffffff;
+  box-shadow: 0px 4px 20px rgba(28, 28, 27, 0.1);
+
   display: flex;
   justify-content: space-between;
 
@@ -67,14 +60,13 @@ const StyledHeader = styled.header`
     color: white;
     padding: 0;
   }
-  .mobile {
-    @media (min-width: 1024px) {
-      display: none;
-    }
+
+  .LogoWrapper {
+    display: flex;
+    flex-direction: row;
+    font-size: 30px;
+    font-weight: bolder;
   }
-  .desktop {
-    @media (max-width: 1024px) {
-      display: none;
-    }
+  .UserWrapper {
   }
 `;

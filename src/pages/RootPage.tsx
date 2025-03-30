@@ -1,6 +1,6 @@
-import Footer from "../components/common/Footer";
+// import Footer from "../components/common/Footer";
 import Header from "../components/common/Header";
-import Nav from "../components/common/Nav";
+// import Nav from "../components/common/Nav";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
@@ -8,16 +8,17 @@ export default function RootPage() {
   return (
     <RootPageWrapper>
       <Header />
-      <Nav />
-      <main style={{ minHeight: 1024 }}>
+      {/*<Nav />*/}
+      <main style={{ width: "100%", height: "100%" }}>
         <Outlet />
       </main>
-      <Footer />
+      {/*<Footer />*/}
     </RootPageWrapper>
   );
 }
 
 const RootPageWrapper = styled.div`
-  width: 1440px;
-  margin: auto;
+  width: 100%;
+  height: 100%;
+  //margin: auto;
 `;

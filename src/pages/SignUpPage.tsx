@@ -1,15 +1,15 @@
 import styled from "styled-components";
-import LoginBox from "../components/login/LoginBox.tsx";
+import SignUpBox from "../components/signup/SignUpBox.tsx";
 
 export default function LoginPage() {
   return (
-    <LoginPageWrapper>
-      <LoginBox />
-    </LoginPageWrapper>
+    <SignUpPageWrapper>
+      <SignUpBox />
+    </SignUpPageWrapper>
   );
 }
 
-const LoginPageWrapper = styled.div`
+const SignUpPageWrapper = styled.div`
   width: 100vw;
   height: 100vh;
 
