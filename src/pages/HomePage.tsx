@@ -1,32 +1,62 @@
 import styled from "styled-components";
-import Card from "../components/home/Card";
-import StudentInfo from "../components/home/StudentInfo.tsx";
+import Card from "../components/common/Card.tsx";
+import SearchStudent from "../components/home/SearchStudent";
+import ListHeader from "../components/home/ListHeader";
+import StudentList from "../components/home/StudentList.tsx";
+import UserInfo from "../components/home/UserInfo";
 
 export default function HomePage() {
   return (
     <HomePageWrapper>
-      <Card cardtitle={"학생 정보"}>
-        <StudentInfo
-          name={"배현준"}
-          school={"인천해원고등학교"}
-          grade={3}
-          classnum={4}
-          number={10}
+      <LeftContentWrapper>
+        <Card
+          cardtitle={"학생 리스트 검색"}
+          contentChildren={<SearchStudent />}
         />
-      </Card>
-      <Card cardtitle={"특기 사항"} />
-      <Card cardtitle={"성적"} />
-      <Card cardtitle={"피드백"} />
+        <Card
+          cardtitle={"학생 리스트"}
+          headerChildren={<ListHeader />}
+          contentChildren={<StudentList />}
+        />
+      </LeftContentWrapper>
+      <RightContentWrapper>
+        <Card
+          cardtitle={"교사 정보"}
+          contentChildren={
+            <UserInfo
+              name="배현준"
+              school="광휘고등학교"
+              grade={3}
+              classnum={4}
+              number={5}
+            />
+          }
+        />
+      </RightContentWrapper>
     </HomePageWrapper>
   );
 }
 
 const HomePageWrapper = styled.div`
   padding: 25px 32px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
   width: 100%;
   height: 100%;
+  box-sizing: border-box;
+`;
+
+const LeftContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  gap: 30px;
+  box-sizing: border-box;
+`;
+const RightContentWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
 `;

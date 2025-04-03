@@ -7,7 +7,7 @@ interface StudentInfoProps {
   classnum: number;
   number: number;
 }
-const StudentInfo = ({
+const UserInfo = ({
   name,
   school,
   grade,
@@ -15,43 +15,29 @@ const StudentInfo = ({
   number,
 }: StudentInfoProps) => {
   return (
-    <StudentInfoWrapper>
+    <UserInfoWrapper>
       <ProfileImage />
-      <RightContent>
-        <span className="name">{name}</span>
-        <br />
-        <span className="info">
-          <span style={{ color: "#FFB608" }}>{school}</span> {grade}학년{" "}
-          {classnum}반 {number}번
-        </span>
-      </RightContent>
-    </StudentInfoWrapper>
+      <span className="name">{name}</span>
+      <span className="info">
+        <span style={{ color: "#FFB608" }}>{school}</span> {grade}학년{" "}
+        {classnum}반 {number}번
+      </span>
+    </UserInfoWrapper>
   );
 };
 
-export default StudentInfo;
+export default UserInfo;
 
-const StudentInfoWrapper = styled.div`
+const UserInfoWrapper = styled.div`
   width: 100%;
   height: 100%;
-  padding: 12px 20px;
-
-  display: flex;
-  flex-direction: row;
-  gap: 32px;
-`;
-
-const ProfileImage = styled.img`
-  background-color: #763636;
-  width: 102px;
-  height: 102px;
-  border-radius: 50%;
-`;
-const RightContent = styled.div`
+  padding: 12px 0;
   display: flex;
   flex-direction: column;
+  gap: 20px;
+
+  align-items: center;
   justify-content: center;
-  align-items: flex-start;
 
   .name {
     font-style: normal;
@@ -73,4 +59,11 @@ const RightContent = styled.div`
 
     color: #333333;
   }
+`;
+
+const ProfileImage = styled.img`
+  background-color: #763636;
+  width: 102px;
+  height: 102px;
+  border-radius: 50%;
 `;

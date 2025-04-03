@@ -4,10 +4,11 @@ import { getMembers } from "./apis/members";
 import useUserStore from "./stores/useUserStore";
 // import ScrollBarStyles from "resources/styles/ScrollBarStyles";
 import RootPage from "./pages/RootPage";
-import HomePage from "./pages/HomePage";
+import StudentLobbyPage from "./pages/StudentLobbyPage.tsx";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import ChildRegisterPage from "./pages/ChildRegisterPage.tsx";
+import HomePage from "./pages/HomePage.tsx";
 
 function App() {
   const location = useLocation();
@@ -65,7 +66,8 @@ function App() {
         <Route path="/childregister" element={<ChildRegisterPage />} />
 
         <Route path="/" element={<RootPage />}>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/studentlobby" element={<StudentLobbyPage />} />
         </Route>
       </Routes>
     </>
