@@ -6,9 +6,27 @@ import GradeList from "../components/studentlobby/GradeList.tsx";
 import FeedbackList from "../components/studentlobby/FeedbackList.tsx";
 import ConsultList from "../components/studentlobby/ConsultList.tsx";
 
+import StudentInfoModal from "../components/Modal/StudentInfoModal.tsx";
+import { useState } from "react";
+
 export default function StudentLobbyPage() {
+  const [isOpenStudentInfoModal, setIsOpenStudentInfoModal] = useState(false);
   return (
     <HomePageWrapper>
+      {isOpenStudentInfoModal && (
+        <StudentInfoModal
+          onClose={() => {
+            setIsOpenStudentInfoModal(false);
+          }}
+        />
+      )}
+      <div
+        onClick={() => {
+          setIsOpenStudentInfoModal(true);
+        }}
+      >
+        열기
+      </div>
       <Card
         cardtitle={"학생 정보"}
         contentChildren={
@@ -20,7 +38,8 @@ export default function StudentLobbyPage() {
             number={10}
           />
         }
-      />
+      ></Card>
+
       <Card cardtitle={"특기 사항"} contentChildren={<SpecialNoteList />} />
       <Card cardtitle={"성적"} contentChildren={<GradeList />} />
       <Card cardtitle={"출결"} />
