@@ -7,44 +7,61 @@ import FeedbackList from "../components/studentlobby/FeedbackList.tsx";
 import ConsultList from "../components/studentlobby/ConsultList.tsx";
 
 import StudentInfoModal from "../components/Modal/StudentInfoModal.tsx";
+import ReportCreateModal from "../components/Modal/ReportCreateModal.tsx";
+import FeedBackModal from "../components/Modal/FeedBack/FeedBackModal.tsx";
 import { useState } from "react";
+import ConsultModal from "../components/Modal/Consult/ConsultModal.tsx";
 
 export default function StudentLobbyPage() {
-  const [isOpenStudentInfoModal, setIsOpenStudentInfoModal] = useState(false);
+  const [openModal, setOpenModal] = useState<string | null>(null);
+
+  const closeModal = () => setOpenModal(null);
+
   return (
     <HomePageWrapper>
-      {isOpenStudentInfoModal && (
-        <StudentInfoModal
-          onClose={() => {
-            setIsOpenStudentInfoModal(false);
-          }}
-        />
+      {/* 모달들 */}
+      {openModal === "studentInfo" && <StudentInfoModal onClose={closeModal} />}
+      {openModal === "specialNote" && (
+        <ReportCreateModal onClose={closeModal} />
       )}
-      <div
-        onClick={() => {
-          setIsOpenStudentInfoModal(true);
-        }}
-      >
-        열기
-      </div>
-      <Card
-        cardtitle={"학생 정보"}
-        contentChildren={
-          <StudentInfo
-            name={"배현준"}
-            school={"인천해원고등학교"}
-            grade={3}
-            classnum={4}
-            number={10}
-          />
-        }
-      ></Card>
+      {openModal === "feedback" && <FeedBackModal onClose={closeModal} />}
+      {openModal === "consult" && <ConsultModal onClose={closeModal} />}
 
-      <Card cardtitle={"특기 사항"} contentChildren={<SpecialNoteList />} />
-      <Card cardtitle={"성적"} contentChildren={<GradeList />} />
-      <Card cardtitle={"출결"} />
-      <Card cardtitle={"피드백"} contentChildren={<FeedbackList />} />
-      <Card cardtitle={"상담 내역"} contentChildren={<ConsultList />} />
+      {/* 카드들 */}
+      <div onClick={() => setOpenModal("studentInfo")}>
+        <Card
+          cardtitle={"학생 정보"}
+          contentChildren={
+            <StudentInfo
+              name={"배현준"}
+              school={"인천해원고등학교"}
+              grade={3}
+              classnum={4}
+              number={10}
+            />
+          }
+        />
+      </div>
+
+      <div onClick={() => setOpenModal("specialNote")}>
+        <Card cardtitle={"특기 사항"} contentChildren={<SpecialNoteList />} />
+      </div>
+
+      <div>
+        <Card cardtitle={"성적"} contentChildren={<GradeList />} />
+      </div>
+
+      <div>
+        <Card cardtitle={"출결"} />
+      </div>
+
+      <div onClick={() => setOpenModal("feedback")}>
+        <Card cardtitle={"피드백"} contentChildren={<FeedbackList />} />
+      </div>
+
+      <div onClick={() => setOpenModal("consult")}>
+        <Card cardtitle={"상담 내역"} contentChildren={<ConsultList />} />
+      </div>
     </HomePageWrapper>
   );
 }

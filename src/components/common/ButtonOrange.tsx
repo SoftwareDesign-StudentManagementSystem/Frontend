@@ -20,4 +20,13 @@ const ButtonOrangeWrapper = styled.button`
 
   background: #ffb608;
   border-radius: 6px;
+
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 150%;
+  /* identical to box height, or 24px */
+  text-transform: capitalize;
+
+  color: #ffffff;
 `;

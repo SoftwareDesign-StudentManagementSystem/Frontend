@@ -1,154 +1,117 @@
 import styled from "styled-components";
 import 횃불이 from "../../assets/횃불이.svg";
 import { useState } from "react";
+import ButtonOrange from "../common/ButtonOrange";
+import ButtonWhite from "../common/ButtonWhite";
+import Modal from "./Modal";
 
 const StudentInfoModal = ({ onClose }: { onClose: () => void }) => {
+  return (
+    <Modal
+      title={"학생 정보"}
+      content={<StudentInfoModalContent />}
+      onClose={onClose}
+    ></Modal>
+  );
+};
+export default StudentInfoModal;
+
+const StudentInfoModalContent = () => {
   const [grade, setGrade] = useState("");
   const [classnum, setClassnum] = useState("");
   const [studentid, setStudentid] = useState("");
   const [name, setName] = useState("");
 
   return (
-    <Overlay onClick={onClose}>
-      <ModalWrapper onClick={(e) => e.stopPropagation()}>
-        <ModalHeader>
-          <h2>학생 정보</h2>
-          <CloseButton onClick={onClose}>✖</CloseButton>
-        </ModalHeader>
-        <ContentWrapper>
-          <ContentLeft>
-            <UserImage src={횃불이} alt="학생 이미지" />
-          </ContentLeft>
-          <ContentRight>
-            <HorizontalLineWrapper>
-              <div className="inputWrapper">
-                <div className="inputtitle">이름</div>
-                <InputBox
-                  placeholder="이름"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-            </HorizontalLineWrapper>
+    <>
+      <ContentLeft>
+        <UserImage src={횃불이} alt="학생 이미지" />
+      </ContentLeft>
+      <ContentRight>
+        <HorizontalLineWrapper>
+          <div className="inputWrapper">
+            <div className="inputtitle">이름</div>
+            <InputBox
+              placeholder="이름"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={{ width: "100%" }}
+            />
+          </div>
+        </HorizontalLineWrapper>
 
-            <HorizontalLineWrapper>
-              <div className="inputWrapper">
-                <div className="inputtitle">학년</div>
-                <InputBox
-                  placeholder="학년"
-                  value={grade}
-                  onChange={(e) => setGrade(e.target.value)}
-                />
-              </div>
-              <div className="inputWrapper">
-                <div className="inputtitle">반</div>
-                <InputBox
-                  placeholder="반"
-                  value={classnum}
-                  onChange={(e) => setClassnum(e.target.value)}
-                />
-              </div>
-              <div className="inputWrapper">
-                <div className="inputtitle">번호</div>
-                <InputBox
-                  placeholder="번호"
-                  value={studentid}
-                  onChange={(e) => setStudentid(e.target.value)}
-                />
-              </div>
-            </HorizontalLineWrapper>
-            <HorizontalLineWrapper>
-              <div className="inputWrapper">
-                <div className="inputtitle">생년월일</div>
-                <InputBox
-                  placeholder="년"
-                  value={grade}
-                  onChange={(e) => setGrade(e.target.value)}
-                />
-              </div>
-              <div className="inputWrapper">
-                <div className="inputtitle">_</div>
-                <InputBox
-                  placeholder="월"
-                  value={classnum}
-                  onChange={(e) => setClassnum(e.target.value)}
-                />
-              </div>
-              <div className="inputWrapper">
-                <div className="inputtitle">_</div>
-                <InputBox
-                  placeholder="일"
-                  value={studentid}
-                  onChange={(e) => setStudentid(e.target.value)}
-                />
-              </div>
-            </HorizontalLineWrapper>
-          </ContentRight>
-        </ContentWrapper>
-      </ModalWrapper>
-    </Overlay>
+        <HorizontalLineWrapper>
+          <div className="inputWrapper">
+            <div className="inputtitle">학년</div>
+            <InputBox
+              placeholder="학년"
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
+            />
+          </div>
+          <div className="inputWrapper">
+            <div className="inputtitle">반</div>
+            <InputBox
+              placeholder="반"
+              value={classnum}
+              onChange={(e) => setClassnum(e.target.value)}
+            />
+          </div>
+          <div className="inputWrapper">
+            <div className="inputtitle">번호</div>
+            <InputBox
+              placeholder="번호"
+              value={studentid}
+              onChange={(e) => setStudentid(e.target.value)}
+            />
+          </div>
+        </HorizontalLineWrapper>
+        <HorizontalLineWrapper>
+          <div className="inputWrapper">
+            <div className="inputtitle">생년월일</div>
+            <InputBox
+              placeholder="년"
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
+            />
+          </div>
+          <div className="inputWrapper">
+            <div className="inputtitle">_</div>
+            <InputBox
+              placeholder="월"
+              value={classnum}
+              onChange={(e) => setClassnum(e.target.value)}
+            />
+          </div>
+          <div className="inputWrapper">
+            <div className="inputtitle">_</div>
+            <InputBox
+              placeholder="일"
+              value={studentid}
+              onChange={(e) => setStudentid(e.target.value)}
+            />
+          </div>
+        </HorizontalLineWrapper>
+        <HorizontalLineWrapper>
+          <ButtonOrange text={"학생 정보 수정"} />
+          <ButtonWhite text={"닫기"} />
+        </HorizontalLineWrapper>
+      </ContentRight>
+    </>
   );
 };
 
-export default StudentInfoModal;
-
-// 모달 배경 (오버레이)
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`;
-
-// 모달 컨테이너
-const ModalWrapper = styled.div`
-  width: fit-content;
-  height: fit-content;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  position: relative;
-`;
-
-// 모달 헤더 (제목 + 닫기 버튼)
-const ModalHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-`;
-
-// 닫기 버튼
-const CloseButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-`;
-
-// 콘텐츠 컨테이너
-const ContentWrapper = styled.div`
-  display: flex;
-  gap: 20px;
-`;
-
 // 왼쪽 영역
 const ContentLeft = styled.div`
-  width: 200px;
+  width: fit-content;
   height: 100%;
-  overflow: hidden;
+  //background: red;
+  //overflow: hidden;
 `;
 
 // 사용자 이미지
 const UserImage = styled.img`
-  width: 100%;
+  //width: 100%;
   height: 100%;
   object-fit: cover;
 `;
@@ -156,10 +119,16 @@ const UserImage = styled.img`
 // 오른쪽 정보 영역
 const ContentRight = styled.div`
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  //gap: 20px;
+  justify-content: space-between;
+  padding: 10px 15px;
 `;
 
 const InputBox = styled.input`
   flex: 1;
+
   height: 48px;
   background: #ffffff;
   border: 1px solid #dddddd;
@@ -171,9 +140,12 @@ const InputBox = styled.input`
 const HorizontalLineWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  //align-items: center;
+  justify-content: center;
+  align-self: center;
   gap: 8px;
 
+  width: 100%;
   input {
     width: 150px;
   }
@@ -191,5 +163,9 @@ const HorizontalLineWrapper = styled.div`
     font-size: 14px;
     line-height: 150%; /* identical to box height, or 21px */
     color: #808080;
+  }
+
+  button {
+    width: 100%;
   }
 `;

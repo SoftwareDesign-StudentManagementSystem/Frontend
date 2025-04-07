@@ -1,7 +1,13 @@
 import styled from "styled-components";
 
-const ButtonWhite = ({ text }: { text: string }) => {
-  return <ButtonWhiteWrapper>{text}</ButtonWhiteWrapper>;
+const ButtonWhite = ({
+  text,
+  onClick,
+}: {
+  text: string;
+  onClick: () => void;
+}) => {
+  return <ButtonWhiteWrapper onClick={onClick}>{text}</ButtonWhiteWrapper>;
 };
 
 export default ButtonWhite;
@@ -23,4 +29,13 @@ const ButtonWhiteWrapper = styled.button`
 
   border: 1px solid #333333;
   border-radius: 6px;
+
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 150%;
+  /* identical to box height, or 24px */
+  text-transform: capitalize;
+
+  color: #333333;
 `;
