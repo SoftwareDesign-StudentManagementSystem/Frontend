@@ -27,7 +27,7 @@ const ButtonWhiteWrapper = styled.button`
   min-width: 140px;
   height: 48px;
 
-  border: 1px solid #333333;
+  border: 0.5px solid #333333;
   border-radius: 6px;
 
   font-style: normal;
@@ -38,4 +38,5 @@ const ButtonWhiteWrapper = styled.button`
   text-transform: capitalize;
 
   color: #333333;
+  background-color: transparent;
 `;

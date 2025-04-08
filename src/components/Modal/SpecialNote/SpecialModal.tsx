@@ -2,42 +2,42 @@ import Modal from "../Modal.tsx";
 import styled from "styled-components";
 
 import Card from "../../common/Card.tsx";
-import ConsultAdd from "./ConsultAdd.tsx";
+import SpecialAdd from "./SpecialAdd.tsx";
 import ButtonWhite from "../../common/ButtonWhite.tsx";
 import { useState } from "react";
-import ConsultList from "../../studentlobby/ConsultList.tsx";
+import SpecialNoteList from "../../studentlobby/SpecialNoteList.tsx";
 
-const ConsultModal = ({ onClose }: { onClose: () => void }) => {
+const SpecialModal = ({ onClose }: { onClose: () => void }) => {
   return (
     <Modal
       onClose={onClose}
-      content={<ConsultModalContent />}
-      title={"상담 내역"}
+      content={<SpecialModalContent />}
+      title={"특기사항"}
     />
   );
 };
-export default ConsultModal;
+export default SpecialModal;
 
-const ConsultModalContent = () => {
+const SpecialModalContent = () => {
   const [isAddMode, setIsAddMode] = useState(false);
   return (
-    <FeedBackModalContentWrapper>
+    <SpecialModalContentWrapper>
       {!isAddMode ? (
         <>
-          <Card cardtitle={"상담 내역"} contentChildren={<ConsultList />} />
+          <Card cardtitle={"특기 사항"} contentChildren={<SpecialNoteList />} />
           <ButtonWhite
-            text={"+ 상담내역 추가"}
+            text={"+ 특기사항 추가"}
             onClick={() => setIsAddMode(true)}
           />
         </>
       ) : (
-        <ConsultAdd />
+        <SpecialAdd />
       )}
-    </FeedBackModalContentWrapper>
+    </SpecialModalContentWrapper>
   );
 };
 
-const FeedBackModalContentWrapper = styled.div`
+const SpecialModalContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 800px;

@@ -3,6 +3,9 @@ import useUserStore from "../../stores/useUserStore";
 import { useNavigate } from "react-router-dom";
 
 import notification from "../../assets/notification.svg";
+import ButtonOrange from "./ButtonOrange";
+import { useState } from "react";
+import ReportCreateModal from "../Modal/ReportCreateModal.tsx";
 
 const UserTypeLabel = ({ type }: { type: string }) => {
   return (
@@ -42,6 +45,9 @@ export default function Header() {
   const { userInfo, setUserInfo, setTokenInfo } = useUserStore();
   const navigate = useNavigate();
 
+  const [openModal, setOpenModal] = useState<string | null>(null);
+  const closeModal = () => setOpenModal(null);
+
   const handleLogout = () => {
     setUserInfo({ id: 0, nickname: "", role: "", fireId: 0 });
     setTokenInfo({
@@ -55,19 +61,32 @@ export default function Header() {
   };
 
   return (
-    <StyledHeader>
-      <div className="LogoWrapper">LOGO</div>
+    <>
+      {openModal === "reportCreate" && (
+        <ReportCreateModal onClose={closeModal} />
+      )}
+      <StyledHeader>
+        <div className="LogoWrapper">LOGO</div>
 
-      <div className="RightWrapper">
-        <div className="UserWrapper">
-          <UserTypeLabel type="교사" />
-          <button>{userInfo.nickname} 배현준 님</button>
+        <div className="RightWrapper">
+          <div className="UserWrapper">
+            <UserTypeLabel type="교사" />
+            <button className="btntype1">{userInfo.nickname} 배현준 님</button>
+          </div>
+
+          <NotificationBtn src={notification} />
+          <button className="btntype1" onClick={handleLogout}>
+            로그아웃
+          </button>
+          <ButtonOrange
+            text={"보고서 작성"}
+            onClick={() => {
+              setOpenModal("reportCreate");
+            }}
+          />
         </div>
-
-        <NotificationBtn src={notification} />
-        <button onClick={handleLogout}>로그아웃</button>
-      </div>
-    </StyledHeader>
+      </StyledHeader>
+    </>
   );
 }
 
@@ -93,12 +112,12 @@ const StyledHeader = styled.header`
     height: 100%;
   }
 
-  button {
+  .btntype1 {
     font-size: 20px;
     line-height: 20px;
     background-color: transparent;
     border: none;
-    //color: white;
+    color: white;
     padding: 0;
 
     font-style: normal;

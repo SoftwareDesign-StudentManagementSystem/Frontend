@@ -9,14 +9,14 @@ const StudentInfoModal = ({ onClose }: { onClose: () => void }) => {
   return (
     <Modal
       title={"학생 정보"}
-      content={<StudentInfoModalContent />}
+      content={<StudentInfoModalContent onClose={onClose} />}
       onClose={onClose}
     ></Modal>
   );
 };
 export default StudentInfoModal;
 
-const StudentInfoModalContent = () => {
+const StudentInfoModalContent = ({ onClose }: { onClose: () => void }) => {
   const [grade, setGrade] = useState("");
   const [classnum, setClassnum] = useState("");
   const [studentid, setStudentid] = useState("");
@@ -94,7 +94,7 @@ const StudentInfoModalContent = () => {
         </HorizontalLineWrapper>
         <HorizontalLineWrapper>
           <ButtonOrange text={"학생 정보 수정"} />
-          <ButtonWhite text={"닫기"} />
+          <ButtonWhite text={"학생 삭제"} onClick={onClose} />
         </HorizontalLineWrapper>
       </ContentRight>
     </>

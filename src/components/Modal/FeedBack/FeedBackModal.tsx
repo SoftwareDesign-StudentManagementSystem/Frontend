@@ -46,5 +46,8 @@ const FeedBackModalContentWrapper = styled.div`
 
   button {
     width: 100%;
+    border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    border-color: #e2e0db;
   }
 `;

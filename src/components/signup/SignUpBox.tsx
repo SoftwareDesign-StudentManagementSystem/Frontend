@@ -14,7 +14,8 @@ const SignUpBox = () => {
       <ContentWrapper>
         <div className="maintitle">
           안녕하세요!
-          <br />앱 이름이 뭔가요?
+          <br />
+          <span style={{ color: "#ffb608" }}>인천해원고</span> iEdu입니다
         </div>
         <div className="inputWrapper">
           <div className="inputtitle">이름</div>
@@ -70,9 +71,9 @@ const SignUpBoxWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 40px;
+  padding: 40px 200px;
   gap: 20px;
-  width: 60%;
+  width: fit-content;
   height: fit-content;
 
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -85,6 +86,7 @@ const Logo = styled.img`
 `;
 const ContentWrapper = styled.div`
   width: 40%;
+  min-width: 400px;
   height: 100%;
   display: flex;
   flex-direction: column;

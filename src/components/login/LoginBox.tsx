@@ -3,10 +3,8 @@ import logoimg from "../../assets/logo.svg";
 import { useState } from "react";
 
 const LoginBox = () => {
-  const [name, setName] = useState("");
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
 
   return (
     <LoginBoxWrapper>
@@ -14,16 +12,10 @@ const LoginBox = () => {
       <ContentWrapper>
         <div className="maintitle">
           안녕하세요!
-          <br />앱 이름이 뭔가요?
+          <br />
+          <span style={{ color: "#ffb608" }}>인천해원고</span> iEdu입니다
         </div>
-        <div className="inputWrapper">
-          <div className="inputtitle">이름</div>
-          <InputBox
-            placeholder="이름을 입력해주세요."
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
+
         <div className="inputWrapper">
           <div className="inputtitle">아이디</div>
           <div
@@ -38,7 +30,6 @@ const LoginBox = () => {
               value={id}
               onChange={(e) => setId(e.target.value)}
             />
-            <DuplicationChkBtn>중복 확인</DuplicationChkBtn>
           </div>
         </div>
         <div className="inputWrapper">
@@ -49,15 +40,8 @@ const LoginBox = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div className="inputWrapper">
-          <div className="inputtitle">비밀번호 확인</div>
-          <InputBox
-            placeholder="비밀번호를 다시 입력해주세요."
-            value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
-          />
-        </div>
-        <SubmitButton>회원가입하기</SubmitButton>
+
+        <SubmitButton>로그인</SubmitButton>
       </ContentWrapper>
     </LoginBoxWrapper>
   );
@@ -70,9 +54,9 @@ const LoginBoxWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 40px;
+  padding: 80px 200px;
   gap: 20px;
-  width: 60%;
+  width: fit-content;
   height: fit-content;
 
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -84,8 +68,11 @@ const Logo = styled.img`
   height: 44px;
 `;
 const ContentWrapper = styled.div`
-  width: 40%;
+  width: 50%;
+  min-width: 400px;
+
   height: 100%;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -131,24 +118,6 @@ const InputBox = styled.input`
 
   box-sizing: border-box;
   padding: 12px 20px;
-`;
-
-const DuplicationChkBtn = styled.button`
-  box-sizing: border-box;
-
-  /* Auto layout */
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 12px 20px;
-  gap: 10px;
-
-  width: 98px;
-  height: 48px;
-
-  border: 1px solid #808080;
-  border-radius: 6px;
 `;
 
 const SubmitButton = styled.button`

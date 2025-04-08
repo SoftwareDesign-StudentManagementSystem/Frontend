@@ -7,10 +7,13 @@ import FeedbackList from "../components/studentlobby/FeedbackList.tsx";
 import ConsultList from "../components/studentlobby/ConsultList.tsx";
 
 import StudentInfoModal from "../components/Modal/StudentInfoModal.tsx";
-import ReportCreateModal from "../components/Modal/ReportCreateModal.tsx";
 import FeedBackModal from "../components/Modal/FeedBack/FeedBackModal.tsx";
 import { useState } from "react";
 import ConsultModal from "../components/Modal/Consult/ConsultModal.tsx";
+import SpecialModal from "../components/Modal/SpecialNote/SpecialModal.tsx";
+import AttendanceModal from "../components/Modal/Attendance/AttendanceModal.tsx";
+import AttendanceList from "../components/studentlobby/AttendanceList.tsx";
+import GradeModal from "../components/Modal/Grade/GradeModal.tsx";
 
 export default function StudentLobbyPage() {
   const [openModal, setOpenModal] = useState<string | null>(null);
@@ -21,11 +24,11 @@ export default function StudentLobbyPage() {
     <HomePageWrapper>
       {/* 모달들 */}
       {openModal === "studentInfo" && <StudentInfoModal onClose={closeModal} />}
-      {openModal === "specialNote" && (
-        <ReportCreateModal onClose={closeModal} />
-      )}
+      {openModal === "specialNote" && <SpecialModal onClose={closeModal} />}
       {openModal === "feedback" && <FeedBackModal onClose={closeModal} />}
       {openModal === "consult" && <ConsultModal onClose={closeModal} />}
+      {openModal === "attendance" && <AttendanceModal onClose={closeModal} />}
+      {openModal === "grade" && <GradeModal onClose={closeModal} />}
 
       {/* 카드들 */}
       <div onClick={() => setOpenModal("studentInfo")}>
@@ -47,12 +50,12 @@ export default function StudentLobbyPage() {
         <Card cardtitle={"특기 사항"} contentChildren={<SpecialNoteList />} />
       </div>
 
-      <div>
+      <div onClick={() => setOpenModal("grade")}>
         <Card cardtitle={"성적"} contentChildren={<GradeList />} />
       </div>
 
-      <div>
-        <Card cardtitle={"출결"} />
+      <div onClick={() => setOpenModal("attendance")}>
+        <Card cardtitle={"출결"} contentChildren={<AttendanceList />} />
       </div>
 
       <div onClick={() => setOpenModal("feedback")}>

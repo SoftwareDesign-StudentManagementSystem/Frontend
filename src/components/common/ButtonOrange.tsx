@@ -1,7 +1,13 @@
 import styled from "styled-components";
 
-const ButtonOrange = ({ text }: { text: string }) => {
-  return <ButtonOrangeWrapper>{text}</ButtonOrangeWrapper>;
+const ButtonOrange = ({
+  text,
+  onClick,
+}: {
+  text: string;
+  onClick: () => void;
+}) => {
+  return <ButtonOrangeWrapper onClick={onClick}>{text}</ButtonOrangeWrapper>;
 };
 
 export default ButtonOrange;
@@ -29,4 +35,5 @@ const ButtonOrangeWrapper = styled.button`
   text-transform: capitalize;
 
   color: #ffffff;
+  border: none;
 `;

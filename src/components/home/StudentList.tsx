@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import human from "../../assets/human.svg";
 import ButtonOrange from "../common/ButtonOrange.tsx";
+import { useNavigate } from "react-router-dom";
 
 interface Student {
   grade: number;
@@ -21,6 +22,7 @@ const dummyStudents: Student[] = [
 ];
 
 const StudentList = () => {
+  const navigate = useNavigate();
   return (
     <StudentListWrapper>
       {dummyStudents.map((student) => (
@@ -31,7 +33,12 @@ const StudentList = () => {
             {student.name}
           </span>
 
-          <ButtonOrange text={"자세히 보기"} />
+          <ButtonOrange
+            text={"자세히 보기"}
+            onClick={() => {
+              navigate("/studentlobby");
+            }}
+          />
         </StudentItem>
       ))}
     </StudentListWrapper>
