@@ -10,38 +10,40 @@ const SearchStudent = () => {
 
   return (
     <HorizontalLineWrapper>
-      <div className="inputWrapper">
-        <div className="inputtitle">학년</div>
-        <InputBox
-          placeholder="학년"
-          value={grade}
-          onChange={(e) => setGrade(e.target.value)}
-        />
-      </div>
-      <div className="inputWrapper">
-        <div className="inputtitle">반</div>
-        <InputBox
-          placeholder="반"
-          value={classnum}
-          onChange={(e) => setClassnum(e.target.value)}
-        />
-      </div>
-      <div className="inputWrapper">
-        <div className="inputtitle">번호</div>
-        <InputBox
-          placeholder="번호"
-          value={studentid}
-          onChange={(e) => setStudentid(e.target.value)}
-        />
-      </div>
-      <div className="inputWrapper">
-        <div className="inputtitle">이름</div>
-        <InputBox
-          placeholder="이름"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
+      <InputWrapper>
+        <div className="inputWrapper">
+          <div className="inputtitle">학년</div>
+          <InputBox
+            placeholder="학년"
+            value={grade}
+            onChange={(e) => setGrade(e.target.value)}
+          />
+        </div>
+        <div className="inputWrapper">
+          <div className="inputtitle">반</div>
+          <InputBox
+            placeholder="반"
+            value={classnum}
+            onChange={(e) => setClassnum(e.target.value)}
+          />
+        </div>
+        <div className="inputWrapper">
+          <div className="inputtitle">번호</div>
+          <InputBox
+            placeholder="번호"
+            value={studentid}
+            onChange={(e) => setStudentid(e.target.value)}
+          />
+        </div>
+        <div className="inputWrapper">
+          <div className="inputtitle">이름</div>
+          <InputBox
+            placeholder="이름"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+      </InputWrapper>
       <ButtonWhite text={"검색"} />
     </HorizontalLineWrapper>
   );
@@ -49,24 +51,22 @@ const SearchStudent = () => {
 
 export default SearchStudent;
 
-const InputBox = styled.input`
-  flex: 1;
-  height: 48px;
-  background: #ffffff;
-  border: 1px solid #dddddd;
-  border-radius: 6px;
-  box-sizing: border-box;
-  padding: 12px 20px;
-`;
 const HorizontalLineWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
-  gap: 8px;
+  justify-content: space-between; /* 좌우 정렬 */
+  align-items: center; /* 상하 정렬 */
+  width: 100%;
+  height: 100px;
+  padding: 0 20px; /* ✅ 이걸로 교체 */
+  box-sizing: border-box; /* ✅ padding 포함한 전체 너비 계산 */
+`;
 
-  input {
-    width: 150px;
-  }
+const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  gap: 15px;
 
   .inputWrapper {
     display: flex;
@@ -82,4 +82,16 @@ const HorizontalLineWrapper = styled.div`
     line-height: 150%; /* identical to box height, or 21px */
     color: #808080;
   }
+`;
+
+const InputBox = styled.input`
+  flex: 1;
+  height: 48px;
+  width: 150px;
+
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  box-sizing: border-box;
+  padding: 12px 20px;
 `;

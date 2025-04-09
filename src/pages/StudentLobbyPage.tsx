@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Card from "../components/common/Card.tsx";
+import DropDownMenu from "../components/common/DropDownMenu.tsx";
 import StudentInfo from "../components/studentlobby/StudentInfo.tsx";
 import SpecialNoteList from "../components/studentlobby/SpecialNoteList.tsx";
 import GradeList from "../components/studentlobby/GradeList.tsx";
@@ -19,6 +20,17 @@ export default function StudentLobbyPage() {
   const [openModal, setOpenModal] = useState<string | null>(null);
 
   const closeModal = () => setOpenModal(null);
+
+  const options = [
+    "1학년 1학기",
+    "1학년 2학기",
+    "2학년 1학기",
+    "2학년 2학기",
+    "3학년 1학기",
+    "3학년 2학기",
+    "4학년 1학기",
+    "4학년 2학기",
+  ];
 
   return (
     <HomePageWrapper>
@@ -47,23 +59,43 @@ export default function StudentLobbyPage() {
       </div>
 
       <div onClick={() => setOpenModal("specialNote")}>
-        <Card cardtitle={"특기 사항"} contentChildren={<SpecialNoteList />} />
+        <Card
+          cardtitle={"특기 사항"}
+          headerChildren={<DropDownMenu options={options} />}
+          contentChildren={<SpecialNoteList />}
+        />
       </div>
 
       <div onClick={() => setOpenModal("grade")}>
-        <Card cardtitle={"성적"} contentChildren={<GradeList />} />
+        <Card
+          cardtitle={"성적"}
+          headerChildren={<DropDownMenu options={options} />}
+          contentChildren={<GradeList />}
+        />
       </div>
 
       <div onClick={() => setOpenModal("attendance")}>
-        <Card cardtitle={"출결"} contentChildren={<AttendanceList />} />
+        <Card
+          cardtitle={"출결"}
+          headerChildren={<DropDownMenu options={options} />}
+          contentChildren={<AttendanceList />}
+        />
       </div>
 
       <div onClick={() => setOpenModal("feedback")}>
-        <Card cardtitle={"피드백"} contentChildren={<FeedbackList />} />
+        <Card
+          cardtitle={"피드백"}
+          headerChildren={<DropDownMenu options={options} />}
+          contentChildren={<FeedbackList />}
+        />
       </div>
 
       <div onClick={() => setOpenModal("consult")}>
-        <Card cardtitle={"상담 내역"} contentChildren={<ConsultList />} />
+        <Card
+          cardtitle={"상담 내역"}
+          headerChildren={<DropDownMenu options={options} />}
+          contentChildren={<ConsultList />}
+        />
       </div>
     </HomePageWrapper>
   );

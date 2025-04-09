@@ -58,5 +58,5 @@ const CardContentWrapper = styled.div`
   height: fit-content;
   min-height: 100px;
 
-  box-sizing: border-box;
+  //box-sizing: border-box;
 `;

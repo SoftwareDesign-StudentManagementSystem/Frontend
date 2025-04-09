@@ -23,7 +23,6 @@ const ButtonWhiteWrapper = styled.button`
   padding: 12px 20px;
   gap: 10px;
 
-  margin: 0 auto;
   min-width: 140px;
   height: 48px;
 

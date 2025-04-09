@@ -1,48 +1,20 @@
 import styled from "styled-components";
+import DropDownMenu from "../../common/DropDownMenu.tsx";
+import InputBoxWrapper from "../../../resources/styles/InputBoxWrapper.tsx";
 
 const InputBox = () => {
   return <InputBoxWrapper placeholder="내용을 입력해주세요." />;
 };
-const InputBoxWrapper = styled.textarea`
-  /* \bcheck-box */
-
-  /* Auto layout */
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 20px;
-  box-sizing: border-box;
-  gap: 8px;
-
-  width: 100%;
-  height: 145px;
-
-  background: #f1f2f8;
-  border-radius: 8px 8px 0px 0px;
-
-  /* Inside auto layout */
-  flex: none;
-  order: 0;
-  align-self: stretch;
-  flex-grow: 1;
-  font-family: "Pretendard";
-
-  font-style: normal;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 125%;
-  /* identical to box height, or 22px */
-
-  color: #333333;
-
-  resize: none;
-`;
 
 const SpecialAdd = () => {
+  const options = ["25년 1월 13일"];
   return (
     <FeedBackAddWrapper>
-      <div className="title">기록일</div>
+      <div>
+        <div className="title">기록일</div>
 
+        <DropDownMenu options={options} />
+      </div>
       <InputBox />
     </FeedBackAddWrapper>
   );
@@ -55,6 +27,7 @@ const FeedBackAddWrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  gap: 20px;
 
   .title {
     font-style: normal;
@@ -63,6 +36,6 @@ const FeedBackAddWrapper = styled.div`
     line-height: 150%;
     text-transform: capitalize;
     color: #000000;
-    //margin-bottom: 8px;
+    margin-bottom: 10px;
   }
 `;
