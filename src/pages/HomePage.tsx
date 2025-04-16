@@ -19,6 +19,7 @@ export default function HomePage() {
           contentChildren={<StudentList />}
         />
       </LeftContentWrapper>
+
       <RightContentWrapper>
         <Card
           cardtitle={"교사 정보"}
@@ -53,10 +54,19 @@ const LeftContentWrapper = styled.div`
   width: 70%;
   gap: 30px;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
+
 const RightContentWrapper = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;

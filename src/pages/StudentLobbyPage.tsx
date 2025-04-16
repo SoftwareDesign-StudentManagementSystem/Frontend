@@ -109,4 +109,10 @@ const HomePageWrapper = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  overflow-x: hidden; // 추가
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
 `;

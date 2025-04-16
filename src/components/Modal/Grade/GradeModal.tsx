@@ -1,3 +1,4 @@
+// GradeModal.tsx
 import Modal from "../Modal.tsx";
 import styled from "styled-components";
 
@@ -14,25 +15,53 @@ const GradeModal = ({ onClose }: { onClose: () => void }) => {
 };
 export default GradeModal;
 
+const gradeData = [
+  { grade: 1, semester: 1 },
+  { grade: 1, semester: 2 },
+  { grade: 2, semester: 1 },
+  { grade: 2, semester: 2 },
+  { grade: 3, semester: 1 },
+  { grade: 3, semester: 2 },
+];
+
 const GradeModalContent = () => {
   const [isAddMode, setIsAddMode] = useState(false);
+  const [selectedGrade, setSelectedGrade] = useState<{
+    grade: number;
+    semester: number;
+  } | null>(null);
+
+  const handleCardClick = (grade: number, semester: number) => {
+    setSelectedGrade({ grade, semester });
+    setIsAddMode(true);
+  };
+
   return (
     <GradeModalContentWrapper>
       {!isAddMode ? (
         <GradeViewWrapper>
-          <div className="leftcontent">
-            <div
-              onClick={() => {
-                setIsAddMode(true);
-              }}
-            >
-              <Card cardtitle={"3학년 2학기"} contentChildren={<GradeList />} />
-            </div>
-          </div>
-          <Chart src={chart} />
+          {gradeData.map(({ grade, semester }) => (
+            <GradeRow key={`${grade}-${semester}`}>
+              <div
+                className="leftcontent"
+                onClick={() => handleCardClick(grade, semester)}
+              >
+                <Card
+                  cardtitle={`${grade}학년 ${semester}학기`}
+                  contentChildren={
+                    <GradeList grade={grade} semester={semester} />
+                  }
+                />
+              </div>
+              <Chart src={chart} />
+            </GradeRow>
+          ))}
         </GradeViewWrapper>
       ) : (
-        <GradeAdd />
+        <GradeAdd
+          grade={selectedGrade?.grade}
+          semester={selectedGrade?.semester}
+        />
       )}
     </GradeModalContentWrapper>
   );
@@ -43,7 +72,6 @@ const GradeModalContentWrapper = styled.div`
   flex-direction: column;
   width: 800px;
   height: 100%;
-  //padding: 1rem;
 
   button {
     width: 100%;
@@ -55,14 +83,20 @@ const GradeModalContentWrapper = styled.div`
 
 const GradeViewWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
-  height: fit-content;
+  gap: 2rem;
+`;
 
+const GradeRow = styled.div`
+  display: flex;
+  flex-direction: row;
   align-items: center;
+  gap: 2rem;
 
   .leftcontent {
-    min-width: fit-content;
+    cursor: pointer;
+    width: 50%;
   }
 `;
 

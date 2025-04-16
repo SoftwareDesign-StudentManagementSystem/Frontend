@@ -1,10 +1,13 @@
 import styled from "styled-components";
 import logoimg from "../../assets/logo.svg";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LoginBox = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   return (
     <LoginBoxWrapper>
@@ -15,7 +18,6 @@ const LoginBox = () => {
           <br />
           <span style={{ color: "#ffb608" }}>인천해원고</span> iEdu입니다
         </div>
-
         <div className="inputWrapper">
           <div className="inputtitle">아이디</div>
           <div
@@ -40,8 +42,20 @@ const LoginBox = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-
-        <SubmitButton>로그인</SubmitButton>
+        <button
+          onClick={() => {
+            navigate("/signup");
+          }}
+        >
+          회원가입
+        </button>
+        <SubmitButton
+          onClick={() => {
+            navigate("/home");
+          }}
+        >
+          로그인
+        </SubmitButton>
       </ContentWrapper>
     </LoginBoxWrapper>
   );

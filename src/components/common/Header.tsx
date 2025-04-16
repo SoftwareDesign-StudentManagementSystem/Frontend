@@ -23,24 +23,30 @@ const UserTypeLabelWrapper = styled.div`
   align-items: center;
   border-radius: 20px;
   padding: 0 5px;
-
   gap: 10px;
 
   min-width: fit-content;
   max-height: 32px;
   background: #ffb608;
+
   div {
     font-style: normal;
     font-weight: 600;
     font-size: 12px;
     line-height: 150%;
-    /* identical to box height, or 18px */
     text-transform: capitalize;
-
     color: #ffffff;
   }
-`;
 
+  @media (max-width: 768px) {
+    padding: 0 4px;
+    gap: 6px;
+
+    div {
+      font-size: 10px;
+    }
+  }
+`;
 export default function Header() {
   const { userInfo, setUserInfo, setTokenInfo } = useUserStore();
   const navigate = useNavigate();
@@ -66,7 +72,14 @@ export default function Header() {
         <ReportCreateModal onClose={closeModal} />
       )}
       <StyledHeader>
-        <div className="LogoWrapper">LOGO</div>
+        <div
+          className="LogoWrapper"
+          onClick={() => {
+            navigate("/home");
+          }}
+        >
+          LOGO
+        </div>
 
         <div className="RightWrapper">
           <div className="UserWrapper">
@@ -89,6 +102,8 @@ export default function Header() {
     </>
   );
 }
+
+// ...생략 (import 부분 등)
 
 const StyledHeader = styled.header`
   padding: 0 32px;
@@ -124,10 +139,11 @@ const StyledHeader = styled.header`
     font-weight: 600;
     font-size: 20px;
     line-height: 150%;
-    /* identical to box height, or 30px */
     text-transform: capitalize;
 
     color: #333333;
+
+    min-width: fit-content;
   }
 
   .LogoWrapper {
@@ -136,10 +152,10 @@ const StyledHeader = styled.header`
     font-size: 30px;
     font-weight: bolder;
   }
+
   .RightWrapper {
     width: fit-content;
     height: 100%;
-
     gap: 50px;
 
     .UserWrapper {
@@ -147,9 +163,39 @@ const StyledHeader = styled.header`
       gap: 10px;
     }
   }
+
+  @media (max-width: 768px) {
+    padding: 0 16px;
+    height: 60px;
+
+    .btntype1 {
+      font-size: 14px;
+    }
+
+    .LogoWrapper {
+      font-size: 22px;
+    }
+
+    .RightWrapper {
+      gap: 20px;
+
+      .UserWrapper {
+        gap: 6px;
+      }
+    }
+
+    div {
+      gap: 16px;
+    }
+  }
 `;
 
 const NotificationBtn = styled.img`
   width: 30px;
   height: 30px;
+
+  @media (max-width: 768px) {
+    width: 24px;
+    height: 24px;
+  }
 `;

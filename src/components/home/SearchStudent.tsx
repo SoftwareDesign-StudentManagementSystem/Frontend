@@ -44,7 +44,9 @@ const SearchStudent = () => {
           />
         </div>
       </InputWrapper>
-      <ButtonWhite text={"검색"} />
+      <ButtonWrapper>
+        <ButtonWhite text={"검색"} />
+      </ButtonWrapper>
     </HorizontalLineWrapper>
   );
 };
@@ -53,33 +55,39 @@ export default SearchStudent;
 
 const HorizontalLineWrapper = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between; /* 좌우 정렬 */
-  align-items: center; /* 상하 정렬 */
+  flex-direction: column; /* 세로로 배치하여 버튼을 아래로 */
+  align-items: center; /* 버튼을 중앙으로 정렬 */
   width: 100%;
-  height: 100px;
-  padding: 0 20px; /* ✅ 이걸로 교체 */
-  box-sizing: border-box; /* ✅ padding 포함한 전체 너비 계산 */
+  padding: 10px 20px;
+  box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    flex-direction: row; /* PC에서는 가로로 배치 */
+    justify-content: space-between;
+    align-items: center;
+  }
 `;
 
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  width: fit-content;
+  flex-wrap: wrap;
+  width: 100%;
   gap: 15px;
 
   .inputWrapper {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100%;
     gap: 8px;
+    min-width: 130px;
+    flex: 1;
   }
+
   .inputtitle {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
-    line-height: 150%; /* identical to box height, or 21px */
+    line-height: 150%;
     color: #808080;
   }
 `;
@@ -88,10 +96,22 @@ const InputBox = styled.input`
   flex: 1;
   height: 48px;
   width: 150px;
-
   background: #ffffff;
   border: 1px solid #dddddd;
   border-radius: 6px;
   box-sizing: border-box;
   padding: 12px 20px;
+`;
+
+const ButtonWrapper = styled.div`
+  width: fit-content;
+  display: flex;
+  justify-content: center; /* 모바일에서 중앙 정렬 */
+  align-items: center;
+  margin-top: 20px;
+
+  @media (min-width: 768px) {
+    justify-content: flex-end; /* PC에서는 오른쪽 정렬 */
+    margin-top: 0; /* PC에서는 마진 없앰 */
+  }
 `;

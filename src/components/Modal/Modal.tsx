@@ -31,11 +31,10 @@ const Overlay = styled.div`
   z-index: 1000;
 `;
 
-// 모달 컨테이너
 const ModalWrapper = styled.div`
   width: fit-content;
   height: fit-content;
-  max-height: 80%;
+  max-height: 85%;
   background: white;
   padding: 40px;
   border-radius: 10px;
@@ -43,6 +42,15 @@ const ModalWrapper = styled.div`
   position: relative;
 
   box-sizing: border-box;
+
+  overflow-y: auto;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-height: 85%;
+    border-radius: 0;
+    padding: 20px;
+  }
 `;
 
 // 모달 헤더 (제목 + 닫기 버튼)

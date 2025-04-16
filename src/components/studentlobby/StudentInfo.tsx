@@ -21,8 +21,10 @@ const StudentInfo = ({
         <span className="name">{name}</span>
         <br />
         <span className="info">
-          <span style={{ color: "#FFB608" }}>{school}</span> {grade}학년{" "}
-          {classnum}반 {number}번
+          <span className="school" style={{ color: "#FFB608" }}>
+            {school}{" "}
+          </span>
+          {grade}학년 {classnum}반 {number}번
         </span>
       </RightContent>
     </StudentInfoWrapper>
@@ -72,5 +74,15 @@ const RightContent = styled.div`
     text-align: center;
 
     color: #333333;
+
+    .school {
+      display: inline;
+    }
+
+    @media (max-width: 768px) {
+      .school {
+        display: block;
+      }
+    }
   }
 `;
