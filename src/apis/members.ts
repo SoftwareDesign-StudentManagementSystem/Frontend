@@ -8,7 +8,7 @@ import { TokenInfo, UserInfo } from "../types/members";
 // 회원 가져오기
 export const getMembers = async (): Promise<ApiResponse<UserInfo>> => {
   const response =
-    await tokenInstance.get<ApiResponse<UserInfo>>(`/api/members`);
+    await tokenInstance.get<ApiResponse<UserInfo>>(`/rest-api/v1/member`);
   return response.data;
 };
 
@@ -40,23 +40,32 @@ export const deleteMembers = async (): Promise<ApiResponse<number>> => {
 };
 
 // 로그인
-export const login = async (
-  studentId: string,
-  password: string,
-): Promise<ApiResponse<TokenInfo>> => {
-  const response = await axiosInstance.post<ApiResponse<TokenInfo>>(
-    `/api/members/login`,
-    {
-      studentId,
+export const login = async (accountId: number, password: string) => {
+  try {
+    const response = await axiosInstance.post("/rest-api/v1/auth/login", {
+      accountId,
       password,
-    },
-  );
-  return response.data;
-};
+    });
 
+    const data = response.data;
+    if (data.returnCode === "SUCCESS") {
+      // 로그인 성공 시, accessToken과 refreshToken 반환
+      return {
+        accessToken: data.data.accessToken,
+        refreshToken: data.data.refreshToken,
+      };
+    } else {
+      throw new Error(data.returnMessage || "로그인 실패");
+    }
+  } catch (error) {
+    console.error("로그인 요청 오류:", error);
+    throw new Error("로그인 실패");
+  }
+};
 // 토큰 재발급
 export const refresh = async (): Promise<ApiResponse<TokenInfo>> => {
-  const response =
-    await refreshInstance.post<ApiResponse<TokenInfo>>(`/api/members/refresh`);
+  const response = await refreshInstance.post<ApiResponse<TokenInfo>>(
+    `/rest-api/v1/auth/login/refresh-token`,
+  );
   return response.data;
 };

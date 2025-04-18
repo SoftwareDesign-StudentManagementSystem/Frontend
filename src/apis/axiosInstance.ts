@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://portal.inuappcenter.kr/",
+  baseURL: "http://api.iedu.letzgo.site/",
 });
 
 // 응답 인터셉터
