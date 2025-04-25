@@ -59,6 +59,7 @@ const LoginBox = () => {
           />
         </div>
         {error && <ErrorText>{error}</ErrorText>} {/* 오류 메시지 출력 */}
+        학부모님! 아직 회원이 아니신가요?
         <button
           onClick={() => {
             navigate("/signup");

@@ -11,9 +11,7 @@ interface UserState {
 const useUserStore = create<UserState>((set) => ({
   tokenInfo: {
     accessToken: "",
-    accessTokenExpiredTime: "",
     refreshToken: "",
-    refreshTokenExpiredTime: "",
   },
   userInfo: {
     id: 0,

@@ -23,9 +23,7 @@ function App() {
       // URL에서 받은 token으로 accessToken 설정
       setTokenInfo({
         accessToken: accessToken,
-        accessTokenExpiredTime: "",
         refreshToken: "",
-        refreshTokenExpiredTime: "",
       });
     }
   }, [location.search, setTokenInfo]);
@@ -44,6 +42,7 @@ function App() {
       try {
         const response = await getMembers();
         setUserInfo(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("회원 가져오기 실패", error);
       }
@@ -51,6 +50,8 @@ function App() {
 
     if (tokenInfo.accessToken) {
       initializeUser();
+    } else {
+      console.log("accesstoken없음");
     }
   }, [tokenInfo, setUserInfo]);
 

@@ -11,6 +11,8 @@ tokenInstance.interceptors.request.use(
   (config) => {
     const { accessToken } = useUserStore.getState().tokenInfo;
     if (accessToken) {
+      console.log("tokenInstance - accesstoken있음" + accessToken);
+
       config.headers["Auth"] = accessToken;
     }
     // else {
@@ -62,9 +64,7 @@ tokenInstance.interceptors.response.use(
         alert("로그인 정보가 만료되었습니다. 다시 로그인해 주세요.");
         useUserStore.getState().setTokenInfo({
           accessToken: "",
-          accessTokenExpiredTime: "",
           refreshToken: "",
-          refreshTokenExpiredTime: "",
         });
         localStorage.removeItem("tokenInfo");
 

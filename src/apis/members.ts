@@ -3,6 +3,7 @@ import tokenInstance from "../apis/tokenInstance";
 import refreshInstance from "../apis/refreshInstance";
 import { ApiResponse } from "../types/common";
 import { TokenInfo, UserInfo } from "../types/members";
+import useUserStore from "../stores/useUserStore.ts";
 // import {Post} from "types/posts";
 
 // 회원 가져오기
@@ -49,6 +50,10 @@ export const login = async (accountId: number, password: string) => {
 
     const data = response.data;
     if (data.returnCode === "SUCCESS") {
+      useUserStore.getState().setTokenInfo({
+        accessToken: data.data.accessToken,
+        refreshToken: data.data.refreshToken,
+      });
       // 로그인 성공 시, accessToken과 refreshToken 반환
       return {
         accessToken: data.data.accessToken,
