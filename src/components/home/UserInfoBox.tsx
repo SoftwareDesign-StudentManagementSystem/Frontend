@@ -1,32 +1,34 @@
 import styled from "styled-components";
+import { UserInfo } from "../../types/members";
 
-interface StudentInfoProps {
-  name: string;
-  school: string;
-  grade: number;
-  classnum: number;
-  number: number;
-}
-const UserInfo = ({
-  name,
-  school,
-  grade,
-  classnum,
-  number,
-}: StudentInfoProps) => {
+const UserInfoBox = ({
+  userInfo,
+  roleString,
+}: {
+  userInfo: UserInfo;
+  roleString: string;
+}) => {
   return (
     <UserInfoWrapper>
       <ProfileImage />
-      <span className="name">{name}</span>
+      <span className="name">
+        {userInfo.name} {roleString}님
+      </span>
       <span className="info">
-        <span style={{ color: "#FFB608" }}>{school}</span> {grade}학년{" "}
-        {classnum}반 {number}번
+        <span style={{ color: "#FFB608" }}>{userInfo.schoolName}</span>{" "}
+        {userInfo.role !== "ROLE_PARENT" && (
+          <>
+            {" "}
+            {userInfo.year}학년 {userInfo.classId}반{" "}
+            {userInfo.role === "ROLE_STUDENT" && <>{userInfo.number}번</>}
+          </>
+        )}
       </span>
     </UserInfoWrapper>
   );
 };
 
-export default UserInfo;
+export default UserInfoBox;
 
 const UserInfoWrapper = styled.div`
   width: 100%;

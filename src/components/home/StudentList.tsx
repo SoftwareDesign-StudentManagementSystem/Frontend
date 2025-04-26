@@ -2,18 +2,9 @@ import styled from "styled-components";
 import human from "../../assets/human.svg";
 import ButtonOrange from "../common/ButtonOrange.tsx";
 import { useNavigate } from "react-router-dom";
-import { getStudentList } from "../../apis/members.ts";
 import { UserInfo } from "../../types/members.ts";
-import { useEffect, useState } from "react";
 
-const StudentList = () => {
-  const [students, setStudents] = useState<UserInfo[]>([]);
-  useEffect(() => {
-    getStudentList().then((res) => {
-      console.log(res);
-      setStudents(res);
-    });
-  }, []);
+const StudentList = ({ students }: { students: UserInfo[] }) => {
   const navigate = useNavigate();
   return (
     <StudentListWrapper>

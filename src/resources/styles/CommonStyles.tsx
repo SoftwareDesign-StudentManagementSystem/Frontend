@@ -7,6 +7,8 @@ const CommonStyles = createGlobalStyle`
         background: none;
         cursor: pointer;
     }
+  
+
 `;
 
 export default CommonStyles;

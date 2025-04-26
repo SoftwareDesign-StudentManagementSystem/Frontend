@@ -1,39 +1,80 @@
 import styled from "styled-components";
 import { useState } from "react";
 import ButtonWhite from "../common/ButtonWhite.tsx";
+import { UserInfo } from "../../types/members"; // 경로 주의
 
-const SearchStudent = () => {
+interface SearchStudentProps {
+  students: UserInfo[];
+  onSearch: (params: {
+    grade: string;
+    classnum: string;
+    studentid: string;
+    name: string;
+  }) => void;
+}
+
+const SearchStudent = ({ students, onSearch }: SearchStudentProps) => {
   const [grade, setGrade] = useState("");
   const [classnum, setClassnum] = useState("");
   const [studentid, setStudentid] = useState("");
   const [name, setName] = useState("");
+
+  const handleSearchClick = () => {
+    onSearch({ grade, classnum, studentid, name });
+  };
+
+  // 중복 제거한 옵션 목록 생성
+  const gradeOptions = Array.from(
+    new Set(students.map((s) => s.year?.toString())),
+  ).filter(Boolean);
+  const classnumOptions = Array.from(
+    new Set(students.map((s) => s.classId?.toString())),
+  ).filter(Boolean);
+  const studentidOptions = Array.from(
+    new Set(students.map((s) => s.number?.toString())),
+  ).filter(Boolean);
 
   return (
     <HorizontalLineWrapper>
       <InputWrapper>
         <div className="inputWrapper">
           <div className="inputtitle">학년</div>
-          <InputBox
-            placeholder="학년"
-            value={grade}
-            onChange={(e) => setGrade(e.target.value)}
-          />
+          <SelectBox value={grade} onChange={(e) => setGrade(e.target.value)}>
+            <option value="">전체</option>
+            {gradeOptions.map((g) => (
+              <option key={g} value={g}>
+                {g}학년
+              </option>
+            ))}
+          </SelectBox>
         </div>
         <div className="inputWrapper">
           <div className="inputtitle">반</div>
-          <InputBox
-            placeholder="반"
+          <SelectBox
             value={classnum}
             onChange={(e) => setClassnum(e.target.value)}
-          />
+          >
+            <option value="">전체</option>
+            {classnumOptions.map((c) => (
+              <option key={c} value={c}>
+                {c}반
+              </option>
+            ))}
+          </SelectBox>
         </div>
         <div className="inputWrapper">
           <div className="inputtitle">번호</div>
-          <InputBox
-            placeholder="번호"
+          <SelectBox
             value={studentid}
             onChange={(e) => setStudentid(e.target.value)}
-          />
+          >
+            <option value="">전체</option>
+            {studentidOptions.map((id) => (
+              <option key={id} value={id}>
+                {id}번
+              </option>
+            ))}
+          </SelectBox>
         </div>
         <div className="inputWrapper">
           <div className="inputtitle">이름</div>
@@ -44,8 +85,9 @@ const SearchStudent = () => {
           />
         </div>
       </InputWrapper>
+
       <ButtonWrapper>
-        <ButtonWhite text={"검색"} />
+        <ButtonWhite text={"검색"} onClick={handleSearchClick} />
       </ButtonWrapper>
     </HorizontalLineWrapper>
   );
@@ -53,16 +95,17 @@ const SearchStudent = () => {
 
 export default SearchStudent;
 
+// Styled-components 수정 추가
 const HorizontalLineWrapper = styled.div`
   display: flex;
-  flex-direction: column; /* 세로로 배치하여 버튼을 아래로 */
-  align-items: center; /* 버튼을 중앙으로 정렬 */
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   padding: 10px 20px;
   box-sizing: border-box;
 
   @media (min-width: 768px) {
-    flex-direction: row; /* PC에서는 가로로 배치 */
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
@@ -84,12 +127,21 @@ const InputWrapper = styled.div`
   }
 
   .inputtitle {
-    font-style: normal;
     font-weight: 400;
     font-size: 14px;
-    line-height: 150%;
     color: #808080;
   }
+`;
+
+const SelectBox = styled.select`
+  flex: 1;
+  height: 48px;
+  width: 150px;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  box-sizing: border-box;
+  padding: 12px 20px;
 `;
 
 const InputBox = styled.input`
@@ -106,12 +158,12 @@ const InputBox = styled.input`
 const ButtonWrapper = styled.div`
   width: fit-content;
   display: flex;
-  justify-content: center; /* 모바일에서 중앙 정렬 */
+  justify-content: center;
   align-items: center;
   margin-top: 20px;
 
   @media (min-width: 768px) {
-    justify-content: flex-end; /* PC에서는 오른쪽 정렬 */
-    margin-top: 0; /* PC에서는 마진 없앰 */
+    justify-content: flex-end;
+    margin-top: 0;
   }
 `;
