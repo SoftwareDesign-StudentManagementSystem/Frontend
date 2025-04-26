@@ -70,10 +70,14 @@ export default function StudentLobbyPage() {
   return (
     <HomePageWrapper>
       {/* 모달들 */}
-      {openModal === "studentInfo" && <StudentInfoModal onClose={closeModal} />}
+      {openModal === "studentInfo" && (
+        <StudentInfoModal onClose={closeModal} studentInfo={studentInfo} />
+      )}
       {openModal === "specialNote" && <SpecialModal onClose={closeModal} />}
       {openModal === "feedback" && <FeedBackModal onClose={closeModal} />}
-      {openModal === "consult" && <ConsultModal onClose={closeModal} />}
+      {openModal === "consult" && (
+        <ConsultModal onClose={closeModal} studentId={Number(id)} />
+      )}
       {openModal === "attendance" && <AttendanceModal onClose={closeModal} />}
       {openModal === "grade" && (
         <GradeModal onClose={closeModal} studentId={Number(id)} />
@@ -140,7 +144,7 @@ export default function StudentLobbyPage() {
           headerChildren={
             <DropDownMenu options={options} onSelect={handleSelect} />
           }
-          contentChildren={<ConsultList />}
+          contentChildren={<ConsultList studentId={Number(id)} />}
         />
       </div>
     </HomePageWrapper>

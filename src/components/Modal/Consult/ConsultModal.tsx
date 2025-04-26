@@ -7,24 +7,33 @@ import ButtonWhite from "../../common/ButtonWhite.tsx";
 import { useState } from "react";
 import ConsultList from "../../studentlobby/ConsultList.tsx";
 
-const ConsultModal = ({ onClose }: { onClose: () => void }) => {
+const ConsultModal = ({
+  onClose,
+  studentId,
+}: {
+  onClose: () => void;
+  studentId: number;
+}) => {
   return (
     <Modal
       onClose={onClose}
-      content={<ConsultModalContent />}
+      content={<ConsultModalContent studentId={studentId} />}
       title={"상담 내역"}
     />
   );
 };
 export default ConsultModal;
 
-const ConsultModalContent = () => {
+const ConsultModalContent = ({ studentId }: { studentId: number }) => {
   const [isAddMode, setIsAddMode] = useState(false);
   return (
     <FeedBackModalContentWrapper>
       {!isAddMode ? (
         <>
-          <Card cardtitle={"상담 내역"} contentChildren={<ConsultList />} />
+          <Card
+            cardtitle={"상담 내역"}
+            contentChildren={<ConsultList studentId={Number(studentId)} />}
+          />
           <ButtonWhite
             text={"+ 상담내역 추가"}
             onClick={() => setIsAddMode(true)}
