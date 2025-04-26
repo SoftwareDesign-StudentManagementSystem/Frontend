@@ -1,13 +1,23 @@
 import styled from "styled-components";
-import { useState } from "react";
 import Card from "../../common/Card.tsx";
 import GradeList from "../../studentlobby/GradeList.tsx";
 import ButtonWhite from "../../common/ButtonWhite.tsx";
+import { GradeListProps } from "../../../types/grades.ts";
 
-const GradeAdd = () => {
+const GradeAdd = ({ year, semester, studentId }: GradeListProps) => {
   return (
     <GradeAddWrapper>
-      <Card cardtitle={"3학년 2학기"} contentChildren={<GradeList />} />
+      <Card
+        cardtitle={year + "학년 " + semester + "학기"}
+        contentChildren={
+          <GradeList
+            year={year}
+            semester={semester}
+            studentId={studentId}
+            miniView={false}
+          />
+        }
+      />
       <ButtonWhite text={"+ 성적 추가"} />
     </GradeAddWrapper>
   );

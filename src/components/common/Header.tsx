@@ -8,10 +8,24 @@ import { useState } from "react";
 import ReportCreateModal from "../Modal/ReportCreateModal.tsx";
 
 const UserTypeLabel = ({ type }: { type: string }) => {
+  const getLabel = (type: string) => {
+    switch (type) {
+      case "ROLE_TEACHER":
+        return "교사";
+      case "ROLE_STUDENT":
+        return "학생";
+      case "ROLE_PARENT":
+        return "학부모";
+      case "ROLE_ADMIN":
+        return "관리자";
+      default:
+        return type; // 알 수 없는 값은 그대로 표시
+    }
+  };
+
   return (
     <UserTypeLabelWrapper>
-      {/*{type}*/}
-      <div>{type}</div>
+      <div>{getLabel(type)}</div>
     </UserTypeLabelWrapper>
   );
 };
@@ -55,12 +69,20 @@ export default function Header() {
   const closeModal = () => setOpenModal(null);
 
   const handleLogout = () => {
-    setUserInfo({ id: 0, nickname: "", role: "", fireId: 0 });
+    setUserInfo({
+      id: 0,
+      name: "",
+      profileImageUrl: null,
+      schoolName: "",
+      year: 0,
+      number: 0,
+      classId: 0,
+      subject: null,
+      role: "",
+    });
     setTokenInfo({
       accessToken: "",
-      accessTokenExpiredTime: "",
       refreshToken: "",
-      refreshTokenExpiredTime: "",
     });
     localStorage.removeItem("tokenInfo");
     navigate("/");
@@ -83,8 +105,8 @@ export default function Header() {
 
         <div className="RightWrapper">
           <div className="UserWrapper">
-            <UserTypeLabel type="교사" />
-            <button className="btntype1">{userInfo.nickname} 배현준 님</button>
+            <UserTypeLabel type={userInfo.role} />
+            <button className="btntype1">{userInfo.name} 님</button>
           </div>
 
           <NotificationBtn src={notification} />

@@ -1,4 +1,8 @@
 import styled from "styled-components";
+import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import { UserInfo } from "../types/members.ts";
 import Card from "../components/common/Card.tsx";
 import DropDownMenu from "../components/common/DropDownMenu.tsx";
 import StudentInfo from "../components/studentlobby/StudentInfo.tsx";
@@ -6,20 +10,26 @@ import SpecialNoteList from "../components/studentlobby/SpecialNoteList.tsx";
 import GradeList from "../components/studentlobby/GradeList.tsx";
 import FeedbackList from "../components/studentlobby/FeedbackList.tsx";
 import ConsultList from "../components/studentlobby/ConsultList.tsx";
+import AttendanceList from "../components/studentlobby/AttendanceList.tsx";
 
 import StudentInfoModal from "../components/Modal/StudentInfoModal.tsx";
 import FeedBackModal from "../components/Modal/FeedBack/FeedBackModal.tsx";
-import { useState } from "react";
 import ConsultModal from "../components/Modal/Consult/ConsultModal.tsx";
 import SpecialModal from "../components/Modal/SpecialNote/SpecialModal.tsx";
 import AttendanceModal from "../components/Modal/Attendance/AttendanceModal.tsx";
-import AttendanceList from "../components/studentlobby/AttendanceList.tsx";
 import GradeModal from "../components/Modal/Grade/GradeModal.tsx";
+import { getStudentInfo } from "../apis/members.ts";
 
 export default function StudentLobbyPage() {
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+
+  const [studentInfo, setStudentInfo] = useState<UserInfo>();
   const [openModal, setOpenModal] = useState<string | null>(null);
 
-  const closeModal = () => setOpenModal(null);
+  // 드롭다운 선택 상태
+  const [selectedYear, setSelectedYear] = useState<number>(1);
+  const [selectedSemester, setSelectedSemester] = useState<number>(1);
 
   const options = [
     "1학년 1학기",
@@ -32,6 +42,31 @@ export default function StudentLobbyPage() {
     "4학년 2학기",
   ];
 
+  useEffect(() => {
+    if (id) {
+      getStudentInfo(Number(id)).then((res) => {
+        console.log(res);
+        setStudentInfo(res);
+      });
+    }
+  }, [id]);
+
+  const closeModal = () => setOpenModal(null);
+
+  // 드롭다운 선택 처리 함수
+  const handleSelect = (option: string) => {
+    const yearMatch = option.match(/(\d)학년/);
+    const semesterMatch = option.match(/(\d)학기/);
+
+    if (yearMatch && semesterMatch) {
+      const year = Number(yearMatch[1]);
+      const semester = Number(semesterMatch[1]);
+
+      setSelectedYear(year);
+      setSelectedSemester(semester);
+    }
+  };
+
   return (
     <HomePageWrapper>
       {/* 모달들 */}
@@ -40,60 +75,71 @@ export default function StudentLobbyPage() {
       {openModal === "feedback" && <FeedBackModal onClose={closeModal} />}
       {openModal === "consult" && <ConsultModal onClose={closeModal} />}
       {openModal === "attendance" && <AttendanceModal onClose={closeModal} />}
-      {openModal === "grade" && <GradeModal onClose={closeModal} />}
+      {openModal === "grade" && (
+        <GradeModal onClose={closeModal} studentId={Number(id)} />
+      )}
 
       {/* 카드들 */}
       <div onClick={() => setOpenModal("studentInfo")}>
         <Card
-          cardtitle={"학생 정보"}
-          contentChildren={
-            <StudentInfo
-              name={"배현준"}
-              school={"인천해원고등학교"}
-              grade={3}
-              classnum={4}
-              number={10}
-            />
-          }
+          cardtitle="학생 정보"
+          contentChildren={<StudentInfo studentInfo={studentInfo} />}
         />
       </div>
 
       <div onClick={() => setOpenModal("specialNote")}>
         <Card
-          cardtitle={"특기 사항"}
-          headerChildren={<DropDownMenu options={options} />}
+          cardtitle="특기 사항"
+          headerChildren={
+            <DropDownMenu options={options} onSelect={handleSelect} />
+          }
           contentChildren={<SpecialNoteList />}
         />
       </div>
 
       <div onClick={() => setOpenModal("grade")}>
         <Card
-          cardtitle={"성적"}
-          headerChildren={<DropDownMenu options={options} />}
-          contentChildren={<GradeList />}
+          cardtitle="성적"
+          headerChildren={
+            <DropDownMenu options={options} onSelect={handleSelect} />
+          }
+          contentChildren={
+            <GradeList
+              studentId={Number(id)}
+              year={selectedYear}
+              semester={selectedSemester}
+              miniView={true}
+            />
+          }
         />
       </div>
 
       <div onClick={() => setOpenModal("attendance")}>
         <Card
-          cardtitle={"출결"}
-          headerChildren={<DropDownMenu options={options} />}
+          cardtitle="출결"
+          headerChildren={
+            <DropDownMenu options={options} onSelect={handleSelect} />
+          }
           contentChildren={<AttendanceList />}
         />
       </div>
 
       <div onClick={() => setOpenModal("feedback")}>
         <Card
-          cardtitle={"피드백"}
-          headerChildren={<DropDownMenu options={options} />}
+          cardtitle="피드백"
+          headerChildren={
+            <DropDownMenu options={options} onSelect={handleSelect} />
+          }
           contentChildren={<FeedbackList />}
         />
       </div>
 
       <div onClick={() => setOpenModal("consult")}>
         <Card
-          cardtitle={"상담 내역"}
-          headerChildren={<DropDownMenu options={options} />}
+          cardtitle="상담 내역"
+          headerChildren={
+            <DropDownMenu options={options} onSelect={handleSelect} />
+          }
           contentChildren={<ConsultList />}
         />
       </div>
@@ -109,7 +155,7 @@ const HomePageWrapper = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  overflow-x: hidden; // 추가
+  overflow-x: hidden;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;

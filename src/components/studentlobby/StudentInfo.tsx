@@ -1,30 +1,28 @@
 import styled from "styled-components";
-
-interface StudentInfoProps {
-  name: string;
-  school: string;
-  grade: number;
-  classnum: number;
-  number: number;
-}
+import { UserInfo } from "../../types/members.ts";
 const StudentInfo = ({
-  name,
-  school,
-  grade,
-  classnum,
-  number,
-}: StudentInfoProps) => {
+  studentInfo,
+}: {
+  studentInfo: UserInfo | undefined;
+}) => {
+  if (studentInfo === undefined) {
+    return (
+      <StudentInfoWrapper>
+        학생 정보를 불러오는데 실패했습니다.
+      </StudentInfoWrapper>
+    );
+  }
   return (
     <StudentInfoWrapper>
       <ProfileImage />
       <RightContent>
-        <span className="name">{name}</span>
+        <span className="name">{studentInfo.name}</span>
         <br />
         <span className="info">
           <span className="school" style={{ color: "#FFB608" }}>
-            {school}{" "}
+            {studentInfo.schoolName}{" "}
           </span>
-          {grade}학년 {classnum}반 {number}번
+          {studentInfo.year}학년 {studentInfo.classId}반 {studentInfo.number}번
         </span>
       </RightContent>
     </StudentInfoWrapper>

@@ -15,8 +15,13 @@ const useUserStore = create<UserState>((set) => ({
   },
   userInfo: {
     id: 0,
-    nickname: "",
-    fireId: 0,
+    name: "",
+    profileImageUrl: null,
+    schoolName: "",
+    year: 0,
+    number: 0,
+    classId: 0,
+    subject: null,
     role: "",
   },
 

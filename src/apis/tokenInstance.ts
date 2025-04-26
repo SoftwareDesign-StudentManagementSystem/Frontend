@@ -11,16 +11,10 @@ tokenInstance.interceptors.request.use(
   (config) => {
     const { accessToken } = useUserStore.getState().tokenInfo;
     if (accessToken) {
-      console.log("tokenInstance - accesstoken있음" + accessToken);
+      console.log("tokenInstance - accesstoken있음 " + accessToken);
 
-      config.headers["Auth"] = accessToken;
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
-    // else {
-    //   alert("로그인이 필요합니다. 로그인해 주세요.");
-    //   return Promise.reject(
-    //     new axios.Cancel("토큰이 없어 요청이 취소되었습니다.")
-    //   );
-    // }
     return config;
   },
   (error) => {

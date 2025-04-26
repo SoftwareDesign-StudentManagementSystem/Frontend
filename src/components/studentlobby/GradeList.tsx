@@ -1,38 +1,23 @@
 import styled from "styled-components";
+import { getStudentGrade } from "../../apis/grade.ts";
+import { useEffect, useState } from "react";
+import { Grade, GradeListProps, SubjectGrade } from "../../types/grades.ts";
 
-const GradeList = () => {
-  const grades = [
-    {
-      subject: "수학",
-      score: "95 / 85",
-      achievement: "A+ (30명)",
-      rank: "1등급",
-    },
-    {
-      subject: "영어",
-      score: "88 / 82",
-      achievement: "A (28명)",
-      rank: "2등급",
-    },
-    {
-      subject: "과학",
-      score: "92 / 80",
-      achievement: "A+ (25명)",
-      rank: "1등급",
-    },
-    {
-      subject: "국어",
-      score: "85 / 78",
-      achievement: "B+ (32명)",
-      rank: "3등급",
-    },
-    {
-      subject: "사회",
-      score: "90 / 79",
-      achievement: "A (27명)",
-      rank: "2등급",
-    },
-  ];
+const GradeList = ({ studentId, year, semester, miniView }: GradeListProps) => {
+  const [grades, setGrades] = useState<Grade[]>([]);
+
+  useEffect(() => {
+    console.log(year, semester, studentId);
+    getStudentGrade(year, semester, studentId)
+      .then((res) => {
+        console.log(res);
+        setGrades(res);
+        console.log("데이터 갱신을 성공하였습니다!");
+      })
+      .catch(() => {
+        console.log("데이터를 불러오는 중 실패하였습니다!");
+      });
+  }, [year, semester, studentId]); // 의존성 배열 수정 (권장)
 
   return (
     <GradeListWrapper>
@@ -46,14 +31,36 @@ const GradeList = () => {
           </tr>
         </thead>
         <tbody>
-          {grades.slice(0, 3).map((grade, index) => (
-            <tr key={index}>
-              <td>{grade.subject}</td>
-              <td>{grade.score}</td>
-              <td>{grade.achievement}</td>
-              <td>{grade.rank}</td>
-            </tr>
-          ))}
+          {(miniView
+            ? Object.entries(grades ?? {})
+                .filter(
+                  ([key]) =>
+                    key !== "id" &&
+                    key !== "studentId" &&
+                    key !== "profileImageUrl" &&
+                    key !== "year" &&
+                    key !== "semester",
+                )
+                .slice(0, 3)
+            : Object.entries(grades ?? {}).filter(
+                ([key]) =>
+                  key !== "id" &&
+                  key !== "studentId" &&
+                  key !== "profileImageUrl" &&
+                  key !== "year" &&
+                  key !== "semester",
+              )
+          ).map(([subject, grade]) => {
+            const subjectGrade = grade as unknown as SubjectGrade;
+            return (
+              <tr key={subject}>
+                <td>{subject}</td>
+                <td>{subjectGrade.score}</td>
+                <td>{subjectGrade.achievementLevel}</td>
+                <td>{subjectGrade.relativeRankGrade}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </GradeListWrapper>
@@ -67,13 +74,10 @@ const GradeListWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  //margin-top: 20px;
 
   table {
     width: 100%;
     border-collapse: collapse;
-    //border: 1px solid #f1f2f8;
-    //background-color: #f9f9f9;
   }
 
   th,
@@ -88,7 +92,6 @@ const GradeListWrapper = styled.div`
   }
 
   th {
-    //background-color: #f0f0f0;
     font-weight: bold;
     text-align: center;
   }

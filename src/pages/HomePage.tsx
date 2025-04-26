@@ -4,8 +4,11 @@ import SearchStudent from "../components/home/SearchStudent";
 import ListHeader from "../components/home/ListHeader";
 import StudentList from "../components/home/StudentList.tsx";
 import UserInfo from "../components/home/UserInfo";
+import useUserStore from "../stores/useUserStore.ts";
 
 export default function HomePage() {
+  const { userInfo } = useUserStore();
+
   return (
     <HomePageWrapper>
       <LeftContentWrapper>
@@ -25,11 +28,11 @@ export default function HomePage() {
           cardtitle={"교사 정보"}
           contentChildren={
             <UserInfo
-              name="배현준"
-              school="광휘고등학교"
-              grade={3}
-              classnum={4}
-              number={5}
+              name={userInfo.name}
+              school={userInfo.schoolName}
+              grade={userInfo.year}
+              classnum={userInfo.classId}
+              number={userInfo.number}
             />
           }
         />

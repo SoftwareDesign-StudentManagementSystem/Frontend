@@ -4,17 +4,16 @@ import refreshInstance from "../apis/refreshInstance";
 import { ApiResponse } from "../types/common";
 import { TokenInfo, UserInfo } from "../types/members";
 import useUserStore from "../stores/useUserStore.ts";
-// import {Post} from "types/posts";
 
 // 회원 가져오기
-export const getMembers = async (): Promise<ApiResponse<UserInfo>> => {
+export const getMemberInfo = async (): Promise<ApiResponse<UserInfo>> => {
   const response =
     await tokenInstance.get<ApiResponse<UserInfo>>(`/rest-api/v1/member`);
   return response.data;
 };
 
 // 회원 닉네임/횃불이 이미지 변경
-export const putMembers = async (
+export const putMemberInfo = async (
   nickname: string | null,
   fireId: number,
 ): Promise<ApiResponse<number>> => {
@@ -34,7 +33,7 @@ export const putMembers = async (
 };
 
 // 회원 삭제
-export const deleteMembers = async (): Promise<ApiResponse<number>> => {
+export const deleteMember = async (): Promise<ApiResponse<number>> => {
   const response =
     await tokenInstance.delete<ApiResponse<number>>(`/api/members`);
   return response.data;
@@ -73,4 +72,22 @@ export const refresh = async (): Promise<ApiResponse<TokenInfo>> => {
     `/rest-api/v1/auth/login/refresh-token`,
   );
   return response.data;
+};
+
+// 학생 리스트 조회
+export const getStudentList = async (): Promise<UserInfo[]> => {
+  const response = await tokenInstance.get<ApiResponse<UserInfo[]>>(
+    `/rest-api/v1/member/students`,
+  );
+  console.log(response.data.swdesignPage.contents);
+  return response.data.swdesignPage.contents;
+};
+
+// 학생의 상세회원정보 조회(학부모/선생님 권한)
+export const getStudentInfo = async (studentId: number): Promise<UserInfo> => {
+  const response = await tokenInstance.get<ApiResponse<UserInfo>>(
+    `/rest-api/v1/member/${studentId}`,
+  );
+  console.log("getStudentInfo" + response.data);
+  return response.data.data;
 };

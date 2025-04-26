@@ -1,6 +1,6 @@
 import { Route, Routes, BrowserRouter, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { getMembers } from "./apis/members";
+import { getMemberInfo } from "./apis/members";
 import useUserStore from "./stores/useUserStore";
 // import ScrollBarStyles from "resources/styles/ScrollBarStyles";
 import RootPage from "./pages/RootPage";
@@ -40,7 +40,7 @@ function App() {
   useEffect(() => {
     const initializeUser = async () => {
       try {
-        const response = await getMembers();
+        const response = await getMemberInfo();
         setUserInfo(response.data);
         console.log(response.data);
       } catch (error) {

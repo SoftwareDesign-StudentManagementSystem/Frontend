@@ -5,7 +5,12 @@ export interface TokenInfo {
 
 export interface UserInfo {
   id: number;
-  nickname: string;
-  fireId: number;
-  role: string; // "admin" | ""
+  name: string;
+  profileImageUrl: string | null;
+  schoolName: string;
+  year: number;
+  number: number;
+  classId: number;
+  subject: string | null;
+  role: string; // 예: "ROLE_STUDENT"
 }

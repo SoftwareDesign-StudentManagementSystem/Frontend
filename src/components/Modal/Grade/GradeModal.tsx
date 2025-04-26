@@ -8,9 +8,19 @@ import { useState } from "react";
 import GradeList from "../../studentlobby/GradeList.tsx";
 import chart from "../../../assets/chart.svg";
 
-const GradeModal = ({ onClose }: { onClose: () => void }) => {
+const GradeModal = ({
+  onClose,
+  studentId,
+}: {
+  onClose: () => void;
+  studentId: number;
+}) => {
   return (
-    <Modal onClose={onClose} content={<GradeModalContent />} title={"성적"} />
+    <Modal
+      onClose={onClose}
+      content={<GradeModalContent studentId={studentId} />}
+      title={"성적"}
+    />
   );
 };
 export default GradeModal;
@@ -24,7 +34,7 @@ const gradeData = [
   { grade: 3, semester: 2 },
 ];
 
-const GradeModalContent = () => {
+const GradeModalContent = ({ studentId }: { studentId: number }) => {
   const [isAddMode, setIsAddMode] = useState(false);
   const [selectedGrade, setSelectedGrade] = useState<{
     grade: number;
@@ -49,7 +59,12 @@ const GradeModalContent = () => {
                 <Card
                   cardtitle={`${grade}학년 ${semester}학기`}
                   contentChildren={
-                    <GradeList grade={grade} semester={semester} />
+                    <GradeList
+                      studentId={Number(studentId)}
+                      year={grade}
+                      semester={semester}
+                      miniView={true}
+                    />
                   }
                 />
               </div>
@@ -59,8 +74,9 @@ const GradeModalContent = () => {
         </GradeViewWrapper>
       ) : (
         <GradeAdd
-          grade={selectedGrade?.grade}
+          year={selectedGrade?.grade}
           semester={selectedGrade?.semester}
+          studentId={studentId}
         />
       )}
     </GradeModalContentWrapper>

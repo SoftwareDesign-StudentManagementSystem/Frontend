@@ -1,7 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 
-const DropDownMenu = ({ options }: { options: string[] }) => {
+interface DropDownMenuProps {
+  options: string[];
+  onSelect?: (option: string) => void; // 🔥 onSelect 추가
+}
+
+const DropDownMenu = ({ options, onSelect }: DropDownMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(options[0]);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -23,6 +28,10 @@ const DropDownMenu = ({ options }: { options: string[] }) => {
   const handleSelect = (option: string) => {
     setSelected(option);
     setIsOpen(false);
+
+    if (onSelect) {
+      onSelect(option); // 🔥 부모에게 선택한 option 전달
+    }
   };
 
   return (
@@ -75,7 +84,6 @@ const DropDownButton = styled.button`
   border-radius: 8px;
   font-size: 16px;
   letter-spacing: 1px;
-
   color: #808080;
   cursor: pointer;
   text-align: left;
