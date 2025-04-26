@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import useUserStore from "../../stores/useUserStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import notification from "../../assets/notification.svg";
 import ButtonOrange from "./ButtonOrange";
@@ -61,9 +61,11 @@ const UserTypeLabelWrapper = styled.div`
     }
   }
 `;
+
 export default function Header() {
   const { userInfo, setUserInfo, setTokenInfo } = useUserStore();
   const navigate = useNavigate();
+  const location = useLocation(); // 현재 경로 가져오기
 
   const [openModal, setOpenModal] = useState<string | null>(null);
   const closeModal = () => setOpenModal(null);
@@ -87,6 +89,8 @@ export default function Header() {
     localStorage.removeItem("tokenInfo");
     navigate("/");
   };
+
+  const isStudentLobby = location.pathname === "/studentlobby"; // 현재 경로가 /studentLobby 인지 확인
 
   return (
     <>
@@ -113,19 +117,20 @@ export default function Header() {
           <button className="btntype1" onClick={handleLogout}>
             로그아웃
           </button>
-          <ButtonOrange
-            text={"보고서 작성"}
-            onClick={() => {
-              setOpenModal("reportCreate");
-            }}
-          />
+
+          {isStudentLobby && (
+            <ButtonOrange
+              text={"보고서 작성"}
+              onClick={() => {
+                setOpenModal("reportCreate");
+              }}
+            />
+          )}
         </div>
       </StyledHeader>
     </>
   );
 }
-
-// ...생략 (import 부분 등)
 
 const StyledHeader = styled.header`
   padding: 0 32px;
