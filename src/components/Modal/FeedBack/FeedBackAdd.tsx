@@ -1,47 +1,55 @@
 import styled from "styled-components";
 import { useState } from "react";
 import InputBoxWrapper from "../../../resources/styles/InputBoxWrapper.tsx";
+import ButtonWhite from "../../common/ButtonWhite.tsx";
+import ButtonOrange from "../../common/ButtonOrange.tsx";
+import { postConsult } from "../../../apis/consult.ts";
+import { postFeedback } from "../../../apis/feedback.ts";
+import { useSearchParams } from "react-router-dom";
+import useUserStore from "../../../stores/useUserStore.ts";
 
-const InputBox = () => {
-  return <InputBoxWrapper placeholder="내용을 입력해주세요." />;
+interface InputBoxProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}
+const InputBox = ({ value, onChange }: InputBoxProps) => {
+  return (
+    <InputBoxWrapper
+      placeholder="내용을 입력해주세요."
+      value={value}
+      onChange={onChange}
+    />
+  );
 };
 
-const FeedBackAdd = () => {
-  const categories = ["성적", "태도", "출결", "행동"];
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+interface FeedbackAddProps {
+  setIsAddMode: (value: boolean) => void;
+}
+const FeedBackAdd = ({ setIsAddMode }: FeedbackAddProps) => {
+  //선택된 학생의 정보
+  const [searchParams] = useSearchParams();
+  const id = Number(searchParams.get("id"));
+  const { userInfo } = useUserStore(); //현재 로그인한 사용자 정보
 
-  const notifyTargets = ["전체", "학생", "학부모", "전송안함"];
+  const [inputContent, setInputContent] = useState("");
+
+  const categories = ["성적", "태도", "출결", "행동"];
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([
+    "성적",
+  ]);
+
+  const notifyTargets = ["학생", "학부모"];
   const [selectedTargets, setSelectedTargets] = useState<string[]>([]);
 
   const toggleCategory = (category: string) => {
-    if (category === "전체") {
-      if (selectedCategories.length === categories.length - 1) {
-        setSelectedCategories([]);
-      } else {
-        setSelectedCategories(categories.filter((c) => c !== "전체"));
-      }
-    } else {
-      if (selectedCategories.includes(category)) {
-        setSelectedCategories(selectedCategories.filter((c) => c !== category));
-      } else {
-        setSelectedCategories([...selectedCategories, category]);
-      }
-    }
+    setSelectedCategories([category]);
   };
 
   const toggleTarget = (target: string) => {
-    if (target === "전체") {
-      if (selectedTargets.length === notifyTargets.length - 1) {
-        setSelectedTargets([]);
-      } else {
-        setSelectedTargets(notifyTargets.filter((t) => t !== "전체"));
-      }
+    if (selectedTargets.includes(target)) {
+      setSelectedTargets(selectedTargets.filter((t) => t !== target));
     } else {
-      if (selectedTargets.includes(target)) {
-        setSelectedTargets(selectedTargets.filter((t) => t !== target));
-      } else {
-        setSelectedTargets([...selectedTargets, target]);
-      }
+      setSelectedTargets([...selectedTargets, target]);
     }
   };
 
@@ -50,11 +58,36 @@ const FeedBackAdd = () => {
   const isAllTargetSelected =
     selectedTargets.length === notifyTargets.length - 1;
 
+  const handleSubmit = async () => {
+    const visibleToStudent = selectedTargets.includes("학생");
+    const visibleToParent = selectedTargets.includes("학부모");
+
+    const feedbackData = {
+      studentId: id,
+      teacherId: userInfo.id,
+      category: selectedCategories[0],
+      content: inputContent,
+      visibleToStudent,
+      visibleToParent,
+      recordedDate: new Date().toISOString().split("T")[0],
+    };
+    console.log(feedbackData);
+
+    postFeedback(feedbackData).then((res) => {
+      alert(res.message);
+      setIsAddMode(false);
+    });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputContent(e.target.value);
+  };
+
   return (
     <FeedBackAddWrapper>
-      <div className="title">피드백을 생성하실 범주를 선택해주세요.</div>
+      <div className="title">피드백을 생성하실 범주를 선택해주세요.(필수)</div>
       <CheckboxGroup>
-        {["전체", ...categories].map((category) => (
+        {[...categories].map((category) => (
           <label key={category}>
             <input
               type="checkbox"
@@ -70,7 +103,7 @@ const FeedBackAdd = () => {
         ))}
       </CheckboxGroup>
 
-      <div className="title">알림을 보낼 대상을 선택해주세요.</div>
+      <div className="title">알림을 보낼 대상을 선택해주세요.(선택)</div>
       <CheckboxGroup>
         {notifyTargets.map((target) => (
           <label key={target}>
@@ -87,7 +120,17 @@ const FeedBackAdd = () => {
           </label>
         ))}
       </CheckboxGroup>
-      <InputBox />
+      <InputBox value={inputContent} onChange={handleInputChange} />
+
+      <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
+        <ButtonWhite
+          text={"돌아가기"}
+          onClick={() => {
+            setIsAddMode(false);
+          }}
+        />
+        <ButtonOrange text={"저장"} onClick={handleSubmit} />
+      </div>
     </FeedBackAddWrapper>
   );
 };

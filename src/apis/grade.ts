@@ -15,3 +15,17 @@ export const getStudentGrade = async (
   console.log(response.data);
   return response.data.data;
 };
+
+// 학생 성적 생성(선생님 권한)
+// export const getStudentGrade = async (
+//   year: number,
+//   semester: number,
+//   studentId: number,
+// ): Promise<Grade[]> => {
+//   const response = await tokenInstance.get<ApiResponse<Grade[]>>(
+//     `/rest-api/v1/grade/filter/${studentId}`,
+//     { params: { year, semester } },
+//   );
+//   console.log(response.data);
+//   return response.data.data;
+// };

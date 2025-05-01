@@ -3,21 +3,70 @@ import { getStudentGrade } from "../../apis/grade.ts";
 import { useEffect, useState } from "react";
 import { Grade, GradeListProps, SubjectGrade } from "../../types/grades.ts";
 
-const GradeList = ({ studentId, year, semester, miniView }: GradeListProps) => {
+// props 타입에 showInputRow, setShowInputRow 추가
+interface GradeListExtendedProps extends GradeListProps {
+  showInputRow: boolean;
+  setShowInputRow: (v: boolean) => void;
+}
+
+const GradeList = ({
+  studentId,
+  year,
+  semester,
+  miniView,
+  showInputRow,
+  setShowInputRow,
+}: GradeListExtendedProps) => {
   const [grades, setGrades] = useState<Grade[]>([]);
+  const [newGrade, setNewGrade] = useState({
+    subject: "",
+    score: "",
+    achievementLevel: "",
+    relativeRankGrade: "",
+  });
 
   useEffect(() => {
-    console.log(year, semester, studentId);
     getStudentGrade(year, semester, studentId)
-      .then((res) => {
-        console.log(res);
-        setGrades(res);
-        console.log("데이터 갱신을 성공하였습니다!");
-      })
-      .catch(() => {
-        console.log("데이터를 불러오는 중 실패하였습니다!");
-      });
-  }, [year, semester, studentId]); // 의존성 배열 수정 (권장)
+      .then((res) => setGrades(res))
+      .catch(() => console.log("데이터를 불러오는 중 실패하였습니다!"));
+  }, [year, semester, studentId]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewGrade({ ...newGrade, [e.target.name]: e.target.value });
+  };
+
+  const handleAddGrade = () => {
+    if (!newGrade.score.trim()) return;
+
+    setGrades((prev) => ({
+      ...prev,
+      [newGrade.subject]: {
+        score: newGrade.score,
+        achievementLevel: newGrade.achievementLevel,
+        relativeRankGrade: newGrade.relativeRankGrade,
+      },
+    }));
+
+    setNewGrade({
+      subject: "",
+      score: "",
+      achievementLevel: "",
+      relativeRankGrade: "",
+    });
+
+    setShowInputRow(false);
+  };
+
+  // 유효한 과목 리스트만 필터링
+  const validGradeEntries = Object.entries(grades ?? {}).filter(
+    ([key]) =>
+      !["id", "studentId", "profileImageUrl", "year", "semester"].includes(key),
+  );
+
+  // miniView가 true면 상위 3개만 보여줌
+  const displayedGrades = miniView
+    ? validGradeEntries.slice(0, 3)
+    : validGradeEntries;
 
   return (
     <GradeListWrapper>
@@ -31,27 +80,8 @@ const GradeList = ({ studentId, year, semester, miniView }: GradeListProps) => {
           </tr>
         </thead>
         <tbody>
-          {(miniView
-            ? Object.entries(grades ?? {})
-                .filter(
-                  ([key]) =>
-                    key !== "id" &&
-                    key !== "studentId" &&
-                    key !== "profileImageUrl" &&
-                    key !== "year" &&
-                    key !== "semester",
-                )
-                .slice(0, 3)
-            : Object.entries(grades ?? {}).filter(
-                ([key]) =>
-                  key !== "id" &&
-                  key !== "studentId" &&
-                  key !== "profileImageUrl" &&
-                  key !== "year" &&
-                  key !== "semester",
-              )
-          ).map(([subject, grade]) => {
-            const subjectGrade = grade as unknown as SubjectGrade;
+          {displayedGrades.map(([subject, grade]) => {
+            const subjectGrade = grade as SubjectGrade;
             return (
               <tr key={subject}>
                 <td>{subject}</td>
@@ -61,6 +91,27 @@ const GradeList = ({ studentId, year, semester, miniView }: GradeListProps) => {
               </tr>
             );
           })}
+          {!miniView && showInputRow && (
+            <>
+              <tr>
+                <td>
+                  <StyledInput
+                    type="text"
+                    name="score"
+                    value={newGrade.score}
+                    onChange={handleInputChange}
+                    placeholder="점수"
+                  />
+                </td>
+                <button
+                  onClick={handleAddGrade}
+                  style={{ marginTop: "15px", marginLeft: "10px" }}
+                >
+                  저장
+                </button>
+              </tr>
+            </>
+          )}
         </tbody>
       </table>
     </GradeListWrapper>
@@ -72,6 +123,7 @@ export default GradeList;
 const GradeListWrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
@@ -94,5 +146,28 @@ const GradeListWrapper = styled.div`
   th {
     font-weight: bold;
     text-align: center;
+  }
+
+  button {
+    width: fit-content;
+  }
+`;
+
+// 중간에 추가
+const StyledInput = styled.input`
+  width: 80%;
+  padding: 8px 10px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+
+  &:focus {
+    border-color: #3d5afe;
+    box-shadow: 0 0 0 2px rgba(61, 90, 254, 0.1);
+  }
+
+  &::placeholder {
+    color: #b0b0b0;
   }
 `;

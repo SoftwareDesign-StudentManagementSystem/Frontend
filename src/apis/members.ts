@@ -39,6 +39,41 @@ export const deleteMember = async (): Promise<ApiResponse<number>> => {
   return response.data;
 };
 
+//(학부모) 회원가입
+export const signup = async (
+  password: string,
+  name: string,
+  phone: string,
+  email: string,
+  birthday: string,
+  schoolName: string,
+  gender: string,
+) => {
+  try {
+    console.log(password, name, phone, email, birthday, schoolName, gender);
+    const response = await axiosInstance.post("/rest-api/v1/member/parent", {
+      password,
+      name,
+      phone,
+      email,
+      birthday,
+      schoolName,
+      gender,
+    });
+
+    const data = response.data;
+    if (data.returnCode === "SUCCESS") {
+      // 회원가입 성공 시, accessToken과 refreshToken 반환
+      return true;
+    } else {
+      throw new Error(data.returnMessage || "회원가입 실패");
+    }
+  } catch (error) {
+    console.error("회원가입 요청 오류:", error);
+    throw new Error("회원가입 실패");
+  }
+};
+
 // 로그인
 export const login = async (accountId: number, password: string) => {
   try {
@@ -79,8 +114,8 @@ export const getStudentList = async (): Promise<UserInfo[]> => {
   const response = await tokenInstance.get<ApiResponse<UserInfo[]>>(
     `/rest-api/v1/member/students`,
   );
-  console.log(response.data.swdesignPage.contents);
-  return response.data.swdesignPage.contents;
+  console.log(response.data.ieduPage.contents);
+  return response.data.ieduPage.contents;
 };
 
 // 학생의 상세회원정보 조회(학부모/선생님 권한)

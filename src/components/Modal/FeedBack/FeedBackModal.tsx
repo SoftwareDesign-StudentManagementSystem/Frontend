@@ -6,6 +6,7 @@ import FeedbackList from "../../studentlobby/FeedbackList.tsx";
 import FeedBackAdd from "./FeedBackAdd.tsx";
 import ButtonWhite from "../../common/ButtonWhite.tsx";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const FeedBackModal = ({ onClose }: { onClose: () => void }) => {
   return (
@@ -20,18 +21,26 @@ export default FeedBackModal;
 
 const FeedBackModalContent = () => {
   const [isAddMode, setIsAddMode] = useState(false);
+
+  //선택된 학생의 정보
+  const [searchParams] = useSearchParams();
+  const studentId = searchParams.get("id");
+
   return (
     <FeedBackModalContentWrapper>
       {!isAddMode ? (
         <>
-          <Card cardtitle={"피드백"} contentChildren={<FeedbackList />} />
+          <Card
+            cardtitle={"피드백"}
+            contentChildren={<FeedbackList studentId={Number(studentId)} />}
+          />
           <ButtonWhite
             text={"+ 피드백 추가"}
             onClick={() => setIsAddMode(true)}
           />
         </>
       ) : (
-        <FeedBackAdd />
+        <FeedBackAdd setIsAddMode={setIsAddMode} />
       )}
     </FeedBackModalContentWrapper>
   );

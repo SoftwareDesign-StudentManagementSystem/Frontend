@@ -104,7 +104,7 @@ export default function Header() {
             navigate("/home");
           }}
         >
-          LOGO
+          iEdu
         </div>
 
         <div className="RightWrapper">

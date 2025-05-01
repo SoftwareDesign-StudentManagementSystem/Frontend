@@ -75,9 +75,7 @@ export default function StudentLobbyPage() {
       )}
       {openModal === "specialNote" && <SpecialModal onClose={closeModal} />}
       {openModal === "feedback" && <FeedBackModal onClose={closeModal} />}
-      {openModal === "consult" && (
-        <ConsultModal onClose={closeModal} studentId={Number(id)} />
-      )}
+      {openModal === "consult" && <ConsultModal onClose={closeModal} />}
       {openModal === "attendance" && <AttendanceModal onClose={closeModal} />}
       {openModal === "grade" && (
         <GradeModal onClose={closeModal} studentId={Number(id)} />

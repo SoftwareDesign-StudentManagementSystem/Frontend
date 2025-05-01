@@ -43,6 +43,7 @@ const StudentInfoModalContent = ({
   const [classnum, setClassnum] = useState(studentInfo?.classId?.toString()); //반
   const [studentid, setStudentid] = useState(studentInfo?.number?.toString()); //번호
 
+  //생년월일
   const [birthYear, setBirthYear] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
   const [birthDay, setBirthDay] = useState("");

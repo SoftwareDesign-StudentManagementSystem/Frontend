@@ -1,5 +1,5 @@
 import tokenInstance from "../apis/tokenInstance";
-import { Consult } from "../types/consults.ts";
+import { Consult, AddConsultProps } from "../types/consults.ts";
 
 // 학생 id로 상담 기록 조회
 export const getConsult = async (studentId: number): Promise<Consult[]> => {
@@ -9,4 +9,23 @@ export const getConsult = async (studentId: number): Promise<Consult[]> => {
   console.log("getconsult");
   console.log(response.data);
   return response.data;
+};
+
+// 교사가 상담 기록 추가
+
+// 상담 기록 추가 함수
+export const postConsult = async (
+  consultData: AddConsultProps,
+): Promise<any> => {
+  try {
+    const response = await tokenInstance.post(
+      "/rest-api/v1/counsel",
+      consultData,
+    );
+    console.log("상담 기록 추가 성공:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("상담 기록 추가 실패:", error);
+    throw error;
+  }
 };

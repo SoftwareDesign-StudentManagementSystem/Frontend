@@ -4,15 +4,58 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useState } from "react";
 import DropDownMenu from "../../common/DropDownMenu.tsx";
+import useUserStore from "../../../stores/useUserStore.ts";
+import ButtonOrange from "../../common/ButtonOrange.tsx";
+import { postConsult } from "../../../apis/consult.ts";
+import { useSearchParams } from "react-router-dom";
+import ButtonWhite from "../../common/ButtonWhite.tsx";
 
-const InputBox = () => {
-  return <InputBoxWrapper placeholder="내용을 입력해주세요." />;
+interface InputBoxProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}
+const InputBox = ({ value, onChange }: InputBoxProps) => {
+  return (
+    <InputBoxWrapper
+      placeholder="내용을 입력해주세요."
+      value={value}
+      onChange={onChange}
+    />
+  );
 };
 
-const ConsultAdd = () => {
+interface ConsultAddProps {
+  setIsAddMode: (value: boolean) => void;
+}
+const ConsultAdd = ({ setIsAddMode }: ConsultAddProps) => {
   const [consultDate, setConsultDate] = useState<Date | null>(null);
   const [nextConsultDate, setNextConsultDate] = useState<Date | null>(null);
-  const options = ["상담 교사1", "상담 교사2"]; // 교사명 드롭다운 옵션
+  const [inputContent, setInputContent] = useState("");
+
+  //선택된 학생의 정보
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+
+  const { userInfo } = useUserStore(); //현재 로그인한 사용자 정보
+  const options = [userInfo.name]; // 교사명 드롭다운 옵션
+
+  const handleSubmit = async () => {
+    const consultData = {
+      studentId: id,
+      teacherId: userInfo.id,
+      date: consultDate,
+      content: inputContent,
+      visibleToStudent: true,
+      visibleToParent: true,
+    };
+    postConsult(consultData).then((res) => {
+      alert(res.message);
+    });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputContent(e.target.value);
+  };
 
   return (
     <ConsultAddWrapper>
@@ -47,7 +90,17 @@ const ConsultAdd = () => {
         </div>
       </OptionsWrapper>
 
-      <InputBox />
+      <InputBox value={inputContent} onChange={handleInputChange} />
+
+      <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
+        <ButtonWhite
+          text={"돌아가기"}
+          onClick={() => {
+            setIsAddMode(false);
+          }}
+        />
+        <ButtonOrange text={"저장"} onClick={handleSubmit} />
+      </div>
     </ConsultAddWrapper>
   );
 };
@@ -60,6 +113,7 @@ const ConsultAddWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  position: relative;
 
   .title {
     font-style: normal;

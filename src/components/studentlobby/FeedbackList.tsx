@@ -1,39 +1,16 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import { getFeedback } from "../../apis/feedback.ts";
+import { Feedback } from "../../types/feedback.ts";
 
-const FeedbackList = () => {
-  const feedbacks = [
-    {
-      date: "2025-04-01",
-      type: "성적",
-      teacher: "김철수",
-      content:
-        "수학 시험에서 우수한 성적을 거두었습니다. 계속 좋은 성적을 유지하세요!",
-    },
-    {
-      date: "2025-04-02",
-      type: "태도",
-      teacher: "이영희",
-      content: "수업 시간에 적극적으로 참여하여 좋은 태도를 보였습니다.",
-    },
-    {
-      date: "2025-04-03",
-      type: "출결",
-      teacher: "박민수",
-      content: "지각이 잦아 출결 관리에 신경 써야 합니다.",
-    },
-    {
-      date: "2025-04-04",
-      type: "행동",
-      teacher: "정다혜",
-      content: "친구들과의 협력적인 태도가 돋보였습니다.",
-    },
-    {
-      date: "2025-04-05",
-      type: "성적",
-      teacher: "최성호",
-      content: "영어 과목에서 전보다 향상된 성적을 보였습니다.",
-    },
-  ];
+const FeedbackList = ({ studentId }: { studentId: number }) => {
+  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
+
+  useEffect(() => {
+    getFeedback(studentId).then((res) => {
+      setFeedbacks(res);
+    });
+  }, []);
 
   return (
     <FeedbackListWrapper>
@@ -49,8 +26,8 @@ const FeedbackList = () => {
         <tbody>
           {feedbacks.slice(0, 3).map((feedback, index) => (
             <tr key={index}>
-              <td>{feedback.date}</td>
-              <td>{feedback.type}</td>
+              <td>{feedback.recordedDate}</td>
+              <td>{feedback.category}</td>
               <td>{feedback.teacher}</td>
               <td>{feedback.content}</td>
             </tr>

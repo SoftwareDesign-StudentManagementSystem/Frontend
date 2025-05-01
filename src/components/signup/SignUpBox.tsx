@@ -1,12 +1,46 @@
 import styled from "styled-components";
 import logoimg from "../../assets/logo.svg";
 import { useState } from "react";
+import { signup } from "../../apis/members.ts";
+import { useNavigate } from "react-router-dom"; // signup API import 추가
 
 const SignUpBox = () => {
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSignUp = async () => {
+    if (password !== passwordConfirm) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    try {
+      // 여기서는 추가 정보는 임시로 입력 (추후 input 추가 가능)
+      const result = await signup(
+        password, // password
+        name, // name
+        "010-0000-0000", // phone (임시)
+        "example@email.com", // email (임시)
+        "2000-01-01", // birthday (임시)
+        "인천해원고", // schoolName (고정)
+        "MALE", // gender (임시)
+      );
+
+      if (result) {
+        alert(
+          "회원가입을 성공하였습니다! 다음 페이지에서 자녀 등록을 완료해 주세요.",
+        );
+        // 이후 이동 처리 필요시 추가 (ex. 로그인 페이지 이동)
+        navigate("/childregister");
+      }
+    } catch (error: any) {
+      alert(error.message || "회원가입에 실패했습니다.");
+    }
+  };
 
   return (
     <SignUpBoxWrapper>
@@ -35,7 +69,7 @@ const SignUpBox = () => {
             }}
           >
             <InputBox
-              placeholder="아이디를 입력해주세요."
+              placeholder="숫자 형태의 아이디를 입력해주세요."
               value={id}
               onChange={(e) => setId(e.target.value)}
             />
@@ -45,6 +79,7 @@ const SignUpBox = () => {
         <div className="inputWrapper">
           <div className="inputtitle">비밀번호</div>
           <InputBox
+            type="password"
             placeholder="비밀번호를 입력해주세요."
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -53,18 +88,21 @@ const SignUpBox = () => {
         <div className="inputWrapper">
           <div className="inputtitle">비밀번호 확인</div>
           <InputBox
+            type="password"
             placeholder="비밀번호를 다시 입력해주세요."
             value={passwordConfirm}
             onChange={(e) => setPasswordConfirm(e.target.value)}
           />
         </div>
-        <SubmitButton>회원가입하기</SubmitButton>
+        <SubmitButton onClick={handleSignUp}>회원가입하기</SubmitButton>
       </ContentWrapper>
     </SignUpBoxWrapper>
   );
 };
 
 export default SignUpBox;
+
+// (이하 styled-components 코드는 기존과 동일)
 
 const SignUpBoxWrapper = styled.div`
   display: flex;

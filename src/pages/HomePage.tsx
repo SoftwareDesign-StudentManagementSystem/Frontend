@@ -13,6 +13,7 @@ import { getStudentList } from "../apis/members.ts";
 
 export default function HomePage() {
   const { userInfo } = useUserStore();
+  console.log(userInfo);
   const roleString =
     userInfo?.role === "ROLE_TEACHER"
       ? "교사"

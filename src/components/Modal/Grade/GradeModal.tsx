@@ -6,7 +6,8 @@ import Card from "../../common/Card.tsx";
 import GradeAdd from "./GradeAdd.tsx";
 import { useState } from "react";
 import GradeList from "../../studentlobby/GradeList.tsx";
-import chart from "../../../assets/chart.svg";
+// import chart from "../../../assets/chart.svg";
+import GradeRadarChart from "./GradeRadarChart"; // 추가
 
 const GradeModal = ({
   onClose,
@@ -50,7 +51,7 @@ const GradeModalContent = ({ studentId }: { studentId: number }) => {
     <GradeModalContentWrapper>
       {!isAddMode ? (
         <GradeViewWrapper>
-          {gradeData.map(({ grade, semester }) => (
+          {gradeData.map(({ grade, semester }, index) => (
             <GradeRow key={`${grade}-${semester}`}>
               <div
                 className="leftcontent"
@@ -68,7 +69,6 @@ const GradeModalContent = ({ studentId }: { studentId: number }) => {
                   }
                 />
               </div>
-              <Chart src={chart} />
             </GradeRow>
           ))}
         </GradeViewWrapper>
@@ -112,10 +112,10 @@ const GradeRow = styled.div`
 
   .leftcontent {
     cursor: pointer;
-    width: 50%;
+    width: 100%;
   }
 `;
 
-const Chart = styled.img`
-  width: 50%;
-`;
+// const Chart = styled.img`
+//   width: 50%;
+// `;

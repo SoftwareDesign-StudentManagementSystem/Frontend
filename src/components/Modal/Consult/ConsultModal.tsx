@@ -6,25 +6,23 @@ import ConsultAdd from "./ConsultAdd.tsx";
 import ButtonWhite from "../../common/ButtonWhite.tsx";
 import { useState } from "react";
 import ConsultList from "../../studentlobby/ConsultList.tsx";
+import { useSearchParams } from "react-router-dom";
 
-const ConsultModal = ({
-  onClose,
-  studentId,
-}: {
-  onClose: () => void;
-  studentId: number;
-}) => {
+const ConsultModal = ({ onClose }: { onClose: () => void }) => {
   return (
     <Modal
       onClose={onClose}
-      content={<ConsultModalContent studentId={studentId} />}
+      content={<ConsultModalContent />}
       title={"상담 내역"}
     />
   );
 };
 export default ConsultModal;
 
-const ConsultModalContent = ({ studentId }: { studentId: number }) => {
+const ConsultModalContent = () => {
+  //선택된 학생의 정보
+  const [searchParams] = useSearchParams();
+  const studentId = searchParams.get("id");
   const [isAddMode, setIsAddMode] = useState(false);
   return (
     <FeedBackModalContentWrapper>
@@ -40,7 +38,9 @@ const ConsultModalContent = ({ studentId }: { studentId: number }) => {
           />
         </>
       ) : (
-        <ConsultAdd />
+        <>
+          <ConsultAdd setIsAddMode={setIsAddMode} />
+        </>
       )}
     </FeedBackModalContentWrapper>
   );

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import SignUpBox from "../components/signup/SignUpBox.tsx";
 
-export default function LoginPage() {
+export default function SignUpPage() {
   return (
     <SignUpPageWrapper>
       <SignUpBox />
