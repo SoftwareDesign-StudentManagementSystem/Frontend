@@ -7,7 +7,8 @@ import GradeSemesterView from "./GradeSemesterView.tsx";
 import { useState } from "react";
 import GradeList from "../../studentlobby/GradeList.tsx";
 // import chart from "../../../assets/chart.svg";
-import GradeRadarChart from "./GradeRadarChart"; // 추가
+import GradeRadarChart from "./GradeRadarChart";
+import ButtonWhite from "../../common/ButtonWhite.tsx"; // 추가
 
 const GradeModal = ({
   onClose,
@@ -73,11 +74,19 @@ const GradeModalContent = ({ studentId }: { studentId: number }) => {
           ))}
         </GradeViewWrapper>
       ) : (
-        <GradeSemesterView
-          year={selectedGrade?.grade}
-          semester={selectedGrade?.semester}
-          studentId={studentId}
-        />
+        <>
+          <GradeSemesterView
+            year={selectedGrade?.grade}
+            semester={selectedGrade?.semester}
+            studentId={studentId}
+          />
+          <ButtonWhite
+            text={"목록으로"}
+            onClick={() => {
+              setIsAddMode(false);
+            }}
+          />
+        </>
       )}
     </GradeModalContentWrapper>
   );
