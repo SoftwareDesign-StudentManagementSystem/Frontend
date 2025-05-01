@@ -3,7 +3,7 @@ import Modal from "../Modal.tsx";
 import styled from "styled-components";
 
 import Card from "../../common/Card.tsx";
-import GradeAdd from "./GradeAdd.tsx";
+import GradeSemesterView from "./GradeSemesterView.tsx";
 import { useState } from "react";
 import GradeList from "../../studentlobby/GradeList.tsx";
 // import chart from "../../../assets/chart.svg";
@@ -73,7 +73,7 @@ const GradeModalContent = ({ studentId }: { studentId: number }) => {
           ))}
         </GradeViewWrapper>
       ) : (
-        <GradeAdd
+        <GradeSemesterView
           year={selectedGrade?.grade}
           semester={selectedGrade?.semester}
           studentId={studentId}
