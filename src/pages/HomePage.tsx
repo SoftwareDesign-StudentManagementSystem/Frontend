@@ -8,10 +8,12 @@ import useUserStore from "../stores/useUserStore.ts";
 import { useEffect, useState } from "react";
 import { UserInfo } from "../types/members.ts";
 import { getStudentList } from "../apis/members.ts";
+import { useNavigate } from "react-router-dom";
 
 // (앞부분은 동일)
 
 export default function HomePage() {
+  const navigate = useNavigate();
   const { userInfo } = useUserStore();
   console.log(userInfo);
   const roleString =
@@ -22,6 +24,9 @@ export default function HomePage() {
         : userInfo.role === "ROLE_PARENT"
           ? "학부모"
           : "관리자";
+  if (userInfo.role === "ROLE_STUDENT") {
+    navigate("/studentlobby?id=" + userInfo.id);
+  }
 
   const [students, setStudents] = useState<UserInfo[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<UserInfo[]>([]);

@@ -18,9 +18,13 @@ import ConsultModal from "../components/Modal/Consult/ConsultModal.tsx";
 import SpecialModal from "../components/Modal/SpecialNote/SpecialModal.tsx";
 import AttendanceModal from "../components/Modal/Attendance/AttendanceModal.tsx";
 import GradeModal from "../components/Modal/Grade/GradeModal.tsx";
-import { getStudentInfo } from "../apis/members.ts";
+import { getStudentInfo, getStudentMyInfo } from "../apis/members.ts";
+import useUserStore from "../stores/useUserStore.ts";
 
 export default function StudentLobbyPage() {
+  const { userInfo } = useUserStore();
+  console.log(userInfo);
+
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
@@ -43,13 +47,23 @@ export default function StudentLobbyPage() {
   ];
 
   useEffect(() => {
+    if (!userInfo.id) return;
+
     if (id) {
-      getStudentInfo(Number(id)).then((res) => {
-        console.log(res);
-        setStudentInfo(res);
-      });
+      console.log("ROLE" + userInfo.role);
+      if (userInfo.role === "ROLE_STUDENT") {
+        getStudentMyInfo().then((res) => {
+          console.log(res);
+          setStudentInfo(res);
+        });
+      } else {
+        getStudentInfo(Number(id)).then((res) => {
+          console.log(res);
+          setStudentInfo(res);
+        });
+      }
     }
-  }, [id]);
+  }, [userInfo]);
 
   const closeModal = () => setOpenModal(null);
 
@@ -132,7 +146,7 @@ export default function StudentLobbyPage() {
           headerChildren={
             <DropDownMenu options={options} onSelect={handleSelect} />
           }
-          contentChildren={<FeedbackList />}
+          contentChildren={<FeedbackList studentId={Number(id)} />}
         />
       </div>
 

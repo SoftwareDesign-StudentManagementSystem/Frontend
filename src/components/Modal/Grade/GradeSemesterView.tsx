@@ -5,10 +5,13 @@ import ButtonWhite from "../../common/ButtonWhite.tsx";
 import { Grade, GradeListProps } from "../../../types/grades.ts";
 import { useEffect, useState } from "react";
 import GradeRadarChart from "./GradeRadarChart.tsx";
-import { getStudentGrade } from "../../../apis/grade.ts";
+import { getStudentGrade, getStudentMyGrade } from "../../../apis/grade.ts";
+import useUserStore from "../../../stores/useUserStore.ts";
 
 // 각 학기별 성적을 보여주는 화면
 const GradeSemesterView = ({ year, semester, studentId }: GradeListProps) => {
+  const { userInfo } = useUserStore();
+
   const [showInputRow, setShowInputRow] = useState(false);
   const [grades, setGrades] = useState<Grade[]>([]);
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
@@ -16,9 +19,15 @@ const GradeSemesterView = ({ year, semester, studentId }: GradeListProps) => {
   useEffect(() => {
     const fetchGrades = async () => {
       try {
-        const res = await getStudentGrade(year, semester, studentId);
-        console.log("GradeSemesterView", res);
-        setGrades(res);
+        if (userInfo.role === "ROLE_STUDENT") {
+          const res = await getStudentMyGrade(year, semester);
+          console.log("GradeSemesterView", res);
+          setGrades(res);
+        } else {
+          const res = await getStudentGrade(year, semester, studentId);
+          console.log("GradeSemesterView", res);
+          setGrades(res);
+        }
       } catch (error) {
         console.error("성적 조회 중 오류 발생:", error);
       } finally {

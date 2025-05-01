@@ -126,3 +126,11 @@ export const getStudentInfo = async (studentId: number): Promise<UserInfo> => {
   console.log("getStudentInfo" + response.data);
   return response.data.data;
 };
+
+// 학생 본인의 상세회원정보 조회(학생 권한)
+export const getStudentMyInfo = async (): Promise<UserInfo> => {
+  const response =
+    await tokenInstance.get<ApiResponse<UserInfo>>(`/rest-api/v1/member`);
+  console.log("getStudentInfo" + response.data);
+  return response.data.data;
+};
