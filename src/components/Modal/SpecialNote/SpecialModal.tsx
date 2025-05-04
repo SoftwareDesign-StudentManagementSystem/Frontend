@@ -6,6 +6,7 @@ import SpecialAdd from "./SpecialAdd.tsx";
 import ButtonWhite from "../../common/ButtonWhite.tsx";
 import { useState } from "react";
 import SpecialNoteList from "../../studentlobby/SpecialNoteList.tsx";
+import useUserStore from "../../../stores/useUserStore.ts";
 
 const SpecialModal = ({ onClose }: { onClose: () => void }) => {
   return (
@@ -19,16 +20,22 @@ const SpecialModal = ({ onClose }: { onClose: () => void }) => {
 export default SpecialModal;
 
 const SpecialModalContent = () => {
+  const { userInfo } = useUserStore();
+
   const [isAddMode, setIsAddMode] = useState(false);
   return (
     <SpecialModalContentWrapper>
       {!isAddMode ? (
         <>
           <Card cardtitle={"특기 사항"} contentChildren={<SpecialNoteList />} />
-          <ButtonWhite
-            text={"+ 특기사항 추가"}
-            onClick={() => setIsAddMode(true)}
-          />
+          {userInfo.role !== "ROLE_STUDENT" && (
+            <>
+              <ButtonWhite
+                text={"+ 특기사항 추가"}
+                onClick={() => setIsAddMode(true)}
+              />
+            </>
+          )}
         </>
       ) : (
         <SpecialAdd />

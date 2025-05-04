@@ -7,6 +7,7 @@ import FeedBackAdd from "./FeedBackAdd.tsx";
 import ButtonWhite from "../../common/ButtonWhite.tsx";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import useUserStore from "../../../stores/useUserStore.ts";
 
 const FeedBackModal = ({ onClose }: { onClose: () => void }) => {
   return (
@@ -20,6 +21,8 @@ const FeedBackModal = ({ onClose }: { onClose: () => void }) => {
 export default FeedBackModal;
 
 const FeedBackModalContent = () => {
+  const { userInfo } = useUserStore();
+
   const [isAddMode, setIsAddMode] = useState(false);
 
   //선택된 학생의 정보
@@ -34,10 +37,14 @@ const FeedBackModalContent = () => {
             cardtitle={"피드백"}
             contentChildren={<FeedbackList studentId={Number(studentId)} />}
           />
-          <ButtonWhite
-            text={"+ 피드백 추가"}
-            onClick={() => setIsAddMode(true)}
-          />
+          {userInfo.role !== "ROLE_STUDENT" && (
+            <>
+              <ButtonWhite
+                text={"+ 피드백 추가"}
+                onClick={() => setIsAddMode(true)}
+              />
+            </>
+          )}
         </>
       ) : (
         <FeedBackAdd setIsAddMode={setIsAddMode} />

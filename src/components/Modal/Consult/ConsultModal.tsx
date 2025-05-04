@@ -7,6 +7,7 @@ import ButtonWhite from "../../common/ButtonWhite.tsx";
 import { useState } from "react";
 import ConsultList from "../../studentlobby/ConsultList.tsx";
 import { useSearchParams } from "react-router-dom";
+import useUserStore from "../../../stores/useUserStore.ts";
 
 const ConsultModal = ({ onClose }: { onClose: () => void }) => {
   return (
@@ -20,6 +21,8 @@ const ConsultModal = ({ onClose }: { onClose: () => void }) => {
 export default ConsultModal;
 
 const ConsultModalContent = () => {
+  const { userInfo } = useUserStore();
+
   //선택된 학생의 정보
   const [searchParams] = useSearchParams();
   const studentId = searchParams.get("id");
@@ -32,10 +35,14 @@ const ConsultModalContent = () => {
             cardtitle={"상담 내역"}
             contentChildren={<ConsultList studentId={Number(studentId)} />}
           />
-          <ButtonWhite
-            text={"+ 상담내역 추가"}
-            onClick={() => setIsAddMode(true)}
-          />
+          {userInfo.role !== "ROLE_STUDENT" && (
+            <>
+              <ButtonWhite
+                text={"+ 상담내역 추가"}
+                onClick={() => setIsAddMode(true)}
+              />
+            </>
+          )}
         </>
       ) : (
         <>
