@@ -49,6 +49,7 @@ export default function NotificationList() {
             <div className="time">{item.isRead}</div>
           </NotificationItem>
         ))}
+        {notifications.length === 0 && <div>알림이 없습니다.</div>}
       </ItemWrapper>
     </DropdownWrapper>
   );

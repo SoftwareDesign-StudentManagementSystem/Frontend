@@ -6,8 +6,9 @@ import notification from "../../assets/notification.svg";
 import ButtonOrange from "./ButtonOrange";
 import { useState } from "react";
 import ReportCreateModal from "../Modal/ReportCreateModal.tsx";
+import NotificationList from "../header/NotificationList.tsx";
 
-import NotificationList from "../header/NotificationList.tsx"; // 추가
+import Logo from "../../assets/logo_row.png";
 
 const UserTypeLabel = ({ type }: { type: string }) => {
   const getLabel = (type: string) => {
@@ -109,7 +110,7 @@ export default function Header() {
             navigate("/home");
           }}
         >
-          iEdu
+          <img src={Logo} alt={"logo"} style={{ height: "70%" }} />
         </div>
 
         <div className="RightWrapper">
@@ -192,6 +193,7 @@ const StyledHeader = styled.header`
     flex-direction: row;
     font-size: 30px;
     font-weight: bolder;
+    cursor: pointer;
   }
 
   .RightWrapper {

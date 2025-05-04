@@ -15,6 +15,45 @@ const ChildRegisterBox = () => {
   const [birthday, setBirthday] = useState("");
 
   const handleSubmit = async () => {
+    // 입력값 유효성 검사
+    if (!name.trim()) {
+      alert("자녀 이름을 입력해주세요.");
+      return;
+    }
+    if (!grade || isNaN(Number(grade))) {
+      alert("학년을 숫자로 입력해주세요.");
+      return;
+    }
+    if (!classnum || isNaN(Number(classnum))) {
+      alert("반을 숫자로 입력해주세요.");
+      return;
+    }
+    if (!studentid || isNaN(Number(studentid))) {
+      alert("번호를 숫자로 입력해주세요.");
+      return;
+    }
+    if (
+      !birthyear.match(/^\d{4}$/) ||
+      !birthmonth.match(/^\d{1,2}$/) ||
+      !birthday.match(/^\d{1,2}$/)
+    ) {
+      alert("생년월일을 정확히 입력해주세요.");
+      return;
+    }
+
+    const birthMonthNum = Number(birthmonth);
+    const birthDayNum = Number(birthday);
+
+    if (birthMonthNum < 1 || birthMonthNum > 12) {
+      alert("월은 1~12 사이여야 합니다.");
+      return;
+    }
+
+    if (birthDayNum < 1 || birthDayNum > 31) {
+      alert("일은 1~31 사이여야 합니다.");
+      return;
+    }
+
     const birthdayString = `${birthyear}-${birthmonth.padStart(2, "0")}-${birthday.padStart(2, "0")}`;
 
     const reqBody = {
@@ -113,7 +152,7 @@ const ChildRegisterBox = () => {
           자녀 개인정보 수집 동의{" "}
           <span style={{ color: "#ffb608" }}>(필수)</span>
         </label>
-        <SubmitButton onClick={handleSubmit}>회원가입하기</SubmitButton>
+        <SubmitButton onClick={handleSubmit}>등록하기</SubmitButton>
       </ContentWrapper>
     </ChildRegisterWrapper>
   );
@@ -130,7 +169,7 @@ const ChildRegisterWrapper = styled.div`
   gap: 20px;
   width: 60%;
   height: fit-content;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  //border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 `;
 const Logo = styled.img`

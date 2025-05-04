@@ -65,11 +65,11 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/childregister" element={<ChildRegisterPage />} />
 
         <Route path="/" element={<RootPage />}>
           <Route path="/home" element={<HomePage />} />
           <Route path="/studentlobby" element={<StudentLobbyPage />} />
+          <Route path="/childregister" element={<ChildRegisterPage />} />
         </Route>
       </Routes>
     </>
