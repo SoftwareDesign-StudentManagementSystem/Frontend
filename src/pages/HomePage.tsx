@@ -7,8 +7,9 @@ import UserInfoBox from "../components/home/UserInfoBox.tsx";
 import useUserStore from "../stores/useUserStore.ts";
 import { useEffect, useState } from "react";
 import { UserInfo } from "../types/members.ts";
-import { getStudentList } from "../apis/members.ts";
+import { getMemberDetailInfo, getStudentList } from "../apis/members.ts";
 import { useNavigate } from "react-router-dom";
+import ButtonWhite from "../components/common/ButtonWhite.tsx";
 
 // (앞부분은 동일)
 
@@ -32,12 +33,20 @@ export default function HomePage() {
   const [filteredStudents, setFilteredStudents] = useState<UserInfo[]>([]);
 
   useEffect(() => {
-    getStudentList().then((res) => {
-      console.log(res);
-      setStudents(res);
-      setFilteredStudents(res);
-    });
-  }, []);
+    if (userInfo?.role === "ROLE_PARENT") {
+      getMemberDetailInfo().then((res) => {
+        console.log("getMemberDetailInfo", res.data);
+        setStudents(res.data.childrenList);
+        setFilteredStudents(res.data.childrenList);
+      });
+    } else if (userInfo?.role === "ROLE_TEACHER") {
+      getStudentList().then((res) => {
+        console.log(res);
+        setStudents(res);
+        setFilteredStudents(res);
+      });
+    }
+  }, [userInfo]);
 
   const handleSearch = (searchParams: {
     grade: string;
@@ -73,6 +82,12 @@ export default function HomePage() {
           cardtitle={"학생 리스트"}
           headerChildren={<ListHeader />}
           contentChildren={<StudentList students={filteredStudents} />}
+        />
+        <ButtonWhite
+          text={"자녀 추가하기"}
+          onClick={() => {
+            navigate("/childregister");
+          }}
         />
       </LeftContentWrapper>
 

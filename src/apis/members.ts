@@ -2,40 +2,24 @@ import axiosInstance from "../apis/axiosInstance";
 import tokenInstance from "../apis/tokenInstance";
 import refreshInstance from "../apis/refreshInstance";
 import { ApiResponse } from "../types/common";
-import { TokenInfo, UserInfo } from "../types/members";
+import { TokenInfo, UserInfo, UserDetailInfo } from "../types/members";
 import useUserStore from "../stores/useUserStore.ts";
 
-// 회원 가져오기
+// 본인 회원 정보 조회
 export const getMemberInfo = async (): Promise<ApiResponse<UserInfo>> => {
   const response =
     await tokenInstance.get<ApiResponse<UserInfo>>(`/rest-api/v1/member`);
   return response.data;
 };
 
-// 회원 닉네임/횃불이 이미지 변경
-export const putMemberInfo = async (
-  nickname: string | null,
-  fireId: number,
-): Promise<ApiResponse<number>> => {
-  if (nickname) {
-    const response = await tokenInstance.put<ApiResponse<number>>(
-      `/api/members`,
-      { nickname, fireId },
-    );
-    return response.data;
-  } else {
-    const response = await tokenInstance.put<ApiResponse<number>>(
-      `/api/members`,
-      { fireId },
-    );
-    return response.data;
-  }
-};
-
-// 회원 삭제
-export const deleteMember = async (): Promise<ApiResponse<number>> => {
-  const response =
-    await tokenInstance.delete<ApiResponse<number>>(`/api/members`);
+// 본인의 상세회원정보 조회
+export const getMemberDetailInfo = async (): Promise<
+  ApiResponse<UserDetailInfo>
+> => {
+  const response = await tokenInstance.get<ApiResponse<UserDetailInfo>>(
+    `/rest-api/v1/member/detail`,
+  );
+  console.log("getMemberDetailInfo" + response.data);
   return response.data;
 };
 
@@ -119,18 +103,30 @@ export const getStudentList = async (): Promise<UserInfo[]> => {
 };
 
 // 학생의 상세회원정보 조회(학부모/선생님 권한)
-export const getStudentInfo = async (studentId: number): Promise<UserInfo> => {
-  const response = await tokenInstance.get<ApiResponse<UserInfo>>(
-    `/rest-api/v1/member/${studentId}`,
+export const getStudentInfo = async (
+  studentId: number,
+): Promise<ApiResponse<UserDetailInfo>> => {
+  const response = await tokenInstance.get<ApiResponse<UserDetailInfo>>(
+    `/rest-api/v1/member/detail/${studentId}`,
   );
   console.log("getStudentInfo" + response.data);
-  return response.data.data;
+  return response.data;
 };
 
-// 학생 본인의 상세회원정보 조회(학생 권한)
-export const getStudentMyInfo = async (): Promise<UserInfo> => {
-  const response =
-    await tokenInstance.get<ApiResponse<UserInfo>>(`/rest-api/v1/member`);
-  console.log("getStudentInfo" + response.data);
-  return response.data.data;
+// 팔로우 요청하기(학부모 권한)
+export interface FollowRequestBody {
+  name: string;
+  year: number;
+  classId: number;
+  number: number;
+  birthday: string;
+}
+export const postFollow = async (
+  body: FollowRequestBody,
+): Promise<ApiResponse> => {
+  const response = await tokenInstance.post<ApiResponse>(
+    `/rest-api/v1/member/follow`,
+    body, // request body 추가
+  );
+  return response.data;
 };

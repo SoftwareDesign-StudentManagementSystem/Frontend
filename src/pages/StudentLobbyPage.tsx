@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { UserInfo } from "../types/members.ts";
+import { UserDetailInfo } from "../types/members.ts";
 import Card from "../components/common/Card.tsx";
 import DropDownMenu from "../components/common/DropDownMenu.tsx";
 import StudentInfo from "../components/studentlobby/StudentInfo.tsx";
@@ -18,7 +18,7 @@ import ConsultModal from "../components/Modal/Consult/ConsultModal.tsx";
 import SpecialModal from "../components/Modal/SpecialNote/SpecialModal.tsx";
 import AttendanceModal from "../components/Modal/Attendance/AttendanceModal.tsx";
 import GradeModal from "../components/Modal/Grade/GradeModal.tsx";
-import { getStudentInfo, getStudentMyInfo } from "../apis/members.ts";
+import { getMemberDetailInfo, getStudentInfo } from "../apis/members.ts";
 import useUserStore from "../stores/useUserStore.ts";
 
 export default function StudentLobbyPage() {
@@ -28,7 +28,7 @@ export default function StudentLobbyPage() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
-  const [studentInfo, setStudentInfo] = useState<UserInfo>();
+  const [studentInfo, setStudentInfo] = useState<UserDetailInfo>();
   const [openModal, setOpenModal] = useState<string | null>(null);
 
   // 드롭다운 선택 상태
@@ -52,14 +52,14 @@ export default function StudentLobbyPage() {
     if (id) {
       console.log("ROLE" + userInfo.role);
       if (userInfo.role === "ROLE_STUDENT") {
-        getStudentMyInfo().then((res) => {
-          console.log(res);
-          setStudentInfo(res);
+        getMemberDetailInfo().then((res) => {
+          console.log("ROLE_STUDENT", res.data);
+          setStudentInfo(res.data);
         });
       } else {
         getStudentInfo(Number(id)).then((res) => {
-          console.log(res);
-          setStudentInfo(res);
+          console.log(res.data);
+          setStudentInfo(res.data);
         });
       }
     }

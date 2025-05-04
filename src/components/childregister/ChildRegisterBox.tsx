@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import logoimg from "../../assets/logo.svg";
 import { useState } from "react";
+import { postFollow } from "../../apis/members.ts";
+import { useNavigate } from "react-router-dom";
+
 const ChildRegisterBox = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [grade, setGrade] = useState("");
   const [classnum, setClassnum] = useState("");
@@ -9,6 +13,31 @@ const ChildRegisterBox = () => {
   const [birthyear, setBirthyear] = useState("");
   const [birthmonth, setBirthmonth] = useState("");
   const [birthday, setBirthday] = useState("");
+
+  const handleSubmit = async () => {
+    const birthdayString = `${birthyear}-${birthmonth.padStart(2, "0")}-${birthday.padStart(2, "0")}`;
+
+    const reqBody = {
+      name: name,
+      year: Number(grade),
+      classId: Number(classnum),
+      number: Number(studentid),
+      birthday: birthdayString,
+    };
+
+    try {
+      const response = await postFollow(reqBody);
+      console.log(response);
+      alert(
+        "자녀 등록 요청을 성공하였습니다. 자녀의 승인 후 학생 리스트에 표시됩니다.",
+      );
+      navigate("/home");
+    } catch (error) {
+      console.error(error);
+      alert("등록 중 오류가 발생했습니다.");
+    }
+  };
+
   return (
     <ChildRegisterWrapper>
       <Logo src={logoimg} />
@@ -20,9 +49,9 @@ const ChildRegisterBox = () => {
           </span>
         </div>
         <div className="inputWrapper">
-          <div className="inputtitle">이름</div>
+          <div className="inputtitle">자녀 이름</div>
           <InputBox
-            placeholder="이름을 입력해주세요."
+            placeholder="자녀의 이름을 입력해주세요."
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -57,6 +86,7 @@ const ChildRegisterBox = () => {
           <div className="inputWrapper">
             <div className="inputtitle">생년월일</div>
             <InputBox
+              placeholder="년(YYYY)"
               value={birthyear}
               onChange={(e) => setBirthyear(e.target.value)}
             />
@@ -64,6 +94,7 @@ const ChildRegisterBox = () => {
           <div className="inputWrapper">
             <div className="inputtitle">_</div>
             <InputBox
+              placeholder="월(MM)"
               value={birthmonth}
               onChange={(e) => setBirthmonth(e.target.value)}
             />
@@ -71,6 +102,7 @@ const ChildRegisterBox = () => {
           <div className="inputWrapper">
             <div className="inputtitle">_</div>
             <InputBox
+              placeholder="일(DD)"
               value={birthday}
               onChange={(e) => setBirthday(e.target.value)}
             />
@@ -81,12 +113,14 @@ const ChildRegisterBox = () => {
           자녀 개인정보 수집 동의{" "}
           <span style={{ color: "#ffb608" }}>(필수)</span>
         </label>
-        <SubmitButton>회원가입하기</SubmitButton>
+        <SubmitButton onClick={handleSubmit}>회원가입하기</SubmitButton>
       </ContentWrapper>
     </ChildRegisterWrapper>
   );
 };
+
 export default ChildRegisterBox;
+
 const ChildRegisterWrapper = styled.div`
   display: flex;
   flex-direction: column;

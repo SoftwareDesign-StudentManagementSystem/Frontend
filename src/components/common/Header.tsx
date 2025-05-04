@@ -7,6 +7,8 @@ import ButtonOrange from "./ButtonOrange";
 import { useState } from "react";
 import ReportCreateModal from "../Modal/ReportCreateModal.tsx";
 
+import NotificationList from "../header/NotificationList.tsx"; // 추가
+
 const UserTypeLabel = ({ type }: { type: string }) => {
   const getLabel = (type: string) => {
     switch (type) {
@@ -70,6 +72,9 @@ export default function Header() {
   const [openModal, setOpenModal] = useState<string | null>(null);
   const closeModal = () => setOpenModal(null);
 
+  // 상태 추가
+  const [showNotifications, setShowNotifications] = useState(false);
+
   const handleLogout = () => {
     setUserInfo({
       id: 0,
@@ -113,7 +118,16 @@ export default function Header() {
             <button className="btntype1">{userInfo.name} 님</button>
           </div>
 
-          <NotificationBtn src={notification} />
+          {userInfo.role != "ROLE_TEACHER" && (
+            <>
+              <NotificationBtn
+                src={notification}
+                onClick={() => setShowNotifications((prev) => !prev)}
+              />
+            </>
+          )}
+
+          {showNotifications && <NotificationList />}
           <button className="btntype1" onClick={handleLogout}>
             로그아웃
           </button>
@@ -220,6 +234,7 @@ const StyledHeader = styled.header`
 const NotificationBtn = styled.img`
   width: 30px;
   height: 30px;
+  cursor: pointer;
 
   @media (max-width: 768px) {
     width: 24px;

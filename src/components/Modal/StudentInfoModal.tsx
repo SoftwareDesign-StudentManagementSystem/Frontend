@@ -4,7 +4,7 @@ import { useState } from "react";
 import ButtonOrange from "../common/ButtonOrange";
 import ButtonWhite from "../common/ButtonWhite";
 import Modal from "./Modal";
-import { UserInfo } from "../../types/members.ts";
+import { UserDetailInfo } from "../../types/members.ts";
 import useUserStore from "../../stores/useUserStore.ts";
 
 const StudentInfoModal = ({
@@ -12,19 +12,16 @@ const StudentInfoModal = ({
   studentInfo,
 }: {
   onClose: () => void;
-  studentInfo?: UserInfo;
+  studentInfo?: UserDetailInfo;
 }) => {
   return (
     <Modal
       title={"학생 정보"}
       content={
-        <StudentInfoModalContent
-          onClose={onClose}
-          studentInfo={studentInfo ? studentInfo : undefined}
-        />
+        <StudentInfoModalContent onClose={onClose} studentInfo={studentInfo} />
       }
       onClose={onClose}
-    ></Modal>
+    />
   );
 };
 export default StudentInfoModal;
@@ -34,19 +31,20 @@ const StudentInfoModalContent = ({
   studentInfo,
 }: {
   onClose: () => void;
-  studentInfo?: UserInfo;
+  studentInfo?: UserDetailInfo;
 }) => {
-  const { userInfo } = useUserStore(); //로그인 되어있는 사용자 정보
+  const { userInfo } = useUserStore(); // 로그인 사용자 정보
+  const isReadOnly = userInfo?.role === "ROLE_STUDENT";
 
-  const [name, setName] = useState(studentInfo?.name); //이름
-  const [grade, setGrade] = useState(studentInfo?.year?.toString() || ""); //학년
-  const [classnum, setClassnum] = useState(studentInfo?.classId?.toString()); //반
-  const [studentid, setStudentid] = useState(studentInfo?.number?.toString()); //번호
+  const [name, setName] = useState(studentInfo?.name);
+  const [grade, setGrade] = useState(studentInfo?.year?.toString() || "");
+  const [classnum, setClassnum] = useState(studentInfo?.classId?.toString());
+  const [studentid, setStudentid] = useState(studentInfo?.number?.toString());
 
-  //생년월일
-  const [birthYear, setBirthYear] = useState("");
-  const [birthMonth, setBirthMonth] = useState("");
-  const [birthDay, setBirthDay] = useState("");
+  const birthData = studentInfo?.birthday?.split("-") ?? ["", "", ""];
+  const [birthYear, setBirthYear] = useState(birthData[0]);
+  const [birthMonth, setBirthMonth] = useState(birthData[1]);
+  const [birthDay, setBirthDay] = useState(birthData[2]);
 
   return (
     <>
@@ -61,6 +59,7 @@ const StudentInfoModalContent = ({
               placeholder="이름"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              readOnly={isReadOnly}
               style={{ width: "100%" }}
             />
           </div>
@@ -73,6 +72,7 @@ const StudentInfoModalContent = ({
               placeholder="학년"
               value={grade}
               onChange={(e) => setGrade(e.target.value)}
+              readOnly={isReadOnly}
             />
           </div>
           <div className="inputWrapper">
@@ -81,6 +81,7 @@ const StudentInfoModalContent = ({
               placeholder="반"
               value={classnum}
               onChange={(e) => setClassnum(e.target.value)}
+              readOnly={isReadOnly}
             />
           </div>
           <div className="inputWrapper">
@@ -89,16 +90,19 @@ const StudentInfoModalContent = ({
               placeholder="번호"
               value={studentid}
               onChange={(e) => setStudentid(e.target.value)}
+              readOnly={isReadOnly}
             />
           </div>
         </HorizontalLineWrapper>
+
         <HorizontalLineWrapper>
           <div className="inputWrapper">
             <div className="inputtitle">생년월일</div>
             <InputBox
               placeholder="년"
               value={birthYear}
-              onChange={(e) => setGrade(e.target.value)}
+              onChange={(e) => setBirthYear(e.target.value)}
+              readOnly={isReadOnly}
             />
           </div>
           <div className="inputWrapper">
@@ -106,7 +110,8 @@ const StudentInfoModalContent = ({
             <InputBox
               placeholder="월"
               value={birthMonth}
-              onChange={(e) => setClassnum(e.target.value)}
+              onChange={(e) => setBirthMonth(e.target.value)}
+              readOnly={isReadOnly}
             />
           </div>
           <div className="inputWrapper">
@@ -114,78 +119,75 @@ const StudentInfoModalContent = ({
             <InputBox
               placeholder="일"
               value={birthDay}
-              onChange={(e) => setStudentid(e.target.value)}
+              onChange={(e) => setBirthDay(e.target.value)}
+              readOnly={isReadOnly}
             />
           </div>
         </HorizontalLineWrapper>
-        <HorizontalLineWrapper>
-          <ButtonOrange text={"학생 정보 수정"} onClick={onClose} />
-          {userInfo?.role === "ROLE_ADMIN" ||
-            (userInfo?.role === "ROLE_TEACHER" && (
-              <>
-                <ButtonWhite
-                  text={"학생 삭제"}
-                  onClick={() => {
-                    const isConfirmed =
-                      window.confirm("정말로 삭제하시겠어요?");
-                    if (isConfirmed) {
-                      onClose(); // 삭제 작업 수행
-                    }
-                  }}
-                />
-              </>
-            ))}
-        </HorizontalLineWrapper>
+
+        {(userInfo?.role === "ROLE_ADMIN" ||
+          userInfo?.role === "ROLE_TEACHER") && (
+          <HorizontalLineWrapper>
+            <ButtonOrange text={"학생 정보 수정"} onClick={onClose} />
+            <ButtonWhite
+              text={"학생 삭제"}
+              onClick={() => {
+                const isConfirmed = window.confirm("정말로 삭제하시겠어요?");
+                if (isConfirmed) {
+                  onClose(); // 삭제 작업 수행
+                }
+              }}
+            />
+          </HorizontalLineWrapper>
+        )}
       </ContentRight>
     </>
   );
 };
 
-// 왼쪽 영역
+// 스타일 컴포넌트
 const ContentLeft = styled.div`
   width: fit-content;
   height: 100%;
-  //background: red;
-  //overflow: hidden;
 `;
 
-// 사용자 이미지
 const UserImage = styled.img`
-  //width: 100%;
   height: 100%;
   object-fit: cover;
 `;
 
-// 오른쪽 정보 영역
 const ContentRight = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  //gap: 20px;
   justify-content: space-between;
   padding: 10px 15px;
 `;
 
 const InputBox = styled.input`
   flex: 1;
-
   height: 48px;
   background: #ffffff;
   border: 1px solid #dddddd;
   border-radius: 6px;
   box-sizing: border-box;
   padding: 12px 20px;
+
+  &:read-only {
+    background-color: #f2f2f2;
+    color: #555;
+    cursor: default;
+  }
 `;
 
 const HorizontalLineWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  //align-items: center;
   justify-content: center;
   align-self: center;
   gap: 8px;
-
   width: 100%;
+
   input {
     width: 150px;
   }
@@ -197,11 +199,12 @@ const HorizontalLineWrapper = styled.div`
     height: 100%;
     gap: 8px;
   }
+
   .inputtitle {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
-    line-height: 150%; /* identical to box height, or 21px */
+    line-height: 150%;
     color: #808080;
   }
 

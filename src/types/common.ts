@@ -1,4 +1,5 @@
 export interface ApiResponse<T = any> {
+  ieduPage: any;
   swdesignPage: any;
   result: ((prevState: string[]) => string[]) | string[];
   data: T;
@@ -6,7 +7,7 @@ export interface ApiResponse<T = any> {
 }
 
 export interface Pagination<T = any> {
-    pages: number;
-    total: number;
-    contents: T;
+  pages: number;
+  total: number;
+  contents: T;
 }

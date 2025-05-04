@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { UserInfo } from "../../types/members.ts";
+import { UserDetailInfo } from "../../types/members.ts";
 const StudentInfo = ({
   studentInfo,
 }: {
-  studentInfo: UserInfo | undefined;
+  studentInfo: UserDetailInfo | undefined;
 }) => {
   if (studentInfo === undefined) {
     return (
