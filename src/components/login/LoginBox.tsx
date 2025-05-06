@@ -31,7 +31,7 @@ const LoginBox = () => {
         <div className="maintitle">
           안녕하세요!
           <br />
-          <span style={{ color: "#ffb608" }}>인천해원고</span> iEdu입니다
+          <span style={{ color: "#ffb608" }}>인천송도고</span> iEdu입니다
         </div>
         <div className="inputWrapper">
           <div className="inputtitle">아이디</div>
