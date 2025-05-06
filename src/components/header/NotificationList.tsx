@@ -2,9 +2,18 @@ import styled from "styled-components";
 import { getNotification, putNotificationRead } from "../../apis/header.ts";
 import { useEffect, useState } from "react";
 import { Notification } from "../../types/header.ts";
+import FollowModal from "../Modal/FollowModal.tsx";
+import useUserStore from "../../stores/useUserStore.ts";
 
 export default function NotificationList() {
+  const { userDetailInfo } = useUserStore();
+
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [isOpenFollowModal, setIsOpenFollowModal] = useState(false);
+  const [parentName, setParentName] = useState("");
+  const [parentId, setParentId] = useState(-1);
+
+  const closeModal = () => setIsOpenFollowModal(false);
 
   useEffect(() => {
     const getNotifications = async () => {
@@ -20,38 +29,58 @@ export default function NotificationList() {
     getNotifications();
   }, []);
 
-  const handleNotiClick = (objectId: number) => {
-    console.log([objectId]);
+  const handleNotiClick = async (object: Notification) => {
+    console.log(object);
     try {
-      putNotificationRead([objectId]).then((res) => {
-        console.log(res);
-        alert("알림 읽기 처리 성공!");
-      });
+      const data = await putNotificationRead([object.id]);
+      console.log("알림 읽기 처리 성공!", data);
+      alert("알림 읽기 처리 성공!");
     } catch (e) {
       console.log(e);
       alert("알림 읽기 처리 실패!");
     }
+    //팔로우 처리
+    if (object.targetObject === "Follow") {
+      if (userDetailInfo.followRecList.length === 0) {
+        alert("이미 처리된 팔로우입니다.");
+        return;
+      }
+      setParentName(object.content);
+      setParentId(userDetailInfo.followRecList[0].id);
+      setIsOpenFollowModal(true);
+    }
   };
 
   return (
-    <DropdownWrapper>
-      <ItemWrapper>
-        {notifications.map((item) => (
-          <NotificationItem
-            key={item.objectId}
-            read={item.isRead}
-            onClick={() => {
-              handleNotiClick(item.objectId);
-            }}
-          >
-            <div className="title">{item.targetObject}</div>
-            <div className="message">{item.content}</div>
-            <div className="time">{item.isRead}</div>
-          </NotificationItem>
-        ))}
-        {notifications.length === 0 && <div>알림이 없습니다.</div>}
-      </ItemWrapper>
-    </DropdownWrapper>
+    <>
+      {isOpenFollowModal && (
+        <div className="ModalWrapper">
+          <FollowModal
+            onClose={closeModal}
+            parentName={parentName}
+            memberId={parentId}
+          />
+        </div>
+      )}
+      <DropdownWrapper>
+        <ItemWrapper>
+          {notifications.map((item, index) => (
+            <NotificationItem
+              key={index}
+              read={item.isRead}
+              onClick={() => {
+                handleNotiClick(item);
+              }}
+            >
+              <div className="title">{item.targetObject}</div>
+              <div className="message">{item.content}</div>
+              <div className="time">{item.isRead}</div>
+            </NotificationItem>
+          ))}
+          {notifications.length === 0 && <div>알림이 없습니다.</div>}
+        </ItemWrapper>
+      </DropdownWrapper>
+    </>
   );
 }
 
@@ -67,6 +96,9 @@ const DropdownWrapper = styled.div`
   border-radius: 12px;
   z-index: 1000;
   padding: 16px;
+  @media (min-width: 768px) {
+    right: 300px;
+  }
 `;
 
 const ItemWrapper = styled.div`

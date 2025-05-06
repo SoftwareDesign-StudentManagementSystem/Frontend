@@ -109,7 +109,7 @@ export const getStudentInfo = async (
   const response = await tokenInstance.get<ApiResponse<UserDetailInfo>>(
     `/rest-api/v1/member/detail/${studentId}`,
   );
-  console.log("getStudentInfo" + response.data);
+  console.log("getStudentInfo", response.data);
   return response.data;
 };
 
@@ -129,4 +129,43 @@ export const postFollow = async (
     body, // request body 추가
   );
   return response.data;
+};
+
+//팔로우 요청 수락하기(학생 권한)
+export const postFollowAccept = async (
+  memberId: number,
+): Promise<ApiResponse> => {
+  const response = await tokenInstance.post<ApiResponse>(
+    `/rest-api/v1/member/followReq/${memberId}`,
+  );
+  return response.data;
+};
+
+//(학년/반/번호)로 학생 조회(선생님 권한)
+export const getFilteredStudentList = async (
+  year: number,
+  classId: number,
+  number?: number, // 선택적 파라미터로 변경
+): Promise<ApiResponse<UserInfo[]>> => {
+  try {
+    const params: Record<string, number> = {
+      year,
+      classId,
+    };
+
+    if (number !== undefined) {
+      params.studentId = number;
+    }
+    console.log(params);
+
+    const response = await tokenInstance.get<ApiResponse<UserInfo[]>>(
+      `/rest-api/v1/member/filter`,
+      { params },
+    );
+    console.log("Filtered student list:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch filtered student list:", error);
+    throw error;
+  }
 };

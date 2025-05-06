@@ -47,7 +47,7 @@ const StudentInfoModalContent = ({
   const [birthDay, setBirthDay] = useState(birthData[2]);
 
   return (
-    <>
+    <ContentWrapper>
       <ContentLeft>
         <UserImage src={횃불이} alt="학생 이미지" />
       </ContentLeft>
@@ -141,19 +141,45 @@ const StudentInfoModalContent = ({
           </HorizontalLineWrapper>
         )}
       </ContentRight>
-    </>
+    </ContentWrapper>
   );
 };
 
 // 스타일 컴포넌트
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  gap: 24px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+`;
+
 const ContentLeft = styled.div`
   width: fit-content;
   height: 100%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
 `;
 
 const UserImage = styled.img`
   height: 100%;
   object-fit: cover;
+
+  @media (max-width: 768px) {
+    height: 120px;
+    width: auto;
+  }
 `;
 
 const ContentRight = styled.div`
@@ -162,6 +188,13 @@ const ContentRight = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 10px 15px;
+
+  @media (max-width: 768px) {
+    padding: 0 10px;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
 `;
 
 const InputBox = styled.input`
@@ -173,10 +206,18 @@ const InputBox = styled.input`
   box-sizing: border-box;
   padding: 12px 20px;
 
+  font-size: 14px;
+
   &:read-only {
     background-color: #f2f2f2;
     color: #555;
     cursor: default;
+  }
+
+  @media (max-width: 768px) {
+    height: 40px;
+    font-size: 12px;
+    padding: 10px 14px;
   }
 `;
 
@@ -210,5 +251,18 @@ const HorizontalLineWrapper = styled.div`
 
   button {
     width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 12px;
+
+    input {
+      width: 100%;
+    }
+
+    .inputtitle {
+      font-size: 12px;
+    }
   }
 `;

@@ -14,6 +14,7 @@ export const getNotification = async (): Promise<Notification[]> => {
 export const putNotificationRead = async (
   notificationIdList: number[],
 ): Promise<ApiResponse> => {
+  console.log(notificationIdList);
   const response = await tokenInstance.put<ApiResponse>(
     `/rest-api/v1/notification`,
     {

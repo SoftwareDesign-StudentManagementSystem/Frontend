@@ -122,7 +122,7 @@ const FeedBackAdd = ({ setIsAddMode }: FeedbackAddProps) => {
       </CheckboxGroup>
       <InputBox value={inputContent} onChange={handleInputChange} />
 
-      <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
+      <ButtonGroup>
         <ButtonWhite
           text={"돌아가기"}
           onClick={() => {
@@ -130,7 +130,7 @@ const FeedBackAdd = ({ setIsAddMode }: FeedbackAddProps) => {
           }}
         />
         <ButtonOrange text={"저장"} onClick={handleSubmit} />
-      </div>
+      </ButtonGroup>
     </FeedBackAddWrapper>
   );
 };
@@ -142,6 +142,8 @@ const FeedBackAddWrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  padding: 0 8px;
+  box-sizing: border-box;
 
   .title {
     font-style: normal;
@@ -150,7 +152,15 @@ const FeedBackAddWrapper = styled.div`
     line-height: 150%;
     text-transform: capitalize;
     color: #000000;
-    //margin-bottom: 8px;
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 4px;
+
+    .title {
+      font-size: 16px;
+    }
   }
 `;
 
@@ -173,4 +183,25 @@ const CheckboxGroup = styled.div`
     width: 16px;
     height: 16px;
   }
+
+  @media (max-width: 768px) {
+    gap: 12px;
+
+    label {
+      font-size: 0.9rem;
+    }
+
+    input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+    }
+  }
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+
+  padding-top: 20px;
 `;

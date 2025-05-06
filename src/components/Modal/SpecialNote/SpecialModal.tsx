@@ -38,7 +38,7 @@ const SpecialModalContent = () => {
           )}
         </>
       ) : (
-        <SpecialAdd />
+        <SpecialAdd setIsAddMode={setIsAddMode} />
       )}
     </SpecialModalContentWrapper>
   );

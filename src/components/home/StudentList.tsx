@@ -34,6 +34,7 @@ const StudentListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   max-height: 400px;
+  min-height: 250px;
   overflow-y: auto;
 `;
 

@@ -102,8 +102,6 @@ const SignUpBox = () => {
 
 export default SignUpBox;
 
-// (이하 styled-components 코드는 기존과 동일)
-
 const SignUpBoxWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -116,12 +114,15 @@ const SignUpBoxWrapper = styled.div`
 
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+  }
 `;
 
-const Logo = styled.img`
-  width: 46px;
-  height: 44px;
-`;
 const ContentWrapper = styled.div`
   width: 40%;
   min-width: 400px;
@@ -133,16 +134,14 @@ const ContentWrapper = styled.div`
   gap: 16px;
 
   .maintitle {
-    font-style: normal;
     font-weight: 600;
     font-size: 30px;
     line-height: 150%;
-    /* or 45px */
     text-align: center;
     text-transform: capitalize;
-
     color: #000000;
   }
+
   .inputWrapper {
     display: flex;
     flex-direction: column;
@@ -150,15 +149,38 @@ const ContentWrapper = styled.div`
     height: 100%;
     gap: 8px;
   }
+
   .inputtitle {
-    font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 150%;
-    /* identical to box height, or 21px */
-
     color: #808080;
   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    min-width: unset;
+  }
+`;
+
+const DuplicationChkBtn = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 20px;
+  gap: 10px;
+
+  width: 98px;
+  height: 48px;
+
+  border: 1px solid #808080;
+  border-radius: 6px;
+  white-space: nowrap; // 모바일에서도 줄 바꿈 방지
+`;
+
+const Logo = styled.img`
+  width: 46px;
+  height: 44px;
 `;
 
 const InputBox = styled.input`
@@ -171,24 +193,6 @@ const InputBox = styled.input`
 
   box-sizing: border-box;
   padding: 12px 20px;
-`;
-
-const DuplicationChkBtn = styled.button`
-  box-sizing: border-box;
-
-  /* Auto layout */
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 12px 20px;
-  gap: 10px;
-
-  width: 98px;
-  height: 48px;
-
-  border: 1px solid #808080;
-  border-radius: 6px;
 `;
 
 const SubmitButton = styled.button`

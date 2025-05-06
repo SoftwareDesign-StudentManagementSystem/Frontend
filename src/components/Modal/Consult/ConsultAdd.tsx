@@ -9,6 +9,7 @@ import ButtonOrange from "../../common/ButtonOrange.tsx";
 import { postConsult } from "../../../apis/consult.ts";
 import { useSearchParams } from "react-router-dom";
 import ButtonWhite from "../../common/ButtonWhite.tsx";
+import { DatePickerOverride } from "../../../resources/styles/CommonStyles.tsx";
 
 interface InputBoxProps {
   value: string;
@@ -58,50 +59,53 @@ const ConsultAdd = ({ setIsAddMode }: ConsultAddProps) => {
   };
 
   return (
-    <ConsultAddWrapper>
-      <OptionsWrapper>
-        <DateWrapper>
+    <>
+      <DatePickerOverride /> {/* 여기에 추가 */}
+      <ConsultAddWrapper>
+        <OptionsWrapper>
+          <DateWrapper>
+            <div>
+              <div className="title">상담 날짜</div>
+              <StyledDatePicker
+                selected={consultDate}
+                onChange={(date: Date | Date[] | null) => {
+                  if (date instanceof Date || date === null) {
+                    setConsultDate(date);
+                  }
+                }}
+                dateFormat="yyyy년 MM월 dd일"
+                placeholderText="날짜를 선택하세요"
+              />
+            </div>
+            <div>
+              <div className="title">다음 상담 날짜</div>
+              <StyledDatePicker
+                selected={nextConsultDate}
+                onChange={(date: Date | null) => setNextConsultDate(date)}
+                dateFormat="yyyy년 MM월 dd일"
+                placeholderText="날짜를 선택하세요"
+              />
+            </div>
+          </DateWrapper>
           <div>
-            <div className="title">상담 날짜</div>
-            <StyledDatePicker
-              selected={consultDate}
-              onChange={(date: Date | Date[] | null) => {
-                if (date instanceof Date || date === null) {
-                  setConsultDate(date);
-                }
-              }}
-              dateFormat="yyyy년 MM월 dd일"
-              placeholderText="날짜를 선택하세요"
-            />
+            <div className="title">상담 교사명</div>
+            <DropDownMenu options={options} />
           </div>
-          <div>
-            <div className="title">다음 상담 날짜</div>
-            <StyledDatePicker
-              selected={nextConsultDate}
-              onChange={(date: Date | null) => setNextConsultDate(date)}
-              dateFormat="yyyy년 MM월 dd일"
-              placeholderText="날짜를 선택하세요"
-            />
-          </div>
-        </DateWrapper>
-        <div>
-          <div className="title">상담 교사명</div>
-          <DropDownMenu options={options} />
+        </OptionsWrapper>
+
+        <InputBox value={inputContent} onChange={handleInputChange} />
+
+        <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
+          <ButtonWhite
+            text={"돌아가기"}
+            onClick={() => {
+              setIsAddMode(false);
+            }}
+          />
+          <ButtonOrange text={"저장"} onClick={handleSubmit} />
         </div>
-      </OptionsWrapper>
-
-      <InputBox value={inputContent} onChange={handleInputChange} />
-
-      <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
-        <ButtonWhite
-          text={"돌아가기"}
-          onClick={() => {
-            setIsAddMode(false);
-          }}
-        />
-        <ButtonOrange text={"저장"} onClick={handleSubmit} />
-      </div>
-    </ConsultAddWrapper>
+      </ConsultAddWrapper>
+    </>
   );
 };
 
@@ -123,26 +127,47 @@ const ConsultAddWrapper = styled.div`
     text-transform: capitalize;
     color: #000000;
   }
+
+  @media (max-width: 768px) {
+    gap: 12px;
+
+    .title {
+      font-size: 15px;
+    }
+  }
 `;
 
 const OptionsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  @media (max-width: 768px) {
+    gap: 12px;
+  }
 `;
 
 const DateWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: 50px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 12px;
+  }
 `;
 
-// DatePicker에 스타일을 입히고 싶을 경우 이렇게 styled-components로 감쌀 수 있습니다.
 const StyledDatePicker = styled(DatePicker)`
-  width: fit-content;
+  width: 100%;
   height: fit-content;
   padding: 8px 12px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 8px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
 `;

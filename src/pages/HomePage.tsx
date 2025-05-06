@@ -7,27 +7,35 @@ import UserInfoBox from "../components/home/UserInfoBox.tsx";
 import useUserStore from "../stores/useUserStore.ts";
 import { useEffect, useState } from "react";
 import { UserInfo } from "../types/members.ts";
-import { getMemberDetailInfo, getStudentList } from "../apis/members.ts";
+import {
+  getMemberDetailInfo,
+  getStudentList,
+  getFilteredStudentList,
+} from "../apis/members.ts";
 import { useNavigate } from "react-router-dom";
 import ButtonWhite from "../components/common/ButtonWhite.tsx";
-
-// (앞부분은 동일)
 
 export default function HomePage() {
   const navigate = useNavigate();
   const { userInfo } = useUserStore();
-  console.log(userInfo);
+  const [role, setRole] = useState(userInfo.role || "");
+
+  useEffect(() => {
+    setRole(userInfo.role);
+
+    if (userInfo.role === "ROLE_STUDENT") {
+      navigate("/studentlobby?id=" + userInfo.id);
+    }
+  }, [userInfo]);
+
   const roleString =
-    userInfo?.role === "ROLE_TEACHER"
+    role === "ROLE_TEACHER"
       ? "교사"
-      : userInfo.role === "ROLE_STUDENT"
+      : role === "ROLE_STUDENT"
         ? "학생"
-        : userInfo.role === "ROLE_PARENT"
+        : role === "ROLE_PARENT"
           ? "학부모"
           : "관리자";
-  if (userInfo.role === "ROLE_STUDENT") {
-    navigate("/studentlobby?id=" + userInfo.id);
-  }
 
   const [students, setStudents] = useState<UserInfo[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<UserInfo[]>([]);
@@ -48,47 +56,69 @@ export default function HomePage() {
     }
   }, [userInfo]);
 
-  const handleSearch = (searchParams: {
+  const handleSearch = async (searchParams: {
     grade: string;
     classnum: string;
     studentid: string;
     name: string;
   }) => {
     const { grade, classnum, studentid, name } = searchParams;
-    const filtered = students.filter((student) => {
-      const matchesGrade = grade ? student.year?.toString() === grade : true;
-      const matchesClassnum = classnum
-        ? student.classId?.toString() === classnum
-        : true;
-      const matchesStudentid = studentid
-        ? student.number?.toString() === studentid
-        : true;
-      const matchesName = name ? student.name?.toString() === name : true;
-      return matchesGrade && matchesClassnum && matchesStudentid && matchesName;
-    });
-    setFilteredStudents(filtered);
+
+    if (!grade || !classnum) {
+      alert("학년과 반은 필수로 선택해야 합니다.");
+      return;
+    }
+
+    try {
+      const res = await getFilteredStudentList(
+        Number(grade),
+        Number(classnum),
+        studentid ? Number(studentid) : undefined,
+      );
+
+      let filtered = res.data;
+
+      // 이름 필터링은 프론트에서 진행
+      if (name) {
+        filtered = filtered.filter((student) => student.name?.includes(name));
+      }
+
+      setFilteredStudents(filtered);
+    } catch (err) {
+      console.error("학생 필터링 실패:", err);
+      alert("학생 검색 중 오류가 발생했습니다.");
+    }
   };
 
   return (
     <HomePageWrapper>
       <LeftContentWrapper>
-        <Card
-          cardtitle={"학생 리스트 검색"}
-          contentChildren={
-            <SearchStudent students={students} onSearch={handleSearch} />
-          }
-        />
+        {role === "ROLE_TEACHER" && (
+          <>
+            <Card
+              cardtitle={"학생 리스트 검색"}
+              contentChildren={
+                <SearchStudent students={students} onSearch={handleSearch} />
+              }
+            />
+          </>
+        )}
+
         <Card
           cardtitle={"학생 리스트"}
           headerChildren={<ListHeader />}
           contentChildren={<StudentList students={filteredStudents} />}
         />
-        <ButtonWhite
-          text={"자녀 추가하기"}
-          onClick={() => {
-            navigate("/childregister");
-          }}
-        />
+        {userInfo.role === "ROLE_PARENT" && (
+          <>
+            <ButtonWhite
+              text={"자녀 추가하기"}
+              onClick={() => {
+                navigate("/childregister");
+              }}
+            />
+          </>
+        )}
       </LeftContentWrapper>
 
       <RightContentWrapper>
@@ -103,8 +133,6 @@ export default function HomePage() {
   );
 }
 
-// styled-components는 동일
-
 const HomePageWrapper = styled.div`
   padding: 25px 32px;
   display: flex;
@@ -113,6 +141,9 @@ const HomePageWrapper = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  @media (max-width: 768px) {
+    padding: 25px 10px;
+  }
 `;
 
 const LeftContentWrapper = styled.div`

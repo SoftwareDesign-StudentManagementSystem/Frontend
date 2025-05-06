@@ -23,7 +23,7 @@ const AttendanceModalContent = () => {
     <AttendanceModalContentWrapper>
       {!isAddMode ? (
         <>
-          <div className="title">출결을 수정하실 날짜를 선택해주세요.</div>
+          {/*<div className="title">출결을 수정하실 날짜를 선택해주세요.</div>*/}
           <Card cardtitle={"출결"} contentChildren={<AttendanceList />} />
         </>
       ) : (

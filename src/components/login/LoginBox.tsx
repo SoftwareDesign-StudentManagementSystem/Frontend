@@ -59,14 +59,16 @@ const LoginBox = () => {
           />
         </div>
         {error && <ErrorText>{error}</ErrorText>} {/* 오류 메시지 출력 */}
-        학부모님! 아직 회원이 아니신가요?
-        <button
-          onClick={() => {
-            navigate("/signup");
-          }}
-        >
-          회원가입
-        </button>
+        <RegisterLine>
+          학부모님! 아직 회원이 아니신가요?
+          <button
+            onClick={() => {
+              navigate("/signup");
+            }}
+          >
+            회원가입
+          </button>
+        </RegisterLine>
         <SubmitButton onClick={handleLogin}>로그인</SubmitButton>
       </ContentWrapper>
     </LoginBoxWrapper>
@@ -84,19 +86,20 @@ const LoginBoxWrapper = styled.div`
   gap: 20px;
   width: fit-content;
   height: fit-content;
-
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+
+  @media (max-width: 768px) {
+    padding: 40px 16px;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+  }
 `;
 
-const Logo = styled.img`
-  width: 46px;
-  height: 44px;
-`;
 const ContentWrapper = styled.div`
   width: 50%;
   min-width: 400px;
-
   height: 100%;
 
   display: flex;
@@ -106,16 +109,14 @@ const ContentWrapper = styled.div`
   gap: 16px;
 
   .maintitle {
-    font-style: normal;
     font-weight: 600;
     font-size: 30px;
     line-height: 150%;
-    /* or 45px */
     text-align: center;
     text-transform: capitalize;
-
     color: #000000;
   }
+
   .inputWrapper {
     display: flex;
     flex-direction: column;
@@ -123,15 +124,23 @@ const ContentWrapper = styled.div`
     height: 100%;
     gap: 8px;
   }
+
   .inputtitle {
-    font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 150%;
-    /* identical to box height, or 21px */
-
     color: #808080;
   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    min-width: unset;
+  }
+`;
+
+const Logo = styled.img`
+  width: 46px;
+  height: 44px;
 `;
 
 const InputBox = styled.input`
@@ -169,4 +178,25 @@ const ErrorText = styled.div`
   color: red;
   font-size: 14px;
   margin-top: 8px;
+`;
+
+const RegisterLine = styled.div`
+  font-size: 14px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  button {
+    background: none;
+    border: none;
+    padding: 0;
+    font-weight: bold;
+    color: #007bff; /* 하이퍼링크 색상 */
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  button:hover {
+    color: #0056b3; /* hover 시 더 진한 파란색 */
+    text-decoration: underline;
+  }
 `;

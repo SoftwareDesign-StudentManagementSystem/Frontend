@@ -11,4 +11,11 @@ const CommonStyles = createGlobalStyle`
 
 `;
 
+import "react-datepicker/dist/react-datepicker.css";
+export const DatePickerOverride = createGlobalStyle`
+  .react-datepicker-popper {
+    margin-left: 30px !important; /* 달력을 오른쪽으로 살짝 밀기 */
+  }
+`;
+
 export default CommonStyles;

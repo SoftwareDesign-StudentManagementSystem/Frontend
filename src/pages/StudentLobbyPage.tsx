@@ -22,7 +22,7 @@ import { getMemberDetailInfo, getStudentInfo } from "../apis/members.ts";
 import useUserStore from "../stores/useUserStore.ts";
 
 export default function StudentLobbyPage() {
-  const { userInfo } = useUserStore();
+  const { userInfo, setUserDetailInfo } = useUserStore();
   console.log(userInfo);
 
   const [searchParams] = useSearchParams();
@@ -55,6 +55,7 @@ export default function StudentLobbyPage() {
         getMemberDetailInfo().then((res) => {
           console.log("ROLE_STUDENT", res.data);
           setStudentInfo(res.data);
+          setUserDetailInfo(res.data);
         });
       } else {
         getStudentInfo(Number(id)).then((res) => {

@@ -22,7 +22,7 @@ const UserTypeLabel = ({ type }: { type: string }) => {
       case "ROLE_ADMIN":
         return "관리자";
       default:
-        return type; // 알 수 없는 값은 그대로 표시
+        return type;
     }
   };
 
@@ -35,29 +35,25 @@ const UserTypeLabel = ({ type }: { type: string }) => {
 
 const UserTypeLabelWrapper = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
   border-radius: 20px;
   padding: 0 5px;
   gap: 10px;
-
   min-width: fit-content;
   max-height: 32px;
   background: #ffb608;
 
   div {
-    font-style: normal;
     font-weight: 600;
     font-size: 12px;
     line-height: 150%;
-    text-transform: capitalize;
     color: #ffffff;
   }
 
   @media (max-width: 768px) {
-    padding: 0 4px;
-    gap: 6px;
+    padding: 0 6px;
+    //gap: 6px;
 
     div {
       font-size: 10px;
@@ -68,12 +64,10 @@ const UserTypeLabelWrapper = styled.div`
 export default function Header() {
   const { userInfo, setUserInfo, setTokenInfo } = useUserStore();
   const navigate = useNavigate();
-  const location = useLocation(); // 현재 경로 가져오기
+  const location = useLocation();
 
   const [openModal, setOpenModal] = useState<string | null>(null);
   const closeModal = () => setOpenModal(null);
-
-  // 상태 추가
   const [showNotifications, setShowNotifications] = useState(false);
 
   const handleLogout = () => {
@@ -96,7 +90,7 @@ export default function Header() {
     navigate("/");
   };
 
-  const isStudentLobby = location.pathname === "/studentlobby"; // 현재 경로가 /studentLobby 인지 확인
+  const isStudentLobby = location.pathname === "/studentlobby";
 
   return (
     <>
@@ -104,29 +98,21 @@ export default function Header() {
         <ReportCreateModal onClose={closeModal} />
       )}
       <StyledHeader>
-        <div
-          className="LogoWrapper"
-          onClick={() => {
-            navigate("/home");
-          }}
-        >
-          <img src={Logo} alt={"logo"} style={{ height: "70%" }} />
+        <div className="LogoWrapper" onClick={() => navigate("/home")}>
+          <img src={Logo} alt="logo" style={{ height: "70%" }} />
         </div>
 
         <div className="RightWrapper">
+          {userInfo.role !== "ROLE_TEACHER" && (
+            <NotificationBtn
+              src={notification}
+              onClick={() => setShowNotifications((prev) => !prev)}
+            />
+          )}
           <div className="UserWrapper">
             <UserTypeLabel type={userInfo.role} />
             <button className="btntype1">{userInfo.name} 님</button>
           </div>
-
-          {userInfo.role != "ROLE_TEACHER" && (
-            <>
-              <NotificationBtn
-                src={notification}
-                onClick={() => setShowNotifications((prev) => !prev)}
-              />
-            </>
-          )}
 
           {showNotifications && <NotificationList />}
           <button className="btntype1" onClick={handleLogout}>
@@ -136,9 +122,7 @@ export default function Header() {
           {isStudentLobby && (
             <ButtonOrange
               text={"보고서 작성"}
-              onClick={() => {
-                setOpenModal("reportCreate");
-              }}
+              onClick={() => setOpenModal("reportCreate")}
             />
           )}
         </div>
@@ -148,7 +132,7 @@ export default function Header() {
 }
 
 const StyledHeader = styled.header`
-  padding: 0 32px;
+  padding: 0 24px;
   box-sizing: border-box;
   width: 100%;
   height: 70px;
@@ -171,26 +155,16 @@ const StyledHeader = styled.header`
 
   .btntype1 {
     font-size: 20px;
-    line-height: 20px;
     background-color: transparent;
     border: none;
-    color: white;
-    padding: 0;
-
-    font-style: normal;
     font-weight: 600;
-    font-size: 20px;
-    line-height: 150%;
     text-transform: capitalize;
-
     color: #333333;
-
     min-width: fit-content;
   }
 
   .LogoWrapper {
     display: flex;
-    flex-direction: row;
     font-size: 30px;
     font-weight: bolder;
     cursor: pointer;
@@ -199,7 +173,7 @@ const StyledHeader = styled.header`
   .RightWrapper {
     width: fit-content;
     height: 100%;
-    gap: 50px;
+    gap: 30px;
 
     .UserWrapper {
       width: fit-content;
@@ -208,27 +182,30 @@ const StyledHeader = styled.header`
   }
 
   @media (max-width: 768px) {
-    padding: 0 16px;
-    height: 60px;
+    padding: 0 10px;
+    height: 56px;
 
     .btntype1 {
-      font-size: 14px;
+      font-size: 12px;
+      padding: 0;
+      margin: 0;
     }
 
     .LogoWrapper {
-      font-size: 22px;
+      font-size: 20px;
     }
 
     .RightWrapper {
-      gap: 20px;
+      gap: 10px;
 
       .UserWrapper {
-        gap: 6px;
+        min-width: fit-content;
+        gap: 4px;
       }
     }
 
     div {
-      gap: 16px;
+      gap: 12px;
     }
   }
 `;
@@ -239,7 +216,7 @@ const NotificationBtn = styled.img`
   cursor: pointer;
 
   @media (max-width: 768px) {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 `;

@@ -10,8 +10,8 @@ export default function LoginPage() {
 }
 
 const LoginPageWrapper = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 98vw;
+  height: 98vh;
 
   display: flex;
   flex-direction: row;

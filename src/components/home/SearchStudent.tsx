@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
 import ButtonWhite from "../common/ButtonWhite.tsx";
-import { UserInfo } from "../../types/members"; // 경로 주의
+import { UserInfo } from "../../types/members";
+import useUserStore from "../../stores/useUserStore.ts"; // 경로 주의
 
 interface SearchStudentProps {
   students: UserInfo[];
@@ -13,9 +14,10 @@ interface SearchStudentProps {
   }) => void;
 }
 
-const SearchStudent = ({ students, onSearch }: SearchStudentProps) => {
-  const [grade, setGrade] = useState("");
-  const [classnum, setClassnum] = useState("");
+const SearchStudent = ({ onSearch }: SearchStudentProps) => {
+  const { userInfo } = useUserStore();
+  const [grade, setGrade] = useState(userInfo.year?.toString() || "");
+  const [classnum, setClassnum] = useState(userInfo.classId?.toString() || "");
   const [studentid, setStudentid] = useState("");
   const [name, setName] = useState("");
 
@@ -23,16 +25,13 @@ const SearchStudent = ({ students, onSearch }: SearchStudentProps) => {
     onSearch({ grade, classnum, studentid, name });
   };
 
-  // 중복 제거한 옵션 목록 생성
-  const gradeOptions = Array.from(
-    new Set(students.map((s) => s.year?.toString())),
-  ).filter(Boolean);
-  const classnumOptions = Array.from(
-    new Set(students.map((s) => s.classId?.toString())),
-  ).filter(Boolean);
-  const studentidOptions = Array.from(
-    new Set(students.map((s) => s.number?.toString())),
-  ).filter(Boolean);
+  const gradeOptions = Array.from({ length: 3 }, (_, i) => (i + 1).toString());
+  const classnumOptions = Array.from({ length: 10 }, (_, i) =>
+    (i + 1).toString(),
+  );
+  const studentidOptions = Array.from({ length: 15 }, (_, i) =>
+    (i + 1).toString(),
+  );
 
   return (
     <HorizontalLineWrapper>

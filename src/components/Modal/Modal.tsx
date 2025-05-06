@@ -1,8 +1,11 @@
 import styled from "styled-components";
 
 import { ModalProps } from "../../types/modal.ts";
+import { createPortal } from "react-dom";
+
+const modalRoot = document.getElementById("modal-root") || document.body;
 const Modal = ({ title, content, onClose }: ModalProps) => {
-  return (
+  return createPortal(
     <Overlay onClick={onClose}>
       <ModalWrapper onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
@@ -11,7 +14,8 @@ const Modal = ({ title, content, onClose }: ModalProps) => {
         </ModalHeader>
         <ContentWrapper>{content}</ContentWrapper>
       </ModalWrapper>
-    </Overlay>
+    </Overlay>,
+    modalRoot,
   );
 };
 
