@@ -121,7 +121,7 @@ export default function Header() {
 
           {isStudentLobby && (
             <ButtonOrange
-              text={"보고서 작성"}
+              text={"보고서 생성"}
               onClick={() => setOpenModal("reportCreate")}
             />
           )}
