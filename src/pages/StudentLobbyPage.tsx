@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { UserDetailInfo } from "../types/members.ts";
 import Card from "../components/common/Card.tsx";
@@ -20,10 +20,12 @@ import AttendanceModal from "../components/Modal/Attendance/AttendanceModal.tsx"
 import GradeModal from "../components/Modal/Grade/GradeModal.tsx";
 import { getMemberDetailInfo, getStudentInfo } from "../apis/members.ts";
 import useUserStore from "../stores/useUserStore.ts";
+import { getRandomProfileImage } from "../utils/getRandomProfileImage.ts";
 
 export default function StudentLobbyPage() {
   const { userInfo, setUserDetailInfo } = useUserStore();
   console.log(userInfo);
+  const profileImage = useMemo(() => getRandomProfileImage(), []);
 
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
@@ -86,7 +88,11 @@ export default function StudentLobbyPage() {
     <HomePageWrapper>
       {/* 모달들 */}
       {openModal === "studentInfo" && (
-        <StudentInfoModal onClose={closeModal} studentInfo={studentInfo} />
+        <StudentInfoModal
+          onClose={closeModal}
+          studentInfo={studentInfo}
+          profileImage={profileImage}
+        />
       )}
       {openModal === "specialNote" && <SpecialModal onClose={closeModal} />}
       {openModal === "feedback" && <FeedBackModal onClose={closeModal} />}
@@ -100,7 +106,12 @@ export default function StudentLobbyPage() {
       <div onClick={() => setOpenModal("studentInfo")}>
         <Card
           cardtitle="학생 정보"
-          contentChildren={<StudentInfo studentInfo={studentInfo} />}
+          contentChildren={
+            <StudentInfo
+              studentInfo={studentInfo}
+              profileImage={profileImage}
+            />
+          }
         />
       </div>
 

@@ -10,15 +10,21 @@ import useUserStore from "../../stores/useUserStore.ts";
 const StudentInfoModal = ({
   onClose,
   studentInfo,
+  profileImage,
 }: {
   onClose: () => void;
   studentInfo?: UserDetailInfo;
+  profileImage: string;
 }) => {
   return (
     <Modal
       title={"학생 정보"}
       content={
-        <StudentInfoModalContent onClose={onClose} studentInfo={studentInfo} />
+        <StudentInfoModalContent
+          onClose={onClose}
+          studentInfo={studentInfo}
+          profileImage={profileImage}
+        />
       }
       onClose={onClose}
     />
@@ -29,12 +35,15 @@ export default StudentInfoModal;
 const StudentInfoModalContent = ({
   onClose,
   studentInfo,
+  profileImage,
 }: {
   onClose: () => void;
   studentInfo?: UserDetailInfo;
+  profileImage: string;
 }) => {
   const { userInfo } = useUserStore(); // 로그인 사용자 정보
-  const isReadOnly = userInfo?.role === "ROLE_STUDENT";
+  const isReadOnly =
+    userInfo?.role === "ROLE_STUDENT" || userInfo?.role === "ROLE_PARENT";
 
   const [name, setName] = useState(studentInfo?.name);
   const [grade, setGrade] = useState(studentInfo?.year?.toString() || "");
@@ -49,7 +58,7 @@ const StudentInfoModalContent = ({
   return (
     <ContentWrapper>
       <ContentLeft>
-        <UserImage src={횃불이} alt="학생 이미지" />
+        <UserImage src={profileImage} alt="학생 이미지" />
       </ContentLeft>
       <ContentRight>
         <HorizontalLineWrapper>
@@ -106,7 +115,7 @@ const StudentInfoModalContent = ({
             />
           </div>
           <div className="inputWrapper">
-            <div className="inputtitle">_</div>
+            <div className="inputtitle">　</div>
             <InputBox
               placeholder="월"
               value={birthMonth}
@@ -115,7 +124,7 @@ const StudentInfoModalContent = ({
             />
           </div>
           <div className="inputWrapper">
-            <div className="inputtitle">_</div>
+            <div className="inputtitle">　</div>
             <InputBox
               placeholder="일"
               value={birthDay}
@@ -161,7 +170,7 @@ const ContentWrapper = styled.div`
 `;
 
 const ContentLeft = styled.div`
-  width: fit-content;
+  width: 300px;
   height: 100%;
 
   @media (max-width: 768px) {
@@ -174,7 +183,9 @@ const ContentLeft = styled.div`
 
 const UserImage = styled.img`
   height: 100%;
+  width: 100%;
   object-fit: cover;
+  overflow: hidden;
 
   @media (max-width: 768px) {
     height: 120px;

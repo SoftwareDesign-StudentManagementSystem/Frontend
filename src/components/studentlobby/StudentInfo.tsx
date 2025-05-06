@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import { UserDetailInfo } from "../../types/members.ts";
+
 const StudentInfo = ({
   studentInfo,
+  profileImage,
 }: {
   studentInfo: UserDetailInfo | undefined;
+  profileImage: string;
 }) => {
   if (studentInfo === undefined) {
     return (
@@ -12,9 +15,10 @@ const StudentInfo = ({
       </StudentInfoWrapper>
     );
   }
+
   return (
     <StudentInfoWrapper>
-      <ProfileImage />
+      <ProfileImage src={profileImage} />
       <RightContent>
         <span className="name">{studentInfo.name}</span>
         <br />
