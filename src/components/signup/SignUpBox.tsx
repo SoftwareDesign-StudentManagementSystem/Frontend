@@ -9,6 +9,7 @@ const SignUpBox = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [gender, setGender] = useState("MALE");
 
   const navigate = useNavigate();
 
@@ -26,8 +27,8 @@ const SignUpBox = () => {
         "010-0000-0000", // phone (임시)
         "example@email.com", // email (임시)
         "2000-01-01", // birthday (임시)
-        "인천해원고", // schoolName (고정)
-        "MALE", // gender (임시)
+        "인천송도고", // schoolName (고정)
+        gender, // gender
       );
 
       if (result) {
@@ -60,7 +61,50 @@ const SignUpBox = () => {
           />
         </div>
         <div className="inputWrapper">
+          <div className="inputtitle">성별</div>
+          <div style={{ display: "flex", gap: "20px", paddingLeft: "4px" }}>
+            <label
+              style={{
+                fontSize: "14px",
+                color: "#000000",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <input
+                type="radio"
+                name="gender"
+                value="MALE"
+                checked={gender === "MALE"}
+                onChange={(e) => setGender(e.target.value)}
+              />
+              아버지
+            </label>
+            <label
+              style={{
+                fontSize: "14px",
+                color: "#000000",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <input
+                type="radio"
+                name="gender"
+                value="FEMALE"
+                checked={gender === "FEMALE"}
+                onChange={(e) => setGender(e.target.value)}
+              />
+              어머니
+            </label>
+          </div>
+        </div>
+
+        <div className="inputWrapper">
           <div className="inputtitle">아이디</div>
+
           <div
             style={{
               display: "flex",
@@ -69,13 +113,14 @@ const SignUpBox = () => {
             }}
           >
             <InputBox
-              placeholder="숫자 형태의 아이디를 입력해주세요."
+              placeholder="자녀의 학번+랜덤2자리로 입력해주세요"
               value={id}
               onChange={(e) => setId(e.target.value)}
             />
-            <DuplicationChkBtn>중복 확인</DuplicationChkBtn>
+            {/*<DuplicationChkBtn>중복 확인</DuplicationChkBtn>*/}
           </div>
         </div>
+
         <div className="inputWrapper">
           <div className="inputtitle">비밀번호</div>
           <InputBox
@@ -162,21 +207,21 @@ const ContentWrapper = styled.div`
     min-width: unset;
   }
 `;
-
-const DuplicationChkBtn = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 12px 20px;
-  gap: 10px;
-
-  width: 98px;
-  height: 48px;
-
-  border: 1px solid #808080;
-  border-radius: 6px;
-  white-space: nowrap; // 모바일에서도 줄 바꿈 방지
-`;
+//
+// const DuplicationChkBtn = styled.button`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   padding: 12px 20px;
+//   gap: 10px;
+//
+//   width: 98px;
+//   height: 48px;
+//
+//   border: 1px solid #808080;
+//   border-radius: 6px;
+//   white-space: nowrap; // 모바일에서도 줄 바꿈 방지
+// `;
 
 const Logo = styled.img`
   width: 46px;

@@ -14,6 +14,7 @@
     "axios": "^1.8.4",
     "chart.js": "^4.4.9",
     "intersection-observer": "^0.12.2",
+    "lucide-react": "^0.507.0",
     "plugin": "^0.3.3",
     "prettier": "^3.5.3",
     "react": "^19.0.0",

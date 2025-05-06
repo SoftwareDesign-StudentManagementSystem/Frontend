@@ -14,6 +14,7 @@ import {
 } from "../apis/members.ts";
 import { useNavigate } from "react-router-dom";
 import ButtonWhite from "../components/common/ButtonWhite.tsx";
+import SlideBanner from "../components/home/SlideBanner.tsx";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -128,6 +129,7 @@ export default function HomePage() {
             <UserInfoBox userInfo={userInfo} roleString={roleString} />
           }
         />
+        <SlideBanner />
       </RightContentWrapper>
     </HomePageWrapper>
   );
