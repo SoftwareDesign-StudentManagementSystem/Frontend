@@ -144,26 +144,27 @@ export const postFollowAccept = async (
 //(학년/반/번호)로 학생 조회(선생님 권한)
 export const getFilteredStudentList = async (
   year: number,
-  classId: number,
+  classId?: number,
   number?: number, // 선택적 파라미터로 변경
-): Promise<ApiResponse<UserInfo[]>> => {
+): Promise<UserInfo[]> => {
   try {
     const params: Record<string, number> = {
       year,
-      classId,
     };
-
+    if (classId !== undefined) {
+      params.classId = classId;
+    }
     if (number !== undefined) {
       params.studentId = number;
     }
-    console.log(params);
+    console.log("params", params);
 
     const response = await tokenInstance.get<ApiResponse<UserInfo[]>>(
       `/rest-api/v1/member/filter`,
       { params },
     );
-    console.log("Filtered student list:", response.data);
-    return response.data;
+    console.log("Filtered student list:", response.data.ieduPage.contents);
+    return response.data.ieduPage.contents;
   } catch (error) {
     console.error("Failed to fetch filtered student list:", error);
     throw error;

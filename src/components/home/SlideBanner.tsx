@@ -58,6 +58,7 @@ const BannerWrapper = styled.div`
   padding: 0 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   overflow: hidden;
+  box-sizing: border-box;
 `;
 
 const ImageContainer = styled.div`
@@ -80,7 +81,7 @@ const slideIn = keyframes`
 `;
 
 const SlidingImage = styled.img`
-  max-height: 100%;
+  max-height: 90%;
   max-width: 100%;
   object-fit: contain;
   animation: ${slideIn} 0.5s ease-out;

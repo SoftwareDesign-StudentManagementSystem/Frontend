@@ -65,20 +65,26 @@ export default function HomePage() {
   }) => {
     const { grade, classnum, studentid, name } = searchParams;
 
-    if (!grade || !classnum) {
-      alert("학년과 반은 필수로 선택해야 합니다.");
+    if (!grade) {
+      alert("학년은 필수로 선택해야 합니다.");
       return;
     }
 
     try {
       const res = await getFilteredStudentList(
         Number(grade),
-        Number(classnum),
+        classnum ? Number(classnum) : undefined,
         studentid ? Number(studentid) : undefined,
       );
 
-      let filtered = res.data;
+      let filtered = res;
 
+      // 번호 필터링은 프론트에서 진행
+      if (studentid) {
+        filtered = filtered.filter(
+          (student) => student.number === Number(studentid),
+        );
+      }
       // 이름 필터링은 프론트에서 진행
       if (name) {
         filtered = filtered.filter((student) => student.name?.includes(name));

@@ -8,9 +8,14 @@ const FeedbackList = ({ studentId }: { studentId: number }) => {
 
   useEffect(() => {
     getFeedback(studentId).then((res) => {
-      setFeedbacks(res);
+      const sortedFeedbacks = res.sort(
+        (a, b) =>
+          new Date(b.recordedDate).getTime() -
+          new Date(a.recordedDate).getTime(),
+      );
+      setFeedbacks(sortedFeedbacks);
     });
-  }, []);
+  }, [studentId]);
 
   return (
     <FeedbackListWrapper>
@@ -24,14 +29,23 @@ const FeedbackList = ({ studentId }: { studentId: number }) => {
           </tr>
         </thead>
         <tbody>
-          {feedbacks.slice(0, 3).map((feedback, index) => (
-            <tr key={index}>
-              <td>{feedback.recordedDate}</td>
-              <td>{feedback.category}</td>
-              <td>{feedback.teacher}</td>
-              <td>{feedback.content}</td>
-            </tr>
-          ))}
+          {feedbacks.slice(0, 3).map((feedback, index) => {
+            const formatDate = (dateStr: string) => {
+              const date = new Date(dateStr);
+              const month = (date.getMonth() + 1).toString().padStart(2, "0");
+              const day = date.getDate().toString().padStart(2, "0");
+              return `${month}/${day}`;
+            };
+
+            return (
+              <tr key={index}>
+                <td>{formatDate(feedback.recordedDate)}</td>
+                <td>{feedback.category}</td>
+                <td>{feedback.teacher}</td>
+                <td>{feedback.content}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </FeedbackListWrapper>

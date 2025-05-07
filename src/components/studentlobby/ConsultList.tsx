@@ -8,9 +8,12 @@ const ConsultList = ({ studentId }: { studentId: number }) => {
 
   useEffect(() => {
     getConsult(studentId).then((res) => {
-      setConsultations(res);
+      const sortedConsultations = res.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+      );
+      setConsultations(sortedConsultations);
     });
-  }, []);
+  }, [studentId]);
 
   return (
     <ConsultListWrapper>
@@ -24,14 +27,24 @@ const ConsultList = ({ studentId }: { studentId: number }) => {
           </tr>
         </thead>
         <tbody>
-          {consultations.slice(0, 3).map((consultation, index) => (
-            <tr key={index}>
-              <td>{consultation.date}</td>
-              <td>{consultation.nextDate}</td>
-              <td>{consultation.teacher}</td>
-              <td>{consultation.content}</td>
-            </tr>
-          ))}
+          {consultations.slice(0, 3).map((consultation, index) => {
+            const formatDate = (dateStr?: string) => {
+              if (!dateStr) return "-";
+              const date = new Date(dateStr);
+              const month = (date.getMonth() + 1).toString().padStart(2, "0");
+              const day = date.getDate().toString().padStart(2, "0");
+              return `${month}/${day}`;
+            };
+
+            return (
+              <tr key={index}>
+                <td>{formatDate(consultation.date)}</td>
+                <td>{formatDate(consultation.nextDate)}</td>
+                <td>{consultation.teacher}</td>
+                <td>{consultation.content}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </ConsultListWrapper>
