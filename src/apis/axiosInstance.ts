@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://api.iedu.letzgo.site/",
+  baseURL: "https://api.iedu.letzgo.site/",
 });
 
 // 응답 인터셉터

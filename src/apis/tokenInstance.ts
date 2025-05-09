@@ -3,7 +3,7 @@ import useUserStore from "../stores/useUserStore";
 import { refresh } from "../apis/members";
 
 const tokenInstance = axios.create({
-  baseURL: "http://api.iedu.letzgo.site/",
+  baseURL: "https://api.iedu.letzgo.site/",
 });
 
 // 요청 인터셉터 - 토큰 설정

@@ -25,6 +25,7 @@ export const getMemberDetailInfo = async (): Promise<
 
 //(학부모) 회원가입
 export const signup = async (
+  accountId: number,
   password: string,
   name: string,
   phone: string,
@@ -34,8 +35,18 @@ export const signup = async (
   gender: string,
 ) => {
   try {
-    console.log(password, name, phone, email, birthday, schoolName, gender);
+    console.log(
+      accountId,
+      password,
+      name,
+      phone,
+      email,
+      birthday,
+      schoolName,
+      gender,
+    );
     const response = await axiosInstance.post("/rest-api/v1/member/parent", {
+      accountId,
       password,
       name,
       phone,

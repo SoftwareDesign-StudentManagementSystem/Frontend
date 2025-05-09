@@ -44,8 +44,6 @@ export default function StudentLobbyPage() {
     "2학년 2학기",
     "3학년 1학기",
     "3학년 2학기",
-    "4학년 1학기",
-    "4학년 2학기",
   ];
 
   useEffect(() => {

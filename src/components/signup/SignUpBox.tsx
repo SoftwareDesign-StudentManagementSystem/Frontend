@@ -22,6 +22,7 @@ const SignUpBox = () => {
     try {
       // 여기서는 추가 정보는 임시로 입력 (추후 input 추가 가능)
       const result = await signup(
+        Number(id),
         password, // password
         name, // name
         "010-0000-0000", // phone (임시)
