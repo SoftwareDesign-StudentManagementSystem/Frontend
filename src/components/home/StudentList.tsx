@@ -4,10 +4,15 @@ import ButtonOrange from "../common/ButtonOrange.tsx";
 import { useNavigate } from "react-router-dom";
 import { UserInfo } from "../../types/members.ts";
 
-const StudentList = ({ students }: { students: UserInfo[] }) => {
+interface StudentListProps {
+  students: UserInfo[];
+  maxHeight?: string; // maxHeight를 props로 받음
+}
+
+const StudentList = ({ students, maxHeight = "400px" }: StudentListProps) => {
   const navigate = useNavigate();
   return (
-    <StudentListWrapper>
+    <StudentListWrapper $maxHeight={maxHeight}>
       {students.map((student) => (
         <StudentItem key={student.id}>
           <span>
@@ -19,7 +24,7 @@ const StudentList = ({ students }: { students: UserInfo[] }) => {
           <ButtonOrange
             text={"자세히 보기"}
             onClick={() => {
-              navigate(`/studentlobby?id=${student.id}`); // ✅ id를 쿼리스트링으로 추가
+              navigate(`/studentlobby?id=${student.id}`);
             }}
           />
         </StudentItem>
@@ -30,11 +35,11 @@ const StudentList = ({ students }: { students: UserInfo[] }) => {
 
 export default StudentList;
 
-const StudentListWrapper = styled.div`
+const StudentListWrapper = styled.div<{ $maxHeight: string }>`
   display: flex;
   flex-direction: column;
-  max-height: 400px;
-  min-height: 400px;
+  max-height: ${({ $maxHeight }) => $maxHeight};
+  // min-height: ${({ $maxHeight }) => $maxHeight};
   overflow-y: auto;
 `;
 
