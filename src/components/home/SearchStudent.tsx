@@ -26,10 +26,10 @@ const SearchStudent = ({ onSearch }: SearchStudentProps) => {
   };
 
   const gradeOptions = Array.from({ length: 3 }, (_, i) => (i + 1).toString());
-  const classnumOptions = Array.from({ length: 10 }, (_, i) =>
+  const classnumOptions = Array.from({ length: 7 }, (_, i) =>
     (i + 1).toString(),
   );
-  const studentidOptions = Array.from({ length: 15 }, (_, i) =>
+  const studentidOptions = Array.from({ length: 25 }, (_, i) =>
     (i + 1).toString(),
   );
 

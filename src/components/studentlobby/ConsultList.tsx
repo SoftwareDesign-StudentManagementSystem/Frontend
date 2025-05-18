@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { Consult } from "../../types/consults.ts";
 import { getConsult } from "../../apis/consult.ts";
+import { useLoading } from "../../stores/LoadingProvider.tsx";
 
 const ConsultList = ({
   studentId,
@@ -10,15 +11,28 @@ const ConsultList = ({
   studentId: number;
   onSelect?: (consult: Consult) => void;
 }) => {
+  const { showLoading, hideLoading } = useLoading();
+
   const [consultations, setConsultations] = useState<Consult[]>([]);
 
   useEffect(() => {
-    getConsult(studentId).then((res) => {
-      const sortedConsultations = res.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-      );
-      setConsultations(sortedConsultations);
-    });
+    const fetchConsultations = async () => {
+      try {
+        showLoading();
+
+        const res = await getConsult(studentId);
+        const sortedConsultations = res.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+        );
+        setConsultations(sortedConsultations);
+      } catch (error) {
+        console.error("상담 데이터를 불러오는 중 오류 발생:", error);
+      } finally {
+        hideLoading();
+      }
+    };
+
+    fetchConsultations();
   }, [studentId]);
 
   return (

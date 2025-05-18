@@ -28,8 +28,11 @@ import { getRandomProfileImage } from "../utils/getRandomProfileImage.ts";
 import ListHeader from "../components/home/ListHeader.tsx";
 import StudentList from "../components/home/StudentList.tsx";
 import getCurrentSemester from "../utils/getCurrentSemester.ts";
+import { useLoading } from "../stores/LoadingProvider.tsx";
 
 export default function StudentLobbyPage() {
+  const { showLoading, hideLoading } = useLoading();
+
   const { userInfo, setUserDetailInfo } = useUserStore();
   console.log(userInfo);
   const profileImage = useMemo(() => getRandomProfileImage(), []);
@@ -69,6 +72,7 @@ export default function StudentLobbyPage() {
 
   useEffect(() => {
     if (!userInfo.id || !id) return;
+    showLoading();
 
     const fetchData = async () => {
       try {
@@ -93,11 +97,13 @@ export default function StudentLobbyPage() {
         }
       } catch (error) {
         console.error("데이터 불러오기 실패:", error);
+      } finally {
+        hideLoading();
       }
     };
 
     fetchData();
-  }, [userInfo, id, setUserDetailInfo]);
+  }, [userInfo, id]);
 
   useEffect(() => {
     setSidebarOpen(false);
@@ -174,7 +180,11 @@ export default function StudentLobbyPage() {
         {openModal === "consult" && <ConsultModal onClose={closeModal} />}
         {openModal === "attendance" && <AttendanceModal onClose={closeModal} />}
         {openModal === "grade" && (
-          <GradeModal onClose={closeModal} studentId={Number(id)} />
+          <GradeModal
+            onClose={closeModal}
+            studentId={Number(id)}
+            studentInfo={studentInfo}
+          />
         )}
 
         <div onClick={() => setOpenModal("studentInfo")}>

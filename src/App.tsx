@@ -9,6 +9,8 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import ChildRegisterPage from "./pages/ChildRegisterPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
+import { LoadingProvider } from "./stores/LoadingProvider.tsx";
+import GlobalLoading from "./components/common/GlobalLoading.tsx";
 
 function App() {
   const location = useLocation();
@@ -79,7 +81,10 @@ function App() {
 export default function Root() {
   return (
     <BrowserRouter>
-      <App />
+      <LoadingProvider>
+        <App />
+        <GlobalLoading />
+      </LoadingProvider>
     </BrowserRouter>
   );
 }

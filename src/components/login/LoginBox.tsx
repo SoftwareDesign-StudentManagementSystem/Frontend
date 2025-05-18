@@ -2,9 +2,12 @@ import styled from "styled-components";
 import logoimg from "../../assets/logo.svg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../apis/members.ts"; // 로그인 요청 함수 import
+import { login } from "../../apis/members.ts";
+import { useLoading } from "../../stores/LoadingProvider.tsx"; // 로그인 요청 함수 import
 
 const LoginBox = () => {
+  const { showLoading, hideLoading } = useLoading();
+
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(""); // 로그인 오류 메시지를 위한 state 추가
@@ -13,6 +16,7 @@ const LoginBox = () => {
 
   const handleLogin = async () => {
     try {
+      showLoading();
       const result = await login(Number(id), password); // 아이디를 숫자로 변환하여 전달
       console.log("로그인 성공:", result);
       // 로그인 성공 후, 홈 화면으로 이동
@@ -21,6 +25,8 @@ const LoginBox = () => {
       setError(
         "로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요." + error,
       );
+    } finally {
+      hideLoading();
     }
   };
 

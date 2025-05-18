@@ -2,9 +2,12 @@ import styled from "styled-components";
 import logoimg from "../../assets/logo.svg";
 import { useState } from "react";
 import { signup } from "../../apis/members.ts";
-import { useNavigate } from "react-router-dom"; // signup API import 추가
+import { useNavigate } from "react-router-dom";
+import { useLoading } from "../../stores/LoadingProvider.tsx"; // signup API import 추가
 
 const SignUpBox = () => {
+  const { showLoading, hideLoading } = useLoading();
+
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +23,8 @@ const SignUpBox = () => {
     }
 
     try {
-      // 여기서는 추가 정보는 임시로 입력 (추후 input 추가 가능)
+      showLoading();
+      //추가 정보는 임시 데이터
       const result = await signup(
         Number(id),
         password, // password
@@ -41,6 +45,8 @@ const SignUpBox = () => {
       }
     } catch (error: any) {
       alert(error.message || "회원가입에 실패했습니다.");
+    } finally {
+      hideLoading();
     }
   };
 

@@ -3,6 +3,7 @@ import { getStudentGrade, getStudentMyGrade } from "../../apis/grade.ts";
 import { useEffect, useState } from "react";
 import { Grade, GradeListProps, SubjectGrade } from "../../types/grades.ts";
 import useUserStore from "../../stores/useUserStore.ts";
+import { useLoading } from "../../stores/LoadingProvider.tsx";
 
 // props 타입에 showInputRow, setShowInputRow 추가
 interface GradeListExtendedProps extends GradeListProps {
@@ -19,6 +20,7 @@ const GradeList = ({
   setShowInputRow,
 }: GradeListExtendedProps) => {
   const { userInfo } = useUserStore();
+  const { showLoading, hideLoading } = useLoading();
 
   const [grades, setGrades] = useState<Grade[]>([]);
   const [newGrade, setNewGrade] = useState({
@@ -30,15 +32,25 @@ const GradeList = ({
 
   useEffect(() => {
     if (!userInfo.id) return;
-    if (userInfo.role === "ROLE_STUDENT") {
-      getStudentMyGrade(year, semester)
-        .then((res) => setGrades(res))
-        .catch(() => console.log("데이터를 불러오는 중 실패하였습니다!"));
-    } else {
-      getStudentGrade(year, semester, studentId)
-        .then((res) => setGrades(res))
-        .catch(() => console.log("데이터를 불러오는 중 실패하였습니다!"));
-    }
+
+    const fetchGrades = async () => {
+      try {
+        showLoading();
+        if (userInfo.role === "ROLE_STUDENT") {
+          const res = await getStudentMyGrade(year, semester);
+          setGrades(res);
+        } else {
+          const res = await getStudentGrade(year, semester, studentId);
+          setGrades(res);
+        }
+      } catch (error) {
+        console.log("데이터를 불러오는 중 실패하였습니다!", error);
+      } finally {
+        hideLoading();
+      }
+    };
+
+    fetchGrades();
   }, [year, semester, studentId, userInfo]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

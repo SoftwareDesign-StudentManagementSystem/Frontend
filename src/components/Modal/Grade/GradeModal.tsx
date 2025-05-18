@@ -7,19 +7,23 @@ import GradeSemesterView from "./GradeSemesterView.tsx";
 import { useState } from "react";
 import GradeList from "../../studentlobby/GradeList.tsx";
 
-import ButtonWhite from "../../common/ButtonWhite.tsx"; // 추가
+import ButtonWhite from "../../common/ButtonWhite.tsx";
 
 const GradeModal = ({
   onClose,
   studentId,
+  studentInfo,
 }: {
   onClose: () => void;
   studentId: number;
+  studentInfo?: UserDetailInfo;
 }) => {
   return (
     <Modal
       onClose={onClose}
-      content={<GradeModalContent studentId={studentId} />}
+      content={
+        <GradeModalContent studentId={studentId} studentInfo={studentInfo} />
+      }
       title={"성적"}
     />
   );
@@ -35,11 +39,16 @@ const gradeData = [
   { grade: 3, semester: 2 },
 ];
 
-import useUserStore from "../../../stores/useUserStore.ts";
-import getCurrentSemester from "../../../utils/getCurrentSemester.ts"; // 추가
+import getCurrentSemester from "../../../utils/getCurrentSemester.ts";
+import { UserDetailInfo } from "../../../types/members.ts";
 
-const GradeModalContent = ({ studentId }: { studentId: number }) => {
-  const { userInfo } = useUserStore();
+const GradeModalContent = ({
+  studentId,
+  studentInfo,
+}: {
+  studentId: number;
+  studentInfo?: UserDetailInfo;
+}) => {
   const [isAddMode, setIsAddMode] = useState(false);
   const [selectedGrade, setSelectedGrade] = useState<{
     grade: number;
@@ -47,7 +56,7 @@ const GradeModalContent = ({ studentId }: { studentId: number }) => {
   } | null>(null);
 
   const currentSemester = getCurrentSemester();
-  const userGrade = userInfo?.year ?? 1; // 기본값 1학년
+  const userGrade = studentInfo?.year ?? 1; // 기본값 1학년
 
   // userGrade까지 학기 리스트 생성
   const filteredGradeData = gradeData

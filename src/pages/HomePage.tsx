@@ -15,9 +15,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import ButtonWhite from "../components/common/ButtonWhite.tsx";
 import SlideBanner from "../components/home/SlideBanner.tsx";
+import { useLoading } from "../stores/LoadingProvider.tsx";
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const { showLoading, hideLoading } = useLoading();
+
   const { userInfo } = useUserStore();
   const [role, setRole] = useState(userInfo.role || "");
 
@@ -42,19 +45,28 @@ export default function HomePage() {
   const [filteredStudents, setFilteredStudents] = useState<UserInfo[]>([]);
 
   useEffect(() => {
-    if (userInfo?.role === "ROLE_PARENT") {
-      getMemberDetailInfo().then((res) => {
-        console.log("getMemberDetailInfo", res.data);
-        setStudents(res.data.childrenList);
-        setFilteredStudents(res.data.childrenList);
-      });
-    } else if (userInfo?.role === "ROLE_TEACHER") {
-      getStudentList().then((res) => {
-        console.log(res);
-        setStudents(res);
-        setFilteredStudents(res);
-      });
-    }
+    const fetchStudentData = async () => {
+      try {
+        showLoading();
+        if (userInfo?.role === "ROLE_PARENT") {
+          const res = await getMemberDetailInfo();
+          console.log("getMemberDetailInfo", res.data);
+          setStudents(res.data.childrenList);
+          setFilteredStudents(res.data.childrenList);
+        } else if (userInfo?.role === "ROLE_TEACHER") {
+          const res = await getStudentList();
+          console.log(res);
+          setStudents(res);
+          setFilteredStudents(res);
+        }
+      } catch (error) {
+        console.error("학생 데이터를 불러오는 중 오류 발생:", error);
+      } finally {
+        hideLoading();
+      }
+    };
+
+    fetchStudentData();
   }, [userInfo]);
 
   const handleSearch = async (searchParams: {
