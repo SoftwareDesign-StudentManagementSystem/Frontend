@@ -99,6 +99,10 @@ export default function StudentLobbyPage() {
     fetchData();
   }, [userInfo, id, setUserDetailInfo]);
 
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [id]);
+
   const closeModal = () => setOpenModal(null);
 
   // 드롭다운 선택 처리 함수
@@ -135,12 +139,15 @@ export default function StudentLobbyPage() {
 
   return (
     <PageWrapper>
+      {/* 토글 버튼은 사이드바 바깥에 있어야 함 */}
+      {userInfo.role === "ROLE_TEACHER" && (
+        <ToggleButton onClick={toggleSidebar}>
+          {sidebarOpen ? "«" : "»"}
+        </ToggleButton>
+      )}
       {/* 사이드바 (학생 리스트) */}
       {userInfo.role === "ROLE_TEACHER" && (
         <Sidebar open={sidebarOpen}>
-          <ToggleButton onClick={toggleSidebar}>
-            {sidebarOpen ? "«" : "»"}
-          </ToggleButton>
           {sidebarOpen && (
             <Card
               cardtitle={"학생 리스트"}
@@ -263,44 +270,51 @@ const PageWrapper = styled.div`
 `;
 
 const Sidebar = styled.div<{ open: boolean }>`
-  width: ${({ open }) => (open ? "fit-content" : "0")};
-  height: 100%;
-  padding: ${({ open }) => (open ? "25px 16px 25px 8px" : "0")};
-  transition: all 0.3s ease;
-  overflow-y: auto; // 수직 스크롤 허용
-  border-right: 1px solid #ddd;
-  background-color: #fafafa;
+  position: fixed; /* 💡 화면 위에 떠있도록 고정 */
+  top: 80px;
+  left: 0;
+  width: 400px;
+  max-width: 100%;
+  height: calc(100vh - 80px); /* 💡 뷰포트 높이에서 top만큼 제외 */
+  padding: 45px 16px;
   box-sizing: border-box;
+  background-color: #fafafa;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transform: ${({ open }) => (open ? "translateX(0)" : "translateX(-100%)")};
+  transition: transform 0.3s ease;
+  overflow-y: auto;
 
   @media (max-width: 768px) {
-    display: none;
+    width: 100%;
   }
 `;
 
 const ToggleButton = styled.button`
   position: fixed;
-  top: 100px;
-  left: 12px;
+  top: 90px;
+  left: 16px;
   width: 36px;
   height: 36px;
   border-radius: 18px;
   border: 1px solid #ccc;
   background-color: white;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 1100; /* 💡 사이드바보다 위에 */
   font-size: 18px;
   font-weight: bold;
-  line-height: 1;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   display: flex;
   justify-content: center;
   align-items: center;
-`;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 
+  @media (max-width: 768px) {
+    top: 70px;
+  }
+`;
 const MainContent = styled.div`
   flex: 1;
-  //height: 100vh;
-  overflow-y: auto; // 독립 스크롤
+  overflow-y: auto;
   padding: 25px 32px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
