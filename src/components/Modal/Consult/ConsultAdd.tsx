@@ -10,6 +10,7 @@ import { postConsult } from "../../../apis/consult.ts";
 import { useSearchParams } from "react-router-dom";
 import ButtonWhite from "../../common/ButtonWhite.tsx";
 import { DatePickerOverride } from "../../../resources/styles/CommonStyles.tsx";
+import { Consult } from "../../../types/consults.ts";
 
 interface InputBoxProps {
   value: string;
@@ -27,11 +28,17 @@ const InputBox = ({ value, onChange }: InputBoxProps) => {
 
 interface ConsultAddProps {
   setIsAddMode: (value: boolean) => void;
+  editData?: Consult | null;
 }
-const ConsultAdd = ({ setIsAddMode }: ConsultAddProps) => {
-  const [consultDate, setConsultDate] = useState<Date | null>(null);
-  const [nextConsultDate, setNextConsultDate] = useState<Date | null>(null);
-  const [inputContent, setInputContent] = useState("");
+
+const ConsultAdd = ({ setIsAddMode, editData }: ConsultAddProps) => {
+  const [consultDate, setConsultDate] = useState<Date | null>(
+    editData?.date ? new Date(editData.date) : null,
+  );
+  const [nextConsultDate, setNextConsultDate] = useState<Date | null>(
+    editData?.nextDate ? new Date(editData.nextDate) : null,
+  );
+  const [inputContent, setInputContent] = useState(editData?.content || "");
 
   //선택된 학생의 정보
   const [searchParams] = useSearchParams();

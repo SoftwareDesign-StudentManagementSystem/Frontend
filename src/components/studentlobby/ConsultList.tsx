@@ -3,7 +3,13 @@ import { useEffect, useState } from "react";
 import { Consult } from "../../types/consults.ts";
 import { getConsult } from "../../apis/consult.ts";
 
-const ConsultList = ({ studentId }: { studentId: number }) => {
+const ConsultList = ({
+  studentId,
+  onSelect,
+}: {
+  studentId: number;
+  onSelect?: (consult: Consult) => void;
+}) => {
   const [consultations, setConsultations] = useState<Consult[]>([]);
 
   useEffect(() => {
@@ -37,7 +43,11 @@ const ConsultList = ({ studentId }: { studentId: number }) => {
             };
 
             return (
-              <tr key={index}>
+              <tr
+                key={index}
+                onClick={() => onSelect?.(consultation)}
+                style={{ cursor: "pointer" }}
+              >
                 <td>{formatDate(consultation.date)}</td>
                 <td>{formatDate(consultation.nextDate)}</td>
                 <td>{consultation.teacher}</td>

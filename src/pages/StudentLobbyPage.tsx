@@ -108,20 +108,22 @@ export default function StudentLobbyPage() {
   return (
     <PageWrapper>
       {/* 사이드바 (학생 리스트) */}
-      <Sidebar open={sidebarOpen}>
-        <ToggleButton onClick={toggleSidebar}>
-          {sidebarOpen ? "«" : "»"}
-        </ToggleButton>
-        {sidebarOpen && (
-          <Card
-            cardtitle={"학생 리스트"}
-            headerChildren={<ListHeader />}
-            contentChildren={
-              <StudentList students={filteredStudents} maxHeight={"100%"} />
-            }
-          />
-        )}
-      </Sidebar>
+      {userInfo.role === "ROLE_TEACHER" && (
+        <Sidebar open={sidebarOpen}>
+          <ToggleButton onClick={toggleSidebar}>
+            {sidebarOpen ? "«" : "»"}
+          </ToggleButton>
+          {sidebarOpen && (
+            <Card
+              cardtitle={"학생 리스트"}
+              headerChildren={<ListHeader />}
+              contentChildren={
+                <StudentList students={filteredStudents} maxHeight={"100%"} />
+              }
+            />
+          )}
+        </Sidebar>
+      )}
 
       {/* 오른쪽 콘텐츠 */}
       <MainContent>
@@ -155,9 +157,9 @@ export default function StudentLobbyPage() {
         <div onClick={() => setOpenModal("specialNote")}>
           <Card
             cardtitle="특기 사항"
-            headerChildren={
-              <DropDownMenu options={options} onSelect={handleSelect} />
-            }
+            // headerChildren={
+            //   <DropDownMenu options={options} onSelect={handleSelect} />
+            // }
             contentChildren={<SpecialNoteList />}
           />
         </div>
@@ -165,9 +167,9 @@ export default function StudentLobbyPage() {
         <div onClick={() => setOpenModal("grade")}>
           <Card
             cardtitle="성적"
-            headerChildren={
-              <DropDownMenu options={options} onSelect={handleSelect} />
-            }
+            // headerChildren={
+            //   <DropDownMenu options={options} onSelect={handleSelect} />
+            // }
             contentChildren={
               <GradeList
                 studentId={Number(id)}
@@ -182,9 +184,9 @@ export default function StudentLobbyPage() {
         <div onClick={() => setOpenModal("attendance")}>
           <Card
             cardtitle="출결"
-            headerChildren={
-              <DropDownMenu options={options} onSelect={handleSelect} />
-            }
+            // headerChildren={
+            //   <DropDownMenu options={options} onSelect={handleSelect} />
+            // }
             contentChildren={<AttendanceList />}
           />
         </div>
@@ -192,9 +194,9 @@ export default function StudentLobbyPage() {
         <div onClick={() => setOpenModal("feedback")}>
           <Card
             cardtitle="피드백"
-            headerChildren={
-              <DropDownMenu options={options} onSelect={handleSelect} />
-            }
+            // headerChildren={
+            //   <DropDownMenu options={options} onSelect={handleSelect} />
+            // }
             contentChildren={<FeedbackList studentId={Number(id)} />}
           />
         </div>
@@ -202,9 +204,9 @@ export default function StudentLobbyPage() {
         <div onClick={() => setOpenModal("consult")}>
           <Card
             cardtitle="상담 내역"
-            headerChildren={
-              <DropDownMenu options={options} onSelect={handleSelect} />
-            }
+            // headerChildren={
+            //   <DropDownMenu options={options} onSelect={handleSelect} />
+            // }
             contentChildren={<ConsultList studentId={Number(id)} />}
           />
         </div>

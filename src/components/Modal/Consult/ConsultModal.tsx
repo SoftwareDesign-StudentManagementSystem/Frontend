@@ -8,6 +8,7 @@ import { useState } from "react";
 import ConsultList from "../../studentlobby/ConsultList.tsx";
 import { useSearchParams } from "react-router-dom";
 import useUserStore from "../../../stores/useUserStore.ts";
+import { Consult } from "../../../types/consults.ts";
 
 const ConsultModal = ({ onClose }: { onClose: () => void }) => {
   return (
@@ -27,13 +28,24 @@ const ConsultModalContent = () => {
   const [searchParams] = useSearchParams();
   const studentId = searchParams.get("id");
   const [isAddMode, setIsAddMode] = useState(false);
+
+  const [selectedConsult, setSelectedConsult] = useState<Consult | null>(null);
+
   return (
     <FeedBackModalContentWrapper>
       {!isAddMode ? (
         <>
           <Card
             cardtitle={"상담 내역"}
-            contentChildren={<ConsultList studentId={Number(studentId)} />}
+            contentChildren={
+              <ConsultList
+                studentId={Number(studentId)}
+                onSelect={(consult) => {
+                  setSelectedConsult(consult);
+                  setIsAddMode(true);
+                }}
+              />
+            }
           />
           {userInfo.role !== "ROLE_STUDENT" && (
             <>
@@ -46,7 +58,7 @@ const ConsultModalContent = () => {
         </>
       ) : (
         <>
-          <ConsultAdd setIsAddMode={setIsAddMode} />
+          <ConsultAdd setIsAddMode={setIsAddMode} editData={selectedConsult} />
         </>
       )}
     </FeedBackModalContentWrapper>

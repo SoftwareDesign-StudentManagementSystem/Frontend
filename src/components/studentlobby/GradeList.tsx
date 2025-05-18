@@ -70,7 +70,14 @@ const GradeList = ({
   // 유효한 과목 리스트만 필터링
   const validGradeEntries = Object.entries(grades ?? {}).filter(
     ([key]) =>
-      !["id", "studentId", "profileImageUrl", "year", "semester"].includes(key),
+      ![
+        "id",
+        "studentId",
+        "profileImageUrl",
+        "year",
+        "semester",
+        "gradeRank",
+      ].includes(key),
   );
 
   // miniView가 true면 상위 3개만 보여줌
@@ -95,8 +102,13 @@ const GradeList = ({
             return (
               <tr key={subject}>
                 <td>{subject}</td>
-                <td>{subjectGrade.score}</td>
-                <td>{subjectGrade.achievementLevel}</td>
+                <td>
+                  {subjectGrade.score} / {subjectGrade.average}
+                </td>
+                <td>
+                  {subjectGrade.achievementLevel}
+                  {}
+                </td>
                 <td>{subjectGrade.relativeRankGrade}</td>
               </tr>
             );
