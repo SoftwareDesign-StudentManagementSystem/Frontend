@@ -3,7 +3,7 @@ import { useState } from "react";
 import InputBoxWrapper from "../../../resources/styles/InputBoxWrapper.tsx";
 import ButtonWhite from "../../common/ButtonWhite.tsx";
 import ButtonOrange from "../../common/ButtonOrange.tsx";
-import { postConsult } from "../../../apis/consult.ts";
+// import { postConsult } from "../../../apis/consult.ts";
 import { postFeedback } from "../../../apis/feedback.ts";
 import { useSearchParams } from "react-router-dom";
 import useUserStore from "../../../stores/useUserStore.ts";

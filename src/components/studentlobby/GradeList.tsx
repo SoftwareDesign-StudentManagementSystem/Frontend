@@ -6,8 +6,8 @@ import useUserStore from "../../stores/useUserStore.ts";
 
 // props 타입에 showInputRow, setShowInputRow 추가
 interface GradeListExtendedProps extends GradeListProps {
-  showInputRow: boolean;
-  setShowInputRow: (v: boolean) => void;
+  showInputRow?: boolean;
+  setShowInputRow?: (v: boolean) => void;
 }
 
 const GradeList = ({
@@ -64,7 +64,7 @@ const GradeList = ({
       relativeRankGrade: "",
     });
 
-    setShowInputRow(false);
+    if (setShowInputRow) setShowInputRow(false);
   };
 
   // 유효한 과목 리스트만 필터링
@@ -98,7 +98,7 @@ const GradeList = ({
         </thead>
         <tbody>
           {displayedGrades.map(([subject, grade]) => {
-            const subjectGrade = grade as SubjectGrade;
+            const subjectGrade = grade as unknown as SubjectGrade;
             return (
               <tr key={subject}>
                 <td>{subject}</td>

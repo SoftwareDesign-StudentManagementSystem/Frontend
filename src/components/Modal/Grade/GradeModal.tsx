@@ -51,7 +51,7 @@ const GradeModalContent = ({ studentId }: { studentId: number }) => {
     <GradeModalContentWrapper>
       {!isAddMode ? (
         <GradeViewWrapper>
-          {gradeData.map(({ grade, semester }, index) => (
+          {gradeData.map(({ grade, semester }) => (
             <GradeRow key={`${grade}-${semester}`}>
               <div
                 className="leftcontent"
@@ -82,11 +82,13 @@ const GradeModalContent = ({ studentId }: { studentId: number }) => {
               }}
             />
           </div>
-          <GradeSemesterView
-            year={selectedGrade?.grade}
-            semester={selectedGrade?.semester}
-            studentId={studentId}
-          />
+          {selectedGrade && (
+            <GradeSemesterView
+              year={selectedGrade?.grade}
+              semester={selectedGrade?.semester}
+              studentId={studentId}
+            />
+          )}
         </>
       )}
     </GradeModalContentWrapper>

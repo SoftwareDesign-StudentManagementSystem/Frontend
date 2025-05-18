@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { UserDetailInfo, UserInfo } from "../types/members.ts";
 import Card from "../components/common/Card.tsx";
-import DropDownMenu from "../components/common/DropDownMenu.tsx";
+// import DropDownMenu from "../components/common/DropDownMenu.tsx";
 import StudentInfo from "../components/studentlobby/StudentInfo.tsx";
 import SpecialNoteList from "../components/studentlobby/SpecialNoteList.tsx";
 import GradeList from "../components/studentlobby/GradeList.tsx";
@@ -44,18 +44,18 @@ export default function StudentLobbyPage() {
 
   const [filteredStudents, setFilteredStudents] = useState<UserInfo[]>([]);
 
-  // 드롭다운 선택 상태
-  const [selectedYear, setSelectedYear] = useState<number>(1);
-  const [selectedSemester, setSelectedSemester] = useState<number>(1);
+  // // 드롭다운 선택 상태
+  // const [selectedYear, setSelectedYear] = useState<number>(1);
+  // const [selectedSemester, setSelectedSemester] = useState<number>(1);
 
-  const options = [
-    "1학년 1학기",
-    "1학년 2학기",
-    "2학년 1학기",
-    "2학년 2학기",
-    "3학년 1학기",
-    "3학년 2학기",
-  ];
+  // const options = [
+  //   "1학년 1학기",
+  //   "1학년 2학기",
+  //   "2학년 1학기",
+  //   "2학년 2학기",
+  //   "3학년 1학기",
+  //   "3학년 2학기",
+  // ];
 
   useEffect(() => {
     if (!userInfo.id || !id) return;
@@ -91,19 +91,19 @@ export default function StudentLobbyPage() {
 
   const closeModal = () => setOpenModal(null);
 
-  // 드롭다운 선택 처리 함수
-  const handleSelect = (option: string) => {
-    const yearMatch = option.match(/(\d)학년/);
-    const semesterMatch = option.match(/(\d)학기/);
-
-    if (yearMatch && semesterMatch) {
-      const year = Number(yearMatch[1]);
-      const semester = Number(semesterMatch[1]);
-
-      setSelectedYear(year);
-      setSelectedSemester(semester);
-    }
-  };
+  // // 드롭다운 선택 처리 함수
+  // const handleSelect = (option: string) => {
+  //   const yearMatch = option.match(/(\d)학년/);
+  //   const semesterMatch = option.match(/(\d)학기/);
+  //
+  //   if (yearMatch && semesterMatch) {
+  //     const year = Number(yearMatch[1]);
+  //     const semester = Number(semesterMatch[1]);
+  //
+  //     setSelectedYear(year);
+  //     setSelectedSemester(semester);
+  //   }
+  // };
 
   return (
     <PageWrapper>
@@ -171,12 +171,15 @@ export default function StudentLobbyPage() {
             //   <DropDownMenu options={options} onSelect={handleSelect} />
             // }
             contentChildren={
-              <GradeList
-                studentId={Number(id)}
-                year={selectedYear}
-                semester={selectedSemester}
-                miniView={true}
-              />
+              studentInfo &&
+              studentInfo.year && (
+                <GradeList
+                  studentId={Number(id)}
+                  year={studentInfo?.year}
+                  semester={1}
+                  miniView={true}
+                />
+              )
             }
           />
         </div>

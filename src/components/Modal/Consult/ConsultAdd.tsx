@@ -2,6 +2,7 @@ import styled from "styled-components";
 import InputBoxWrapper from "../../../resources/styles/InputBoxWrapper.tsx";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 import { useState } from "react";
 import DropDownMenu from "../../common/DropDownMenu.tsx";
 import useUserStore from "../../../stores/useUserStore.ts";
@@ -16,6 +17,7 @@ interface InputBoxProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
+
 const InputBox = ({ value, onChange }: InputBoxProps) => {
   return (
     <InputBoxWrapper
@@ -73,25 +75,33 @@ const ConsultAdd = ({ setIsAddMode, editData }: ConsultAddProps) => {
           <DateWrapper>
             <div>
               <div className="title">상담 날짜</div>
-              <StyledDatePicker
-                selected={consultDate}
-                onChange={(date: Date | Date[] | null) => {
-                  if (date instanceof Date || date === null) {
-                    setConsultDate(date);
-                  }
-                }}
-                dateFormat="yyyy년 MM월 dd일"
-                placeholderText="날짜를 선택하세요"
-              />
+              <DatePickerWrapper>
+                <DatePicker
+                  selected={consultDate}
+                  onChange={(date) => {
+                    if (!Array.isArray(date)) {
+                      setConsultDate(date);
+                    }
+                  }}
+                  dateFormat="yyyy년 MM월 dd일"
+                  placeholderText="날짜를 선택하세요"
+                />
+              </DatePickerWrapper>
             </div>
             <div>
               <div className="title">다음 상담 날짜</div>
-              <StyledDatePicker
-                selected={nextConsultDate}
-                onChange={(date: Date | null) => setNextConsultDate(date)}
-                dateFormat="yyyy년 MM월 dd일"
-                placeholderText="날짜를 선택하세요"
-              />
+              <DatePickerWrapper>
+                <DatePicker
+                  selected={nextConsultDate}
+                  onChange={(date) => {
+                    if (!Array.isArray(date)) {
+                      setNextConsultDate(date);
+                    }
+                  }}
+                  dateFormat="yyyy년 MM월 dd일"
+                  placeholderText="날짜를 선택하세요"
+                />
+              </DatePickerWrapper>
             </div>
           </DateWrapper>
           <div>
@@ -165,16 +175,22 @@ const DateWrapper = styled.div`
   }
 `;
 
-const StyledDatePicker = styled(DatePicker)`
-  width: 100%;
-  height: fit-content;
-  padding: 8px 12px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+const DatePickerWrapper = styled.div`
+  .react-datepicker-wrapper {
+    width: 100%;
+  }
 
-  @media (max-width: 768px) {
-    font-size: 14px;
-    padding: 6px 10px;
+  .react-datepicker__input-container input {
+    width: 100%;
+    height: fit-content;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+      padding: 6px 10px;
+    }
   }
 `;

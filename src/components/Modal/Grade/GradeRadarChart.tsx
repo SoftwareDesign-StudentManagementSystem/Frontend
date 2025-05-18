@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Grade, SubjectScore } from "../../../types/grades.ts";
+import { SubjectScore } from "../../../types/grades.ts";
 
 ChartJS.register(
   RadialLinearScale,
@@ -43,7 +43,7 @@ const GradeRadarChart = ({ grades }: GradeRadarChartProps) => {
   console.log("labels", labels);
 
   // datasets 구성: 객체에서 과목별 점수 추출
-  const datasets = Object.values(grades).map((grade) => ({
+  const datasets = Object.values(grades).map(() => ({
     data: subjectKeys.map((subject) => (grades[subject] as SubjectScore).score),
     fill: true,
     backgroundColor: "rgba(34, 202, 236, 0.2)",

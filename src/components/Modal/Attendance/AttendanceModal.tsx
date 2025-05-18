@@ -18,7 +18,7 @@ const AttendanceModal = ({ onClose }: { onClose: () => void }) => {
 export default AttendanceModal;
 
 const AttendanceModalContent = () => {
-  const [isAddMode, setIsAddMode] = useState(false);
+  const [isAddMode] = useState(false);
   return (
     <AttendanceModalContentWrapper>
       {!isAddMode ? (

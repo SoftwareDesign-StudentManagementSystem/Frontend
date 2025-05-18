@@ -58,7 +58,7 @@ const ReportCreateModalContent = () => {
         ))}
       </CheckboxGroup>
       <ButtonWrapper>
-        <ButtonOrange text={"다운로드"} />
+        <ButtonOrange text={"다운로드"} onClick={() => {}} />
       </ButtonWrapper>
     </ReportCreateModalContentWrapper>
   );

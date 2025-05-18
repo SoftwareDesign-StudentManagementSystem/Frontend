@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import 횃불이 from "../../assets/횃불이.svg";
+// import 횃불이 from "../../assets/횃불이.svg";
 import { useState } from "react";
 import ButtonOrange from "../common/ButtonOrange";
 import ButtonWhite from "../common/ButtonWhite";
