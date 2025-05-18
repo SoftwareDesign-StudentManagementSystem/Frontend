@@ -3,12 +3,23 @@ import styled from "styled-components";
 
 interface DropDownMenuProps {
   options: string[];
-  onSelect?: (option: string) => void; // 🔥 onSelect 추가
+  onSelect?: (option: string) => void;
+  defaultSelected?: string; // 추가
 }
 
-const DropDownMenu = ({ options, onSelect }: DropDownMenuProps) => {
+const DropDownMenu = ({
+  options,
+  onSelect,
+  defaultSelected,
+}: DropDownMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(options[0]);
+  const [selected, setSelected] = useState(defaultSelected || options[0]);
+
+  useEffect(() => {
+    if (defaultSelected) {
+      setSelected(defaultSelected);
+    }
+  }, [defaultSelected]);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

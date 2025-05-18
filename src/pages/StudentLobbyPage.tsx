@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { UserDetailInfo, UserInfo } from "../types/members.ts";
 import Card from "../components/common/Card.tsx";
-// import DropDownMenu from "../components/common/DropDownMenu.tsx";
+import DropDownMenu from "../components/common/DropDownMenu.tsx";
 import StudentInfo from "../components/studentlobby/StudentInfo.tsx";
 import SpecialNoteList from "../components/studentlobby/SpecialNoteList.tsx";
 import GradeList from "../components/studentlobby/GradeList.tsx";
@@ -27,6 +27,7 @@ import useUserStore from "../stores/useUserStore.ts";
 import { getRandomProfileImage } from "../utils/getRandomProfileImage.ts";
 import ListHeader from "../components/home/ListHeader.tsx";
 import StudentList from "../components/home/StudentList.tsx";
+import getCurrentSemester from "../utils/getCurrentSemester.ts";
 
 export default function StudentLobbyPage() {
   const { userInfo, setUserDetailInfo } = useUserStore();
@@ -44,18 +45,27 @@ export default function StudentLobbyPage() {
 
   const [filteredStudents, setFilteredStudents] = useState<UserInfo[]>([]);
 
-  // // 드롭다운 선택 상태
-  // const [selectedYear, setSelectedYear] = useState<number>(1);
-  // const [selectedSemester, setSelectedSemester] = useState<number>(1);
+  // 드롭다운 선택 상태
+  const [selectedYear, setSelectedYear] = useState<number>(
+    Number(studentInfo?.year),
+  );
+  const [selectedSemester, setSelectedSemester] = useState<number>(1);
+  const [options, setOptions] = useState<string[]>([]);
+  const [selectedOption, setSelectedOption] = useState<string>("1학년 1학기");
+  useEffect(() => {
+    if (studentInfo?.year) {
+      const semester = getCurrentSemester();
+      const year = studentInfo.year;
 
-  // const options = [
-  //   "1학년 1학기",
-  //   "1학년 2학기",
-  //   "2학년 1학기",
-  //   "2학년 2학기",
-  //   "3학년 1학기",
-  //   "3학년 2학기",
-  // ];
+      const availableOptions = generateAvailableOptions(year, semester);
+
+      setOptions(availableOptions);
+      const defaultOpt = `${year}학년 ${semester}학기`;
+      setSelectedOption(defaultOpt);
+      setSelectedYear(year);
+      setSelectedSemester(semester);
+    }
+  }, [studentInfo]);
 
   useEffect(() => {
     if (!userInfo.id || !id) return;
@@ -87,23 +97,41 @@ export default function StudentLobbyPage() {
     };
 
     fetchData();
-  }, [userInfo, id]);
+  }, [userInfo, id, setUserDetailInfo]);
 
   const closeModal = () => setOpenModal(null);
 
-  // // 드롭다운 선택 처리 함수
-  // const handleSelect = (option: string) => {
-  //   const yearMatch = option.match(/(\d)학년/);
-  //   const semesterMatch = option.match(/(\d)학기/);
-  //
-  //   if (yearMatch && semesterMatch) {
-  //     const year = Number(yearMatch[1]);
-  //     const semester = Number(semesterMatch[1]);
-  //
-  //     setSelectedYear(year);
-  //     setSelectedSemester(semester);
-  //   }
-  // };
+  // 드롭다운 선택 처리 함수
+  const handleSelect = (option: string) => {
+    const yearMatch = option.match(/(\d)학년/);
+    const semesterMatch = option.match(/(\d)학기/);
+
+    if (yearMatch && semesterMatch) {
+      const year = Number(yearMatch[1]);
+      const semester = Number(semesterMatch[1]);
+
+      setSelectedYear(year);
+      setSelectedSemester(semester);
+    }
+  };
+
+  const generateAvailableOptions = (year: number, semester: number) => {
+    const allOptions = [
+      { year: 1, semester: 1 },
+      { year: 1, semester: 2 },
+      { year: 2, semester: 1 },
+      { year: 2, semester: 2 },
+      { year: 3, semester: 1 },
+      { year: 3, semester: 2 },
+    ];
+
+    return allOptions
+      .filter(
+        (opt) =>
+          opt.year < year || (opt.year === year && opt.semester <= semester),
+      )
+      .map((opt) => `${opt.year}학년 ${opt.semester}학기`);
+  };
 
   return (
     <PageWrapper>
@@ -145,6 +173,13 @@ export default function StudentLobbyPage() {
         <div onClick={() => setOpenModal("studentInfo")}>
           <Card
             cardtitle="학생 정보"
+            headerChildren={
+              <DropDownMenu
+                options={options}
+                onSelect={handleSelect}
+                defaultSelected={selectedOption}
+              />
+            }
             contentChildren={
               <StudentInfo
                 studentInfo={studentInfo}
@@ -175,8 +210,8 @@ export default function StudentLobbyPage() {
               studentInfo.year && (
                 <GradeList
                   studentId={Number(id)}
-                  year={studentInfo?.year}
-                  semester={1}
+                  year={selectedYear}
+                  semester={selectedSemester}
                   miniView={true}
                 />
               )
