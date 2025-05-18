@@ -35,7 +35,8 @@ const gradeData = [
   { grade: 3, semester: 2 },
 ];
 
-import useUserStore from "../../../stores/useUserStore.ts"; // 추가
+import useUserStore from "../../../stores/useUserStore.ts";
+import getCurrentSemester from "../../../utils/getCurrentSemester.ts"; // 추가
 
 const GradeModalContent = ({ studentId }: { studentId: number }) => {
   const { userInfo } = useUserStore();
@@ -44,13 +45,6 @@ const GradeModalContent = ({ studentId }: { studentId: number }) => {
     grade: number;
     semester: number;
   } | null>(null);
-
-  // 현재 연월로 학기 계산 (3~8월: 1학기, 9~2월: 2학기)
-  const getCurrentSemester = () => {
-    const now = new Date();
-    const month = now.getMonth() + 1;
-    return month >= 3 && month <= 8 ? 1 : 2;
-  };
 
   const currentSemester = getCurrentSemester();
   const userGrade = userInfo?.year ?? 1; // 기본값 1학년
