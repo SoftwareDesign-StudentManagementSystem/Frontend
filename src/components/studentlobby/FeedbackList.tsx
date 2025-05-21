@@ -28,25 +28,35 @@ const FeedbackList = ({ studentId }: { studentId: number }) => {
             <th>내용</th>
           </tr>
         </thead>
-        <tbody>
-          {feedbacks.slice(0, 3).map((feedback, index) => {
-            const formatDate = (dateStr: string) => {
-              const date = new Date(dateStr);
-              const month = (date.getMonth() + 1).toString().padStart(2, "0");
-              const day = date.getDate().toString().padStart(2, "0");
-              return `${month}/${day}`;
-            };
+        {feedbacks.length === 0 ? (
+          <tbody>
+            <tr>
+              <td colSpan={4} className="nodata">
+                피드백 정보가 없습니다.
+              </td>
+            </tr>
+          </tbody>
+        ) : (
+          <tbody>
+            {feedbacks.slice(0, 3).map((feedback, index) => {
+              const formatDate = (dateStr: string) => {
+                const date = new Date(dateStr);
+                const month = (date.getMonth() + 1).toString().padStart(2, "0");
+                const day = date.getDate().toString().padStart(2, "0");
+                return `${month}/${day}`;
+              };
 
-            return (
-              <tr key={index}>
-                <td>{formatDate(feedback.recordedDate)}</td>
-                <td>{feedback.category}</td>
-                <td>{feedback.teacher}</td>
-                <td>{feedback.content}</td>
-              </tr>
-            );
-          })}
-        </tbody>
+              return (
+                <tr key={index}>
+                  <td>{formatDate(feedback.recordedDate)}</td>
+                  <td>{feedback.category}</td>
+                  <td>{feedback.teacher}</td>
+                  <td>{feedback.content}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        )}
       </table>
     </FeedbackListWrapper>
   );
@@ -83,5 +93,13 @@ const FeedbackListWrapper = styled.div`
     //background-color: #f0f0f0;
     font-weight: bold;
     text-align: center;
+  }
+
+  .nodata {
+    text-align: center;
+    padding: 30px 0;
+    background-color: #f8f8f8;
+    color: #999;
+    font-size: 16px;
   }
 `;

@@ -109,42 +109,43 @@ const GradeList = ({
           </tr>
         </thead>
         <tbody>
-          {displayedGrades.map(([subject, grade]) => {
-            const subjectGrade = grade as unknown as SubjectGrade;
-            return (
-              <tr key={subject}>
-                <td>{subject}</td>
-                <td>
-                  {subjectGrade.score} / {subjectGrade.average}
-                </td>
-                <td>
-                  {subjectGrade.achievementLevel}
-                  {}
-                </td>
-                <td>{subjectGrade.relativeRankGrade}</td>
-              </tr>
-            );
-          })}
+          {displayedGrades.length === 0 ? (
+            <tr>
+              <td colSpan={4} className="nodata">
+                성적 정보가 없습니다.
+              </td>
+            </tr>
+          ) : (
+            displayedGrades.map(([subject, grade]) => {
+              const subjectGrade = grade as unknown as SubjectGrade;
+              return (
+                <tr key={subject}>
+                  <td>{subject}</td>
+                  <td>
+                    {subjectGrade.score} / {subjectGrade.average}
+                  </td>
+                  <td>{subjectGrade.achievementLevel}</td>
+                  <td>{subjectGrade.relativeRankGrade}</td>
+                </tr>
+              );
+            })
+          )}
+
           {!miniView && showInputRow && (
-            <>
-              <tr>
-                <td>
-                  <StyledInput
-                    type="text"
-                    name="score"
-                    value={newGrade.score}
-                    onChange={handleInputChange}
-                    placeholder="점수"
-                  />
-                </td>
-                <button
-                  onClick={handleAddGrade}
-                  style={{ marginTop: "15px", marginLeft: "10px" }}
-                >
+            <tr>
+              <td colSpan={4}>
+                <StyledInput
+                  type="text"
+                  name="score"
+                  value={newGrade.score}
+                  onChange={handleInputChange}
+                  placeholder="점수"
+                />
+                <button onClick={handleAddGrade} style={{ marginLeft: "10px" }}>
                   저장
                 </button>
-              </tr>
-            </>
+              </td>
+            </tr>
           )}
         </tbody>
       </table>
@@ -184,6 +185,14 @@ const GradeListWrapper = styled.div`
 
   button {
     width: fit-content;
+  }
+
+  .nodata {
+    text-align: center;
+    padding: 20px 0;
+    color: #888;
+    font-size: 15px;
+    background-color: #f8f8f8;
   }
 `;
 

@@ -9,6 +9,8 @@ const SpecialNoteList = () => {
     { date: "2025-05-12", content: "국어 독후감 경진대회 입상" },
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
+  const displayedNotes = notes.slice(0, 3);
+
   return (
     <SpecialNoteListWrapper>
       <table>
@@ -19,21 +21,29 @@ const SpecialNoteList = () => {
           </tr>
         </thead>
         <tbody>
-          {notes.slice(0, 3).map((note, index) => {
-            const formatDate = (dateStr: string) => {
-              const date = new Date(dateStr);
-              const month = (date.getMonth() + 1).toString().padStart(2, "0");
-              const day = date.getDate().toString().padStart(2, "0");
-              return `${month}/${day}`;
-            };
+          {displayedNotes.length === 0 ? (
+            <tr>
+              <td colSpan={2} className="nodata">
+                등록된 특기사항이 없습니다.
+              </td>
+            </tr>
+          ) : (
+            displayedNotes.map((note, index) => {
+              const formatDate = (dateStr: string) => {
+                const date = new Date(dateStr);
+                const month = (date.getMonth() + 1).toString().padStart(2, "0");
+                const day = date.getDate().toString().padStart(2, "0");
+                return `${month}/${day}`;
+              };
 
-            return (
-              <tr key={index}>
-                <td>{formatDate(note.date)}</td>
-                <td className="content">{note.content}</td>
-              </tr>
-            );
-          })}
+              return (
+                <tr key={index}>
+                  <td>{formatDate(note.date)}</td>
+                  <td className="content">{note.content}</td>
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
     </SpecialNoteListWrapper>
@@ -67,5 +77,13 @@ const SpecialNoteListWrapper = styled.div`
   th {
     font-weight: bold;
     text-align: center;
+  }
+
+  .nodata {
+    text-align: center;
+    padding: 20px 0;
+    color: #999;
+    background-color: #f8f8f8;
+    font-size: 15px;
   }
 `;

@@ -27,7 +27,7 @@ interface GradeRadarChartProps {
 const GradeRadarChart = ({ grades }: GradeRadarChartProps) => {
   // grades가 undefined, null이거나 빈 객체일 경우 처리
   if (!grades || Object.keys(grades).length === 0) {
-    return <p>성적 데이터가 없습니다.</p>;
+    return <p>성적 정보가 없습니다.</p>;
   }
 
   // 과목 리스트를 객체에서 추출 (과목 이름은 grades 객체의 키에 해당)

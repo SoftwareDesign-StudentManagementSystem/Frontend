@@ -47,28 +47,36 @@ const ConsultList = ({
           </tr>
         </thead>
         <tbody>
-          {consultations.slice(0, 3).map((consultation, index) => {
-            const formatDate = (dateStr?: string) => {
-              if (!dateStr) return "-";
-              const date = new Date(dateStr);
-              const month = (date.getMonth() + 1).toString().padStart(2, "0");
-              const day = date.getDate().toString().padStart(2, "0");
-              return `${month}/${day}`;
-            };
+          {consultations.length === 0 ? (
+            <tr>
+              <td colSpan={4} className="nodata">
+                상담 정보가 없습니다.
+              </td>
+            </tr>
+          ) : (
+            consultations.slice(0, 3).map((consultation, index) => {
+              const formatDate = (dateStr?: string) => {
+                if (!dateStr) return "-";
+                const date = new Date(dateStr);
+                const month = (date.getMonth() + 1).toString().padStart(2, "0");
+                const day = date.getDate().toString().padStart(2, "0");
+                return `${month}/${day}`;
+              };
 
-            return (
-              <tr
-                key={index}
-                onClick={() => onSelect?.(consultation)}
-                style={{ cursor: "pointer" }}
-              >
-                <td>{formatDate(consultation.date)}</td>
-                <td>{formatDate(consultation.nextDate)}</td>
-                <td>{consultation.teacher}</td>
-                <td>{consultation.content}</td>
-              </tr>
-            );
-          })}
+              return (
+                <tr
+                  key={index}
+                  onClick={() => onSelect?.(consultation)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <td>{formatDate(consultation.date)}</td>
+                  <td>{formatDate(consultation.nextDate)}</td>
+                  <td>{consultation.teacher}</td>
+                  <td>{consultation.content}</td>
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
     </ConsultListWrapper>
@@ -106,5 +114,13 @@ const ConsultListWrapper = styled.div`
     //background-color: #f0f0f0;
     font-weight: bold;
     text-align: center;
+  }
+
+  .nodata {
+    text-align: center;
+    padding: 30px 0;
+    background-color: #f8f8f8;
+    color: #999;
+    font-size: 16px;
   }
 `;
