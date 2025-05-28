@@ -175,7 +175,9 @@ export default function StudentLobbyPage() {
             profileImage={profileImage}
           />
         )}
-        {openModal === "specialNote" && <SpecialModal onClose={closeModal} />}
+        {openModal === "specialNote" && (
+          <SpecialModal onClose={closeModal} studentInfo={studentInfo} />
+        )}
         {openModal === "feedback" && <FeedBackModal onClose={closeModal} />}
         {openModal === "consult" && <ConsultModal onClose={closeModal} />}
         {openModal === "attendance" && <AttendanceModal onClose={closeModal} />}

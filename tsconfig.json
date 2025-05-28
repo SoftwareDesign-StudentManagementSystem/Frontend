@@ -3,5 +3,18 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    "jsx": "react-jsx",               // ✅ JSX 컴파일 허용
+    "esModuleInterop": true,          // ✅ ESM 호환성 경고 해결
+    "module": "esnext",
+    "target": "es6",
+    "moduleResolution": "node",
+    "types": ["jest", "node", "@testing-library/jest-dom"],
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src", "**/*.test.ts", "**/*.test.tsx"]
 }

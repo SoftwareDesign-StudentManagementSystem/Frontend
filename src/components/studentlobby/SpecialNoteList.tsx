@@ -1,15 +1,47 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import { getAllSpecialties } from "../../apis/specialnote";
+import { Specialty } from "../../types/specialnotes";
+import { useSearchParams } from "react-router-dom";
 
-const SpecialNoteList = () => {
-  const notes = [
-    { date: "2025-05-01", content: "수학 경시대회 최우수상 수상" },
-    { date: "2025-05-03", content: "체육 수업에서 적극적인 태도 칭찬" },
-    { date: "2025-05-07", content: "과학 프로젝트 발표 우수" },
-    { date: "2025-05-10", content: "학급 내 리더십 발휘" },
-    { date: "2025-05-12", content: "국어 독후감 경진대회 입상" },
-  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+interface SpecialNoteListProps {
+  setIsAddMode?: (value: boolean) => void;
+  setEditData?: (note: Specialty) => void;
+}
 
-  const displayedNotes = notes.slice(0, 3);
+const SpecialNoteList = ({
+  setIsAddMode,
+  setEditData,
+}: SpecialNoteListProps) => {
+  const [notes, setNotes] = useState<Specialty[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+
+  useEffect(() => {
+    const fetchSpecialties = async () => {
+      try {
+        const data = await getAllSpecialties(Number(id));
+        const sorted = data.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+        );
+        setNotes(sorted.slice(0, 3));
+      } catch (error) {
+        console.error("특기사항 로딩 실패:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSpecialties();
+  }, [id]);
+
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${month}/${day}`;
+  };
 
   return (
     <SpecialNoteListWrapper>
@@ -21,28 +53,34 @@ const SpecialNoteList = () => {
           </tr>
         </thead>
         <tbody>
-          {displayedNotes.length === 0 ? (
+          {loading ? (
+            <tr>
+              <td colSpan={2} className="nodata">
+                불러오는 중...
+              </td>
+            </tr>
+          ) : notes.length === 0 ? (
             <tr>
               <td colSpan={2} className="nodata">
                 등록된 특기사항이 없습니다.
               </td>
             </tr>
           ) : (
-            displayedNotes.map((note, index) => {
-              const formatDate = (dateStr: string) => {
-                const date = new Date(dateStr);
-                const month = (date.getMonth() + 1).toString().padStart(2, "0");
-                const day = date.getDate().toString().padStart(2, "0");
-                return `${month}/${day}`;
-              };
-
-              return (
-                <tr key={index}>
-                  <td>{formatDate(note.date)}</td>
-                  <td className="content">{note.content}</td>
-                </tr>
-              );
-            })
+            notes.map((note) => (
+              <tr
+                key={note.id}
+                onClick={() => {
+                  if (setEditData && setIsAddMode) {
+                    setEditData(note);
+                    setIsAddMode(true);
+                  }
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                <td>{formatDate(note.date)}</td>
+                <td className="content">{note.content}</td>
+              </tr>
+            ))
           )}
         </tbody>
       </table>
