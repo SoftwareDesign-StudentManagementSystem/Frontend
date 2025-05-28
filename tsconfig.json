@@ -1,20 +1,18 @@
 {
   "files": [],
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    { "path": "./tsconfig.app.json" }
   ],
   "compilerOptions": {
-    "jsx": "react-jsx",               // ✅ JSX 컴파일 허용
-    "esModuleInterop": true,          // ✅ ESM 호환성 경고 해결
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
     "module": "esnext",
     "target": "es6",
     "moduleResolution": "node",
-    "types": ["jest", "node", "@testing-library/jest-dom"],
     "allowJs": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src", "**/*.test.ts", "**/*.test.tsx"]
+  "include": ["src"]
 }
