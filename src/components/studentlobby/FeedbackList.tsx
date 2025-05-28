@@ -97,7 +97,7 @@ const FeedbackListWrapper = styled.div`
 
   .nodata {
     text-align: center;
-    padding: 30px 0;
+    padding: 60px 0;
     background-color: #f8f8f8;
     color: #999;
     font-size: 16px;

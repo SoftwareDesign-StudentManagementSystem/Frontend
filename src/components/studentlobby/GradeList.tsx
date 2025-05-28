@@ -189,7 +189,7 @@ const GradeListWrapper = styled.div`
 
   .nodata {
     text-align: center;
-    padding: 20px 0;
+    padding: 60px 0;
     color: #888;
     font-size: 15px;
     background-color: #f8f8f8;

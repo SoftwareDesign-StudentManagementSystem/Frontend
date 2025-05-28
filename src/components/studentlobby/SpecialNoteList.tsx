@@ -62,7 +62,7 @@ const SpecialNoteList = ({
           ) : notes.length === 0 ? (
             <tr>
               <td colSpan={2} className="nodata">
-                등록된 특기사항이 없습니다.
+                특기사항 정보가 없습니다.
               </td>
             </tr>
           ) : (
@@ -119,7 +119,7 @@ const SpecialNoteListWrapper = styled.div`
 
   .nodata {
     text-align: center;
-    padding: 20px 0;
+    padding: 60px 0;
     color: #999;
     background-color: #f8f8f8;
     font-size: 15px;

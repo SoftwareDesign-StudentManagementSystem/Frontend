@@ -1,30 +1,161 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import {
+  getAttendanceByStudent,
+  updateAttendance,
+} from "../../apis/attendance";
+import {
+  AttendanceState,
+  PeriodType,
+  SemesterType,
+  UpdateAttendanceProps,
+} from "../../types/attendance";
+import { useLoading } from "../../stores/LoadingProvider";
 
-const AttendanceList = () => {
-  const attendanceData = [
-    {
-      date: "3/25",
-      periods: ["O", "O", "△", "O", "O", "O", "O", "O"],
-    },
-    {
-      date: "3/26",
-      periods: ["O", "O", "O", "O", "O", "O", "O", "O"],
-    },
-    {
-      date: "3/27",
-      periods: ["O", "△", "△", "O", "O", "O", "O", "X"],
-    },
-    {
-      date: "3/28",
-      periods: ["O", "O", "O", "O", "X", "X", "O", "O"],
-    },
-    {
-      date: "3/29",
-      periods: ["O", "O", "O", "O", "O", "O", "O", "O"],
-    },
-  ];
+interface Props {
+  studentId: number;
+  selectedMonth?: string;
+  miniview?: boolean;
+}
 
-  const displayedData = attendanceData.slice(0, 3);
+const AttendanceList = ({
+  studentId,
+  selectedMonth = "전체",
+  miniview,
+}: Props) => {
+  const [attendanceData, setAttendanceData] = useState<
+    {
+      id: number;
+      year: number;
+      semester: string;
+      date: string;
+      rawDate: string;
+      periods: { period: PeriodType; state: AttendanceState | "" }[];
+    }[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+  const { showLoading, hideLoading } = useLoading();
+
+  useEffect(() => {
+    const fetchAttendance = async () => {
+      try {
+        if (!miniview) showLoading();
+        else {
+          setLoading(true);
+        }
+        const data = await getAttendanceByStudent(studentId);
+
+        const filtered = data.filter((item) => {
+          if (!selectedMonth || selectedMonth === "전체") return true;
+          const month = new Date(item.date).getMonth() + 1;
+          return selectedMonth === `${month}월`;
+        });
+
+        const transformed = filtered
+          .sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+          )
+          .map((item) => ({
+            id: item.id,
+            year: item.year,
+            semester: item.semester,
+            date: formatDate(item.date),
+            rawDate: item.date,
+            periods: Array.from({ length: 8 }, (_, i) => {
+              const period = item.periodAttendanceDtos.find(
+                (p) => p.period === `PERIOD_${i + 1}`,
+              );
+              return {
+                period: `PERIOD_${i + 1}` as PeriodType,
+                state: (period?.state ?? "") as AttendanceState | "",
+              };
+            }),
+          }));
+
+        setAttendanceData(miniview ? transformed.slice(0, 3) : transformed);
+        if (!miniview) hideLoading();
+        else {
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("출결 정보를 불러오는 데 실패했습니다:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAttendance();
+  }, [studentId, selectedMonth]);
+
+  const attendanceStates: AttendanceState[] = ["출석", "결석", "지각", "조퇴"];
+
+  const getNextState = (current: AttendanceState | ""): AttendanceState => {
+    const index = attendanceStates.indexOf(current as AttendanceState);
+    return attendanceStates[(index + 1) % attendanceStates.length];
+  };
+
+  const handleCellClick = async (dayIndex: number, periodIndex: number) => {
+    if (miniview) return;
+    const target = attendanceData[dayIndex];
+    const updatedState = getNextState(target.periods[periodIndex].state);
+
+    const updatedPeriods = [...target.periods];
+    updatedPeriods[periodIndex] = {
+      ...updatedPeriods[periodIndex],
+      state: updatedState,
+    };
+
+    const validPeriods = updatedPeriods.filter(
+      (p): p is { period: PeriodType; state: AttendanceState } =>
+        p.state === "출석" ||
+        p.state === "결석" ||
+        p.state === "지각" ||
+        p.state === "조퇴",
+    );
+
+    const updatedAttendance: UpdateAttendanceProps = {
+      year: target.year,
+      semester: target.semester as SemesterType,
+      date: target.rawDate,
+      periodAttendances: validPeriods,
+    };
+
+    try {
+      await updateAttendance(target.id, updatedAttendance);
+
+      const newData = [...attendanceData];
+      newData[dayIndex] = {
+        ...newData[dayIndex],
+        periods: updatedPeriods,
+      };
+      setAttendanceData(newData);
+    } catch (err) {
+      alert("출결 수정 실패");
+      console.error(err);
+    }
+  };
+
+  const formatDate = (isoDate: string) => {
+    const date = new Date(isoDate);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${month}/${day}`;
+  };
+
+  const convertState = (state: string) => {
+    switch (state) {
+      case "출석":
+        return "O";
+      case "결석":
+        return "🖤";
+      case "지각":
+        return "×";
+      case "조퇴":
+        return "◎";
+      default:
+        return "-";
+    }
+  };
 
   return (
     <AttendanceTableWrapper>
@@ -38,25 +169,30 @@ const AttendanceList = () => {
           </tr>
         </thead>
         <tbody>
-          {displayedData.length === 0 ? (
+          {loading ? (
+            <tr>
+              <td colSpan={9} className="nodata">
+                로딩 중...
+              </td>
+            </tr>
+          ) : attendanceData.length === 0 ? (
             <tr>
               <td colSpan={9} className="nodata">
                 출결 정보가 없습니다.
               </td>
             </tr>
           ) : (
-            displayedData.map((day, index) => (
-              <tr key={index}>
-                <td
-                  onClick={() => {
-                    alert(day.date + "눌림");
-                  }}
-                  style={{ cursor: "pointer" }}
-                >
-                  {day.date}
-                </td>
-                {day.periods.map((status, i) => (
-                  <td key={i}>{status}</td>
+            attendanceData.map((day, dayIndex) => (
+              <tr key={dayIndex}>
+                <td>{day.date}</td>
+                {day.periods.map((p, periodIndex) => (
+                  <td
+                    key={periodIndex}
+                    onClick={() => handleCellClick(dayIndex, periodIndex)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {convertState(p.state)}
+                  </td>
                 ))}
               </tr>
             ))
@@ -72,6 +208,7 @@ export default AttendanceList;
 const AttendanceTableWrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column; /* 추가 */
   justify-content: center;
   align-items: center;
 
@@ -85,19 +222,22 @@ const AttendanceTableWrapper = styled.div`
     border: 1px solid #f1f2f8;
     padding: 10px;
     text-align: center;
-    font-size: 14px;
   }
 
   th {
     font-weight: bold;
-    background-color: #f7f9fc;
+    text-align: center;
+  }
+
+  button {
+    width: fit-content;
   }
 
   .nodata {
     text-align: center;
-    padding: 20px 0;
+    padding: 60px 0;
     color: #888;
-    background-color: #f8f8f8;
     font-size: 15px;
+    background-color: #f8f8f8;
   }
 `;

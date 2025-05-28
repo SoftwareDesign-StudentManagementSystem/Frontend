@@ -8,8 +8,10 @@ interface CardProps {
 }
 
 const Card = ({ cardtitle, headerChildren, contentChildren }: CardProps) => {
+  const isSearchCard = cardtitle === "학생 리스트 검색";
+
   return (
-    <CardWrapper>
+    <CardWrapper noMinHeight={isSearchCard}>
       <CardHeaderWrapper>
         <div>{cardtitle}</div>
         {headerChildren} {/* 헤더 영역에 children을 추가 */}
@@ -21,9 +23,10 @@ const Card = ({ cardtitle, headerChildren, contentChildren }: CardProps) => {
 
 export default Card;
 
-const CardWrapper = styled.div`
+const CardWrapper = styled.div<{ noMinHeight?: boolean }>`
   width: 100%;
   height: fit-content;
+  ${({ noMinHeight }) => !noMinHeight && `min-height: 250px;`}
   box-sizing: border-box;
   border-width: 0px 1px 1px 0px;
   border-style: solid;
@@ -56,7 +59,7 @@ const CardHeaderWrapper = styled.div`
 const CardContentWrapper = styled.div`
   width: 100%;
   height: fit-content;
-  min-height: 100px;
+  //min-height: 100px;
 
   //box-sizing: border-box;
 `;

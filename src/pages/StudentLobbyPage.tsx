@@ -244,7 +244,9 @@ export default function StudentLobbyPage() {
             // headerChildren={
             //   <DropDownMenu options={options} onSelect={handleSelect} />
             // }
-            contentChildren={<AttendanceList />}
+            contentChildren={
+              <AttendanceList studentId={Number(id)} miniview={true} />
+            }
           />
         </div>
 
