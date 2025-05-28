@@ -8,7 +8,7 @@ import { useState } from "react";
 import ReportCreateModal from "../Modal/ReportCreateModal.tsx";
 import NotificationList from "../header/NotificationList.tsx";
 
-import Logo from "../../assets/logo_row.png";
+import Logo from "../../assets/iedulogo.png";
 
 const UserTypeLabel = ({ type }: { type: string }) => {
   const getLabel = (type: string) => {
@@ -99,7 +99,7 @@ export default function Header() {
       )}
       <StyledHeader>
         <div className="LogoWrapper" onClick={() => navigate("/home")}>
-          <img src={Logo} alt="logo" style={{ height: "70%" }} />
+          <img src={Logo} alt="logo" style={{ height: "60%" }} />
         </div>
 
         <div className="RightWrapper">
