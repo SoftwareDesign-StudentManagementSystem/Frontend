@@ -1,14 +1,7 @@
 export interface Consult {
+    id: number;
     date: string;
-    nextDate: string;
+    nextCounselDate: string;
     teacher: string;
     content: string;
-}
-export interface AddConsultProps {
-    studentId: number;
-    teacherId: number;
-    date: string;
-    content: string;
-    visibleToStudent: boolean;
-    visibleToParent: boolean;
 }

@@ -1,4 +1,5 @@
 export interface Feedback {
+    id: number;
     teacherName: string;
     category: string;
     content: string;

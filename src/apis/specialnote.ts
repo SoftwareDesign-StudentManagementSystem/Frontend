@@ -1,9 +1,5 @@
 import tokenInstance from "../apis/tokenInstance";
-import {
-  Specialty,
-  AddSpecialtyProps,
-  UpdateSpecialtyProps,
-} from "../types/specialnotes";
+import { Specialty, AddSpecialtyProps } from "../types/specialnotes";
 import { ApiResponse } from "../types/common";
 
 // 1. 학생의 모든 특기사항 조회
