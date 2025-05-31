@@ -1,13 +1,15 @@
 import tokenInstance from "../apis/tokenInstance";
 import { Feedback, AddFeedbackProps } from "../types/feedback";
+import { ApiResponse } from "../types/common";
 
 // 1. 학생 id로 모든 피드백 조회 [학부모/선생님 권한]
 export const getFeedback = async (studentId: number): Promise<Feedback[]> => {
-  const response = await tokenInstance.get<Feedback[]>(
+  console.log("학생 id:", studentId);
+  const response = await tokenInstance.get<ApiResponse<Feedback[]>>(
     `/rest-api/v1/feedback/${studentId}`,
   );
   console.log("학생 피드백 조회 성공:", response.data);
-  return response.data;
+  return response.data.ieduPage.contents;
 };
 
 // 2. 본인의 모든 피드백 조회 [학생 권한]

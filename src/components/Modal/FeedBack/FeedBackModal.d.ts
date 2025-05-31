@@ -1,4 +1,6 @@
-declare const FeedBackModal: ({ onClose }: {
+import { UserDetailInfo } from "../../../types/members";
+declare const FeedBackModal: ({ onClose, studentInfo, }: {
     onClose: () => void;
+    studentInfo: UserDetailInfo;
 }) => import("react/jsx-runtime").JSX.Element;
 export default FeedBackModal;

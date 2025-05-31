@@ -8,19 +8,30 @@ import ButtonWhite from "../../common/ButtonWhite.tsx";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import useUserStore from "../../../stores/useUserStore.ts";
+import { UserDetailInfo } from "../../../types/members";
 
-const FeedBackModal = ({ onClose }: { onClose: () => void }) => {
+const FeedBackModal = ({
+  onClose,
+  studentInfo,
+}: {
+  onClose: () => void;
+  studentInfo: UserDetailInfo;
+}) => {
   return (
     <Modal
       onClose={onClose}
-      content={<FeedBackModalContent />}
+      content={<FeedBackModalContent studentInfo={studentInfo} />}
       title={"피드백"}
     />
   );
 };
 export default FeedBackModal;
 
-const FeedBackModalContent = () => {
+const FeedBackModalContent = ({
+  studentInfo,
+}: {
+  studentInfo: UserDetailInfo;
+}) => {
   const { userInfo } = useUserStore();
 
   const [isAddMode, setIsAddMode] = useState(false);
@@ -47,7 +58,7 @@ const FeedBackModalContent = () => {
           )}
         </>
       ) : (
-        <FeedBackAdd setIsAddMode={setIsAddMode} />
+        <FeedBackAdd setIsAddMode={setIsAddMode} studentInfo={studentInfo} />
       )}
     </FeedBackModalContentWrapper>
   );

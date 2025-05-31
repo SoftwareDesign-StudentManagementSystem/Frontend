@@ -178,7 +178,9 @@ export default function StudentLobbyPage() {
         {openModal === "specialNote" && (
           <SpecialModal onClose={closeModal} studentInfo={studentInfo} />
         )}
-        {openModal === "feedback" && <FeedBackModal onClose={closeModal} />}
+        {openModal === "feedback" && studentInfo && (
+          <FeedBackModal onClose={closeModal} studentInfo={studentInfo} />
+        )}
         {openModal === "consult" && <ConsultModal onClose={closeModal} />}
         {openModal === "attendance" && <AttendanceModal onClose={closeModal} />}
         {openModal === "grade" && (
@@ -256,7 +258,9 @@ export default function StudentLobbyPage() {
             // headerChildren={
             //   <DropDownMenu options={options} onSelect={handleSelect} />
             // }
-            contentChildren={<FeedbackList studentId={Number(id)} />}
+            contentChildren={
+              <FeedbackList studentId={Number(id)} miniView={true} />
+            }
           />
         </div>
 

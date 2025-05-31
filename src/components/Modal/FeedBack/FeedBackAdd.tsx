@@ -6,6 +6,7 @@ import ButtonOrange from "../../common/ButtonOrange.tsx";
 // import { postConsult } from "../../../apis/consult.ts";
 import { postFeedback } from "../../../apis/feedback.ts";
 import { useSearchParams } from "react-router-dom";
+import { UserDetailInfo } from "../../../types/members";
 
 interface InputBoxProps {
   value: string;
@@ -23,8 +24,9 @@ const InputBox = ({ value, onChange }: InputBoxProps) => {
 
 interface FeedbackAddProps {
   setIsAddMode: (value: boolean) => void;
+  studentInfo: UserDetailInfo;
 }
-const FeedBackAdd = ({ setIsAddMode }: FeedbackAddProps) => {
+const FeedBackAdd = ({ setIsAddMode, studentInfo }: FeedbackAddProps) => {
   //선택된 학생의 정보
   const [searchParams] = useSearchParams();
   const id = Number(searchParams.get("id"));
@@ -61,7 +63,8 @@ const FeedBackAdd = ({ setIsAddMode }: FeedbackAddProps) => {
     const visibleToParent = selectedTargets.includes("학부모");
 
     const now = new Date();
-    const year = now.getFullYear();
+    const year = studentInfo.year;
+    if (!year) return;
     const semester =
       now.getMonth() + 1 <= 6 ? "FIRST_SEMESTER" : "SECOND_SEMESTER";
 
