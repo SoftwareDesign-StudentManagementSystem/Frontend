@@ -10,7 +10,7 @@ refreshInstance.interceptors.request.use(
   (config) => {
     const { refreshToken } = useUserStore.getState().tokenInfo;
     if (refreshToken) {
-      config.headers["refresh"] = refreshToken;
+      config.headers["Authorization"] = refreshToken;
     }
     return config;
   },

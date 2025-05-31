@@ -70,7 +70,7 @@ const ConsultList = ({
                   style={{ cursor: "pointer" }}
                 >
                   <td>{formatDate(consultation.date)}</td>
-                  <td>{formatDate(consultation.nextDate)}</td>
+                  <td>{formatDate(consultation.nextCounselDate)}</td>
                   <td>{consultation.teacher}</td>
                   <td>{consultation.content}</td>
                 </tr>

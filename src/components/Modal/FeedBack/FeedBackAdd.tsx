@@ -3,10 +3,15 @@ import { useState } from "react";
 import InputBoxWrapper from "../../../resources/styles/InputBoxWrapper.tsx";
 import ButtonWhite from "../../common/ButtonWhite.tsx";
 import ButtonOrange from "../../common/ButtonOrange.tsx";
-// import { postConsult } from "../../../apis/consult.ts";
-import { postFeedback } from "../../../apis/feedback.ts";
+import {
+  deleteFeedback,
+  postFeedback,
+  putFeedback,
+} from "../../../apis/feedback.ts"; // 수정 API 추가
 import { useSearchParams } from "react-router-dom";
 import { UserDetailInfo } from "../../../types/members";
+import { Feedback } from "../../../types/feedback.ts";
+import ButtonRed from "../../common/ButtonRed"; // Feedback 타입 임포트
 
 interface InputBoxProps {
   value: string;
@@ -25,21 +30,32 @@ const InputBox = ({ value, onChange }: InputBoxProps) => {
 interface FeedbackAddProps {
   setIsAddMode: (value: boolean) => void;
   studentInfo: UserDetailInfo;
+  initialFeedback?: Feedback | null;
 }
-const FeedBackAdd = ({ setIsAddMode, studentInfo }: FeedbackAddProps) => {
-  //선택된 학생의 정보
+
+const FeedBackAdd = ({
+  setIsAddMode,
+  studentInfo,
+  initialFeedback,
+}: FeedbackAddProps) => {
   const [searchParams] = useSearchParams();
   const id = Number(searchParams.get("id"));
 
-  const [inputContent, setInputContent] = useState("");
-
   const categories = ["성적", "태도", "출결", "행동"];
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([
-    "성적",
-  ]);
-
   const notifyTargets = ["학생", "학부모"];
-  const [selectedTargets, setSelectedTargets] = useState<string[]>([]);
+
+  const [inputContent, setInputContent] = useState(
+    initialFeedback?.content || "",
+  );
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    initialFeedback ? [initialFeedback.category] : ["성적"],
+  );
+  const [selectedTargets, setSelectedTargets] = useState<string[]>(() => {
+    const targets: string[] = [];
+    if (initialFeedback?.visibleToStudent) targets.push("학생");
+    if (initialFeedback?.visibleToParent) targets.push("학부모");
+    return targets;
+  });
 
   const toggleCategory = (category: string) => {
     setSelectedCategories([category]);
@@ -52,11 +68,6 @@ const FeedBackAdd = ({ setIsAddMode, studentInfo }: FeedbackAddProps) => {
       setSelectedTargets([...selectedTargets, target]);
     }
   };
-
-  const isAllCategorySelected =
-    selectedCategories.length === categories.length - 1;
-  const isAllTargetSelected =
-    selectedTargets.length === notifyTargets.length - 1;
 
   const handleSubmit = async () => {
     const visibleToStudent = selectedTargets.includes("학생");
@@ -76,11 +87,14 @@ const FeedBackAdd = ({ setIsAddMode, studentInfo }: FeedbackAddProps) => {
       visibleToStudent,
       visibleToParent,
     };
-    console.log(id);
-    console.log(feedbackData);
 
     try {
-      const res = await postFeedback(id, feedbackData);
+      let res;
+      if (initialFeedback) {
+        res = await putFeedback(initialFeedback.id, feedbackData); // 수정 요청
+      } else {
+        res = await postFeedback(id, feedbackData); // 새로 추가
+      }
       alert(res.message || "피드백이 저장되었습니다.");
       setIsAddMode(false);
     } catch (error) {
@@ -88,23 +102,31 @@ const FeedBackAdd = ({ setIsAddMode, studentInfo }: FeedbackAddProps) => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputContent(e.target.value);
+  const handleDelete = async () => {
+    if (!initialFeedback) return;
+    const confirmDelete = window.confirm(
+      "정말로 이 피드백을 삭제하시겠습니까?",
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deleteFeedback(initialFeedback.id);
+      alert("피드백이 삭제되었습니다.");
+      setIsAddMode(false);
+    } catch (error) {
+      alert("피드백 삭제에 실패했습니다." + error);
+    }
   };
 
   return (
     <FeedBackAddWrapper>
       <div className="title">피드백을 생성하실 범주를 선택해주세요.(필수)</div>
       <CheckboxGroup>
-        {[...categories].map((category) => (
+        {categories.map((category) => (
           <label key={category}>
             <input
               type="checkbox"
-              checked={
-                category === "전체"
-                  ? isAllCategorySelected
-                  : selectedCategories.includes(category)
-              }
+              checked={selectedCategories.includes(category)}
               onChange={() => toggleCategory(category)}
             />
             {category}
@@ -118,27 +140,26 @@ const FeedBackAdd = ({ setIsAddMode, studentInfo }: FeedbackAddProps) => {
           <label key={target}>
             <input
               type="checkbox"
-              checked={
-                target === "전체"
-                  ? isAllTargetSelected
-                  : selectedTargets.includes(target)
-              }
+              checked={selectedTargets.includes(target)}
               onChange={() => toggleTarget(target)}
             />
             {target}
           </label>
         ))}
       </CheckboxGroup>
-      <InputBox value={inputContent} onChange={handleInputChange} />
+
+      <InputBox
+        value={inputContent}
+        onChange={(e) => setInputContent(e.target.value)}
+      />
 
       <ButtonGroup>
-        <ButtonWhite
-          text={"돌아가기"}
-          onClick={() => {
-            setIsAddMode(false);
-          }}
+        <ButtonWhite text={"돌아가기"} onClick={() => setIsAddMode(false)} />
+        {initialFeedback && <ButtonRed text="삭제" onClick={handleDelete} />}
+        <ButtonOrange
+          text={initialFeedback ? "수정" : "저장"}
+          onClick={handleSubmit}
         />
-        <ButtonOrange text={"저장"} onClick={handleSubmit} />
       </ButtonGroup>
     </FeedBackAddWrapper>
   );
@@ -155,12 +176,10 @@ const FeedBackAddWrapper = styled.div`
   box-sizing: border-box;
 
   .title {
-    font-style: normal;
     font-weight: 400;
     font-size: 20px;
     line-height: 150%;
-    text-transform: capitalize;
-    color: #000000;
+    color: #000;
     margin-bottom: 8px;
   }
 
@@ -175,11 +194,9 @@ const FeedBackAddWrapper = styled.div`
 
 const CheckboxGroup = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   gap: 20px;
   margin: 20px 0;
-  box-sizing: border-box;
-  flex-wrap: wrap;
 
   label {
     display: flex;
@@ -211,6 +228,5 @@ const ButtonGroup = styled.div`
   display: flex;
   flex-direction: row;
   gap: 10px;
-
   padding-top: 20px;
 `;

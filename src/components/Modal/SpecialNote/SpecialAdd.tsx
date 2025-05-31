@@ -4,8 +4,12 @@ import ButtonWhite from "../../common/ButtonWhite.tsx";
 import ButtonOrange from "../../common/ButtonOrange.tsx";
 import ButtonRed from "../../common/ButtonRed.tsx"; // 삭제 버튼 import
 import { useState } from "react";
-import { deleteSpecialty, postSpecialty } from "../../../apis/specialnote.ts";
-import { AddSpecialtyProps, Specialty } from "../../../types/specialnotes";
+import {
+  deleteSpecialty,
+  postSpecialty,
+  updateSpecialty,
+} from "../../../apis/specialnote.ts";
+import { Specialty } from "../../../types/specialnotes";
 import DatePicker from "react-datepicker";
 import { DatePickerOverride } from "../../../resources/styles/CommonStyles";
 import { UserDetailInfo } from "../../../types/members";
@@ -36,15 +40,20 @@ const SpecialAdd = ({
     const semester =
       recordDate.getMonth() + 1 <= 6 ? "FIRST_SEMESTER" : "SECOND_SEMESTER";
 
-    const newSpecialty: AddSpecialtyProps = {
+    const specialtyData = {
       content,
       year,
       semester,
     };
 
     try {
-      await postSpecialty(studentInfo.id, newSpecialty); // putSpecialty 필요 시 수정
-      alert(isEdit ? "수정되었습니다." : "특기사항이 저장되었습니다.");
+      if (isEdit && editData) {
+        await updateSpecialty(editData.id, specialtyData); // 수정 요청
+        alert("수정되었습니다.");
+      } else {
+        await postSpecialty(studentInfo.id, specialtyData); // 새로 작성
+        alert("특기사항이 저장되었습니다.");
+      }
       setIsAddMode(false);
     } catch (error) {
       alert("저장에 실패했습니다.");

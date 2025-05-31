@@ -99,7 +99,7 @@ export const login = async (accountId: number, password: string) => {
 // 토큰 재발급
 export const refresh = async (): Promise<ApiResponse<TokenInfo>> => {
   const response = await refreshInstance.post<ApiResponse<TokenInfo>>(
-    `/rest-api/v1/auth/login/refresh-token`,
+    `/rest-api/v1/auth/refresh-token`,
   );
   return response.data;
 };

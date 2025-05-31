@@ -6,9 +6,11 @@ import { Feedback } from "../../types/feedback.ts";
 const FeedbackList = ({
   studentId,
   miniView,
+  onSelectFeedback,
 }: {
   studentId: number;
   miniView?: boolean;
+  onSelectFeedback?: (feedback: Feedback) => void;
 }) => {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
 
@@ -55,7 +57,11 @@ const FeedbackList = ({
                 };
 
                 return (
-                  <tr key={index}>
+                  <tr
+                    key={index}
+                    onClick={() => onSelectFeedback?.(feedback)}
+                    style={{ cursor: "pointer" }}
+                  >
                     <td>{formatDate(feedback.date)}</td>
                     <td>{feedback.category}</td>
                     <td>{feedback.teacherName}</td>

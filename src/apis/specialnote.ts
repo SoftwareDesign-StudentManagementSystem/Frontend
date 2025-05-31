@@ -49,7 +49,7 @@ export const postSpecialty = async (
 // 4. 학생 특기사항 수정
 export const updateSpecialty = async (
   specialtyId: number,
-  specialtyData: UpdateSpecialtyProps,
+  specialtyData: { content: string; year: number; semester: string },
 ): Promise<any> => {
   try {
     const response = await tokenInstance.put(

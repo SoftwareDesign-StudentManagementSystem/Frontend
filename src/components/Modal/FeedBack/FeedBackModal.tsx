@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import useUserStore from "../../../stores/useUserStore.ts";
 import { UserDetailInfo } from "../../../types/members";
+import { Feedback } from "../../../types/feedback";
 
 const FeedBackModal = ({
   onClose,
@@ -34,11 +35,12 @@ const FeedBackModalContent = ({
 }) => {
   const { userInfo } = useUserStore();
 
-  const [isAddMode, setIsAddMode] = useState(false);
-
   //선택된 학생의 정보
   const [searchParams] = useSearchParams();
   const studentId = searchParams.get("id");
+
+  const [isAddMode, setIsAddMode] = useState(false);
+  const [editingFeedback, setEditingFeedback] = useState<Feedback | null>(null);
 
   return (
     <FeedBackModalContentWrapper>
@@ -46,8 +48,17 @@ const FeedBackModalContent = ({
         <>
           <Card
             cardtitle={"피드백"}
-            contentChildren={<FeedbackList studentId={Number(studentId)} />}
+            contentChildren={
+              <FeedbackList
+                studentId={Number(studentId)}
+                onSelectFeedback={(feedback) => {
+                  setEditingFeedback(feedback);
+                  setIsAddMode(true);
+                }}
+              />
+            }
           />
+
           {userInfo.role !== "ROLE_STUDENT" && (
             <>
               <ButtonWhite
@@ -58,7 +69,11 @@ const FeedBackModalContent = ({
           )}
         </>
       ) : (
-        <FeedBackAdd setIsAddMode={setIsAddMode} studentInfo={studentInfo} />
+        <FeedBackAdd
+          setIsAddMode={setIsAddMode}
+          studentInfo={studentInfo}
+          initialFeedback={editingFeedback}
+        />
       )}
     </FeedBackModalContentWrapper>
   );

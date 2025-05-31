@@ -9,19 +9,30 @@ import ConsultList from "../../studentlobby/ConsultList.tsx";
 import { useSearchParams } from "react-router-dom";
 import useUserStore from "../../../stores/useUserStore.ts";
 import { Consult } from "../../../types/consults.ts";
+import { UserDetailInfo } from "../../../types/members";
 
-const ConsultModal = ({ onClose }: { onClose: () => void }) => {
+const ConsultModal = ({
+  onClose,
+  studentInfo,
+}: {
+  onClose: () => void;
+  studentInfo: UserDetailInfo;
+}) => {
   return (
     <Modal
       onClose={onClose}
-      content={<ConsultModalContent />}
+      content={<ConsultModalContent studentInfo={studentInfo} />}
       title={"상담 내역"}
     />
   );
 };
 export default ConsultModal;
 
-const ConsultModalContent = () => {
+const ConsultModalContent = ({
+  studentInfo,
+}: {
+  studentInfo: UserDetailInfo;
+}) => {
   const { userInfo } = useUserStore();
 
   //선택된 학생의 정보
@@ -51,14 +62,21 @@ const ConsultModalContent = () => {
             <>
               <ButtonWhite
                 text={"+ 상담내역 추가"}
-                onClick={() => setIsAddMode(true)}
+                onClick={() => {
+                  setSelectedConsult(null);
+                  setIsAddMode(true);
+                }}
               />
             </>
           )}
         </>
       ) : (
         <>
-          <ConsultAdd setIsAddMode={setIsAddMode} editData={selectedConsult} />
+          <ConsultAdd
+            setIsAddMode={setIsAddMode}
+            editData={selectedConsult}
+            studentInfo={studentInfo}
+          />
         </>
       )}
     </FeedBackModalContentWrapper>

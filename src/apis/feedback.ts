@@ -1,5 +1,5 @@
 import tokenInstance from "../apis/tokenInstance";
-import { Feedback, AddFeedbackProps } from "../types/feedback";
+import { Feedback } from "../types/feedback";
 import { ApiResponse } from "../types/common";
 
 // 1. 학생 id로 모든 피드백 조회 [학부모/선생님 권한]
@@ -79,7 +79,14 @@ export const postFeedback = async (
 // 6. 피드백 수정 [선생님 권한]
 export const putFeedback = async (
   feedbackId: number,
-  updatedData: AddFeedbackProps,
+  updatedData: {
+    year: number;
+    semester: string;
+    category: string;
+    content: string;
+    visibleToStudent: boolean;
+    visibleToParent: boolean;
+  },
 ): Promise<void> => {
   try {
     await tokenInstance.put(`/rest-api/v1/feedback/${feedbackId}`, updatedData);
