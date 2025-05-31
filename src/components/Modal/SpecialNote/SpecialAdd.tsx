@@ -4,7 +4,7 @@ import ButtonWhite from "../../common/ButtonWhite.tsx";
 import ButtonOrange from "../../common/ButtonOrange.tsx";
 import ButtonRed from "../../common/ButtonRed.tsx"; // 삭제 버튼 import
 import { useState } from "react";
-import { postSpecialty } from "../../../apis/specialnote.ts";
+import { deleteSpecialty, postSpecialty } from "../../../apis/specialnote.ts";
 import { AddSpecialtyProps, Specialty } from "../../../types/specialnotes";
 import DatePicker from "react-datepicker";
 import { DatePickerOverride } from "../../../resources/styles/CommonStyles";
@@ -52,10 +52,18 @@ const SpecialAdd = ({
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    if (!editData) return;
+
     if (window.confirm("정말 삭제하시겠습니까?")) {
-      // TODO: deleteSpecialty API 호출 및 성공 시 setIsAddMode(false)
-      alert("삭제 기능은 아직 구현되지 않았습니다.");
+      try {
+        await deleteSpecialty(editData.id);
+        alert("삭제되었습니다.");
+        setIsAddMode(false);
+      } catch (error) {
+        alert("삭제에 실패했습니다.");
+        console.error(error);
+      }
     }
   };
 

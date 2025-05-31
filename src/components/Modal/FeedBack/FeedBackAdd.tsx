@@ -6,7 +6,6 @@ import ButtonOrange from "../../common/ButtonOrange.tsx";
 // import { postConsult } from "../../../apis/consult.ts";
 import { postFeedback } from "../../../apis/feedback.ts";
 import { useSearchParams } from "react-router-dom";
-import useUserStore from "../../../stores/useUserStore.ts";
 
 interface InputBoxProps {
   value: string;
@@ -29,7 +28,6 @@ const FeedBackAdd = ({ setIsAddMode }: FeedbackAddProps) => {
   //선택된 학생의 정보
   const [searchParams] = useSearchParams();
   const id = Number(searchParams.get("id"));
-  const { userInfo } = useUserStore(); //현재 로그인한 사용자 정보
 
   const [inputContent, setInputContent] = useState("");
 
@@ -62,21 +60,29 @@ const FeedBackAdd = ({ setIsAddMode }: FeedbackAddProps) => {
     const visibleToStudent = selectedTargets.includes("학생");
     const visibleToParent = selectedTargets.includes("학부모");
 
+    const now = new Date();
+    const year = now.getFullYear();
+    const semester =
+      now.getMonth() + 1 <= 6 ? "FIRST_SEMESTER" : "SECOND_SEMESTER";
+
     const feedbackData = {
-      studentId: id,
-      teacherId: userInfo.id,
+      year,
+      semester,
       category: selectedCategories[0],
       content: inputContent,
       visibleToStudent,
       visibleToParent,
-      recordedDate: new Date().toISOString().split("T")[0],
     };
+    console.log(id);
     console.log(feedbackData);
 
-    postFeedback(feedbackData).then((res) => {
-      alert(res.message);
+    try {
+      const res = await postFeedback(id, feedbackData);
+      alert(res.message || "피드백이 저장되었습니다.");
       setIsAddMode(false);
-    });
+    } catch (error) {
+      alert("피드백 저장에 실패했습니다." + error);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

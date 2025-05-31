@@ -7,12 +7,16 @@ export interface Feedback {
   visibleToParent: boolean;
 }
 
+export type SemesterType = "FIRST_SEMESTER" | "SECOND_SEMESTER";
+
+export type FeedbackCategory = "성적" | "생활" | "태도" | "기타"; // 필요시 확장
+
+// types/feedback.ts
 export interface AddFeedbackProps {
-  studentId: number;
-  teacherId: number;
+  year: number;
+  semester: "FIRST_SEMESTER" | "SECOND_SEMESTER";
   category: string;
   content: string;
   visibleToStudent: boolean;
   visibleToParent: boolean;
-  recordedDate: string;
 }
