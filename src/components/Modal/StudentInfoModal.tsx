@@ -2,7 +2,7 @@ import styled from "styled-components";
 // import 횃불이 from "../../assets/횃불이.svg";
 import { useState } from "react";
 import ButtonOrange from "../common/ButtonOrange";
-import ButtonWhite from "../common/ButtonWhite";
+import ButtonRed from "../common/ButtonRed";
 import Modal from "./Modal";
 import { UserDetailInfo } from "../../types/members.ts";
 import useUserStore from "../../stores/useUserStore.ts";
@@ -137,8 +137,7 @@ const StudentInfoModalContent = ({
         {(userInfo?.role === "ROLE_ADMIN" ||
           userInfo?.role === "ROLE_TEACHER") && (
           <HorizontalLineWrapper>
-            <ButtonOrange text={"학생 정보 수정"} onClick={onClose} />
-            <ButtonWhite
+            <ButtonRed
               text={"학생 삭제"}
               onClick={() => {
                 const isConfirmed = window.confirm("정말로 삭제하시겠어요?");
@@ -147,6 +146,7 @@ const StudentInfoModalContent = ({
                 }
               }}
             />
+            <ButtonOrange text={"학생 정보 수정"} onClick={onClose} />
           </HorizontalLineWrapper>
         )}
       </ContentRight>

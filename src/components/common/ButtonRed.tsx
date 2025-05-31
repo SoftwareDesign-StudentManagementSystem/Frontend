@@ -1,18 +1,18 @@
 import styled from "styled-components";
 
-const ButtonWhite = ({
-  text,
-  onClick,
-}: {
+const ButtonDelete = ({
+                        text,
+                        onClick,
+                      }: {
   text: string;
   onClick: () => void;
 }) => {
-  return <ButtonWhiteWrapper onClick={onClick}>{text}</ButtonWhiteWrapper>;
+  return <ButtonDeleteWrapper onClick={onClick}>{text}</ButtonDeleteWrapper>;
 };
 
-export default ButtonWhite;
+export default ButtonDelete;
 
-const ButtonWhiteWrapper = styled.button`
+const ButtonDeleteWrapper = styled.button`
   box-sizing: border-box;
 
   display: flex;
@@ -25,21 +25,22 @@ const ButtonWhiteWrapper = styled.button`
   width: auto;
   height: 40px;
 
-  border: 0.5px solid #333333;
+  border: 0.5px solid #e74c3c; /* 붉은 테두리 */
   border-radius: 6px;
 
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
   line-height: 150%;
-  color: #333333;
+  color: #e74c3c; /* 붉은 글씨 */
   background-color: transparent;
 
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 
   &:hover {
-    background-color: #f0f0f0; /* 연한 회색 배경 */
+    background-color: #e74c3c;
+    color: white; /* hover 시 색 반전 */
   }
 
   @media (max-width: 480px) {

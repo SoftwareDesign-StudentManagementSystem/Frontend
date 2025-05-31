@@ -2,6 +2,7 @@ import styled from "styled-components";
 import InputBoxWrapper from "../../../resources/styles/InputBoxWrapper.tsx";
 import ButtonWhite from "../../common/ButtonWhite.tsx";
 import ButtonOrange from "../../common/ButtonOrange.tsx";
+import ButtonRed from "../../common/ButtonRed.tsx"; // 삭제 버튼 import
 import { useState } from "react";
 import { postSpecialty } from "../../../apis/specialnote.ts";
 import { AddSpecialtyProps, Specialty } from "../../../types/specialnotes";
@@ -51,6 +52,13 @@ const SpecialAdd = ({
     }
   };
 
+  const handleDelete = () => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      // TODO: deleteSpecialty API 호출 및 성공 시 setIsAddMode(false)
+      alert("삭제 기능은 아직 구현되지 않았습니다.");
+    }
+  };
+
   return (
     <>
       <DatePickerOverride />
@@ -77,6 +85,7 @@ const SpecialAdd = ({
 
         <ButtonGroup>
           <ButtonWhite text="돌아가기" onClick={() => setIsAddMode(false)} />
+          {isEdit && <ButtonRed text="삭제" onClick={handleDelete} />}
           <ButtonOrange text={isEdit ? "수정" : "저장"} onClick={handleSave} />
         </ButtonGroup>
       </FeedBackAddWrapper>
