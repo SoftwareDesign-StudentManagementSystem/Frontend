@@ -129,7 +129,11 @@ const ReportCreateModalContent = () => {
 
   return (
     <ReportCreateModalContentWrapper>
-      <div className="info">보고서를 생성하실 범주를 선택해주세요.</div>
+      <div className="info">
+        {/*보고서를 생성할 수 있어요.*/}
+        {/*<br />*/}
+        보고서를 생성하실 학기와 범주를 선택해주세요.
+      </div>
 
       <DropdownRow>
         <DropDownMenu
@@ -185,7 +189,7 @@ const ReportCreateModalContentWrapper = styled.div`
   .info {
     font-style: normal;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 17px;
     line-height: 150%;
     color: #000000;
   }
