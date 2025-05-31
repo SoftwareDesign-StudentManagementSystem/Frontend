@@ -46,8 +46,9 @@ const ConsultAdd = ({
   studentInfo,
 }: ConsultAddProps) => {
   const [consultDate, setConsultDate] = useState<Date | null>(
-    editData?.date ? new Date(editData.date) : null,
+    editData?.date ? new Date(editData.date) : new Date(),
   );
+
   const [nextConsultDate, setNextConsultDate] = useState<Date | null>(
     editData?.nextCounselDate ? new Date(editData.nextCounselDate) : null,
   );
