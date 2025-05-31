@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { ReactNode } from "react";
+import { useLocation } from "react-router-dom";
 
 interface CardProps {
   cardtitle: string;
@@ -8,10 +9,12 @@ interface CardProps {
 }
 
 const Card = ({ cardtitle, headerChildren, contentChildren }: CardProps) => {
-  const isSearchCard = cardtitle === "학생 리스트 검색";
+  // const isSearchCard = cardtitle === "학생 리스트 검색";
+  const location = useLocation();
+  const isHome = location.pathname === "/home"; //home에서의 카드 높이를 다르게 함.
 
   return (
-    <CardWrapper noMinHeight={isSearchCard}>
+    <CardWrapper noMinHeight={isHome}>
       <CardHeaderWrapper>
         <div>{cardtitle}</div>
         {headerChildren} {/* 헤더 영역에 children을 추가 */}
