@@ -90,6 +90,27 @@ export default function Header() {
     navigate("/");
   };
 
+  const handleLogout2 = () => {
+    // setUserInfo({
+    //   id: 0,
+    //   name: "",
+    //   profileImageUrl: null,
+    //   schoolName: "",
+    //   year: 0,
+    //   number: 0,
+    //   classId: 0,
+    //   subject: null,
+    //   role: "",
+    // });
+
+    setTokenInfo({
+      accessToken: "",
+      refreshToken: useUserStore.getState().tokenInfo.refreshToken,
+    });
+    // localStorage.removeItem("tokenInfo");
+    // navigate("/");
+  };
+
   const isStudentLobby = location.pathname === "/studentlobby";
 
   return (
@@ -117,6 +138,9 @@ export default function Header() {
           {showNotifications && <NotificationList />}
           <button className="btntype1" onClick={handleLogout}>
             로그아웃
+          </button>
+          <button className="btntype1" onClick={handleLogout2}>
+            로그아웃2
           </button>
 
           {isStudentLobby && (

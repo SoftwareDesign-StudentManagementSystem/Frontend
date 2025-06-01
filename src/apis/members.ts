@@ -79,6 +79,7 @@ export const login = async (accountId: number, password: string) => {
 
     const data = response.data;
     if (data.returnCode === "SUCCESS") {
+      console.log("리프레시토큰", data.data.refreshToken);
       useUserStore.getState().setTokenInfo({
         accessToken: data.data.accessToken,
         refreshToken: data.data.refreshToken,

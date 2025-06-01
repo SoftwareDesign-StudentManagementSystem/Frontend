@@ -1,16 +1,31 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-
 import { ModalProps } from "../../types/modal.ts";
 import { createPortal } from "react-dom";
 
 const modalRoot = document.getElementById("modal-root") || document.body;
+
 const Modal = ({ title, content, onClose }: ModalProps) => {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    // 모달 열릴 때 애니메이션 적용
+    setVisible(true);
+    return () => setVisible(false);
+  }, []);
+
+  const handleClose = () => {
+    setVisible(false);
+    // 애니메이션 끝난 후 실제로 닫기
+    setTimeout(onClose, 300); // duration과 동일
+  };
+
   return createPortal(
-    <Overlay onClick={onClose}>
-      <ModalWrapper onClick={(e) => e.stopPropagation()}>
+    <Overlay $visible={visible} onClick={handleClose}>
+      <ModalWrapper $visible={visible} onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
           <div>{title}</div>
-          <CloseButton onClick={onClose}>✖</CloseButton>
+          <CloseButton onClick={handleClose}>✖</CloseButton>
         </ModalHeader>
         <ContentWrapper>{content}</ContentWrapper>
       </ModalWrapper>
@@ -22,7 +37,7 @@ const Modal = ({ title, content, onClose }: ModalProps) => {
 export default Modal;
 
 // 모달 배경 (오버레이)
-const Overlay = styled.div`
+const Overlay = styled.div<{ $visible: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -33,11 +48,13 @@ const Overlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1000;
+
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+  transition: opacity 0.3s ease;
 `;
 
-const ModalWrapper = styled.div`
+const ModalWrapper = styled.div<{ $visible: boolean }>`
   width: fit-content;
-  height: fit-content;
   max-height: 85%;
   background: white;
   padding: 40px;
@@ -47,11 +64,16 @@ const ModalWrapper = styled.div`
   box-sizing: border-box;
 
   display: flex;
-  flex-direction: column; /* flex column 구조로 변경 */
+  flex-direction: column;
+
+  transform: ${({ $visible }) =>
+    $visible ? "translateY(0)" : "translateY(20px)"};
+
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+  transition: all 0.3s ease;
 
   @media (max-width: 768px) {
     width: 100%;
-    max-height: 85%;
     border-radius: 0;
     padding: 20px;
   }

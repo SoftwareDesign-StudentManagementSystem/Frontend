@@ -9,8 +9,9 @@ const refreshInstance = axios.create({
 refreshInstance.interceptors.request.use(
   (config) => {
     const { refreshToken } = useUserStore.getState().tokenInfo;
+    console.log("refreshInstance - refreshToken있음 ", refreshToken);
     if (refreshToken) {
-      config.headers["Authorization"] = refreshToken;
+      config.headers["Authorization"] = `Bearer ${refreshToken}`;
     }
     return config;
   },
