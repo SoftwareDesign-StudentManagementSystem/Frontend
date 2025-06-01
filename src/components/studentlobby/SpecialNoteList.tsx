@@ -56,7 +56,7 @@ const SpecialNoteList = ({
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan={2} className="nodata">
+              <td colSpan={3} className="nodata">
                 불러오는 중...
               </td>
             </tr>
