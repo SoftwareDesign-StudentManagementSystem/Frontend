@@ -89,13 +89,12 @@ const FeedBackAdd = ({
     };
 
     try {
-      let res;
       if (initialFeedback) {
-        res = await putFeedback(initialFeedback.id, feedbackData); // 수정 요청
+        await putFeedback(initialFeedback.id, feedbackData); // 수정 요청
       } else {
-        res = await postFeedback(id, feedbackData); // 새로 추가
+        await postFeedback(id, feedbackData); // 새로 추가
       }
-      alert(res.message || "피드백이 저장되었습니다.");
+      alert("피드백이 저장되었습니다.");
       setIsAddMode(false);
     } catch (error) {
       alert("피드백 저장에 실패했습니다." + error);
@@ -134,19 +133,23 @@ const FeedBackAdd = ({
         ))}
       </CheckboxGroup>
 
-      <div className="title">알림을 보낼 대상을 선택해주세요.(선택)</div>
-      <CheckboxGroup>
-        {notifyTargets.map((target) => (
-          <label key={target}>
-            <input
-              type="checkbox"
-              checked={selectedTargets.includes(target)}
-              onChange={() => toggleTarget(target)}
-            />
-            {target}
-          </label>
-        ))}
-      </CheckboxGroup>
+      {!initialFeedback && (
+        <>
+          <div className="title">알림을 보낼 대상을 선택해주세요.(선택)</div>
+          <CheckboxGroup>
+            {notifyTargets.map((target) => (
+              <label key={target}>
+                <input
+                  type="checkbox"
+                  checked={selectedTargets.includes(target)}
+                  onChange={() => toggleTarget(target)}
+                />
+                {target}
+              </label>
+            ))}
+          </CheckboxGroup>
+        </>
+      )}
 
       <InputBox
         value={inputContent}
@@ -177,10 +180,10 @@ const FeedBackAddWrapper = styled.div`
 
   .title {
     font-weight: 400;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 150%;
     color: #000;
-    margin-bottom: 8px;
+    //margin-bottom: 4px;
   }
 
   @media (max-width: 768px) {

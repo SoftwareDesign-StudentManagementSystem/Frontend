@@ -1,4 +1,5 @@
 export interface Specialty {
+    teacherName: string;
     id: number;
     studentId: number;
     content: string;

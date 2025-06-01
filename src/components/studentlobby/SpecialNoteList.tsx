@@ -49,6 +49,7 @@ const SpecialNoteList = ({
         <thead>
           <tr>
             <th>기록일</th>
+            <th>작성 교사</th>
             <th>특기사항</th>
           </tr>
         </thead>
@@ -61,7 +62,7 @@ const SpecialNoteList = ({
             </tr>
           ) : notes.length === 0 ? (
             <tr>
-              <td colSpan={2} className="nodata">
+              <td colSpan={3} className="nodata">
                 특기사항 정보가 없습니다.
               </td>
             </tr>
@@ -78,6 +79,7 @@ const SpecialNoteList = ({
                 style={{ cursor: "pointer" }}
               >
                 <td>{formatDate(note.date)}</td>
+                <td>{note.teacherName}</td>
                 <td className="content">{note.content}</td>
               </tr>
             ))

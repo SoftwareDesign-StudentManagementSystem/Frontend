@@ -2,6 +2,6 @@ export interface Consult {
     id: number;
     date: string;
     nextCounselDate: string;
-    teacher: string;
+    teacherName: string;
     content: string;
 }

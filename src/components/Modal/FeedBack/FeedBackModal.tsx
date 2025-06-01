@@ -63,7 +63,10 @@ const FeedBackModalContent = ({
             <>
               <ButtonWhite
                 text={"+ 피드백 추가"}
-                onClick={() => setIsAddMode(true)}
+                onClick={() => {
+                  setEditingFeedback(null);
+                  setIsAddMode(true);
+                }}
               />
             </>
           )}
