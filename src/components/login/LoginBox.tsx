@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import logoimg from "../../assets/logo.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../apis/members.ts";
 import { useLoading } from "../../stores/LoadingProvider.tsx"; // 로그인 요청 함수 import
@@ -13,6 +13,14 @@ const LoginBox = () => {
   const [error, setError] = useState(""); // 로그인 오류 메시지를 위한 state 추가
 
   const navigate = useNavigate();
+
+  //유저 토큰이 존재하면 로그인페이지를 건너뛰고 home으로 이동
+  useEffect(() => {
+    const tokenInfo = JSON.parse(localStorage.getItem("tokenInfo") || "{}");
+    if (tokenInfo?.accessToken) {
+      navigate("/home");
+    }
+  }, []);
 
   const handleLogin = async () => {
     try {

@@ -51,7 +51,7 @@ tokenInstance.interceptors.response.use(
             .getState()
             .setTokenInfo({ accessToken: "", refreshToken: "" });
           localStorage.removeItem("tokenInfo");
-          window.location.href = "/login";
+          window.location.replace("/login");
         }
 
         (
