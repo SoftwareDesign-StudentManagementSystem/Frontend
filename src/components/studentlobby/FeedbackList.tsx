@@ -31,7 +31,7 @@ const FeedbackList = ({
           <tr>
             <th>일자</th>
             <th>유형</th>
-            <th>작성 교사명</th>
+            <th>작성 교사</th>
             <th>내용</th>
           </tr>
         </thead>

@@ -42,7 +42,7 @@ const ConsultList = ({
           <tr>
             <th>상담일</th>
             <th>다음 상담 예정일</th>
-            <th>작성 교사명</th>
+            <th>작성 교사</th>
             <th>내용</th>
           </tr>
         </thead>
