@@ -130,6 +130,7 @@ export default function Header() {
       <StyledHeader>
         <div className="LogoWrapper" onClick={() => navigate("/home")}>
           <img src={Logo} alt="logo" style={{ height: "60%" }} />
+          <span style={{ color: "#FFB608" }}>{userInfo.schoolName}</span>{" "}
         </div>
 
         <div className="RightWrapper">
@@ -203,9 +204,17 @@ const StyledHeader = styled.header`
 
   .LogoWrapper {
     display: flex;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: bolder;
     cursor: pointer;
+    gap: 10px;
+  }
+  @media (max-width: 768px) {
+    .LogoWrapper {
+      span {
+        font-size: 15px; /* 모바일에서는 더 작게 */
+      }
+    }
   }
 
   .RightWrapper {
