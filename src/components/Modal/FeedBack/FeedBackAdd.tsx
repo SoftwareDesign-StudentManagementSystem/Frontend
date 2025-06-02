@@ -82,6 +82,16 @@ const FeedBackAdd = ({
     const feedbackData = {
       year,
       semester,
+      date: now.toISOString().substring(0, 10), // "YYYY-MM-DD" 형식
+      category: selectedCategories[0],
+      content: inputContent,
+      visibleToStudent,
+      visibleToParent,
+    };
+    const feedbackDataEdited = {
+      year,
+      semester,
+      date: initialFeedback?.date ?? now.toISOString().substring(0, 10),
       category: selectedCategories[0],
       content: inputContent,
       visibleToStudent,
@@ -90,9 +100,9 @@ const FeedBackAdd = ({
 
     try {
       if (initialFeedback) {
-        await putFeedback(initialFeedback.id, feedbackData); // 수정 요청
+        await putFeedback(initialFeedback.id, feedbackDataEdited);
       } else {
-        await postFeedback(id, feedbackData); // 새로 추가
+        await postFeedback(id, feedbackData);
       }
       alert("피드백이 저장되었습니다.");
       setIsAddMode(false);

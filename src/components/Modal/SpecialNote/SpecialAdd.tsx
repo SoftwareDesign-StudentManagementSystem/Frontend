@@ -44,6 +44,7 @@ const SpecialAdd = ({
       content,
       year,
       semester,
+      date: recordDate.toISOString().slice(0, 10), // 날짜만 추출
     };
 
     try {

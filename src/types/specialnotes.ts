@@ -12,10 +12,12 @@ export interface AddSpecialtyProps {
   content: string;
   year: number;
   semester: string;
+  date: string;
 }
 
 export interface UpdateSpecialtyProps {
   content?: string;
   year?: number;
-  semester?: number;
+  semester?: string;
+  date?: string;
 }

@@ -71,13 +71,22 @@ const ConsultAdd = ({
       semester: getCurrentSemesterString(),
       content: inputContent,
       nextCounselDate: nextConsultDate,
+      date: consultDate.toISOString().slice(0, 10),
+    };
+
+    const consultDataEdited = {
+      year: studentInfo.year,
+      semester: getCurrentSemesterString(),
+      content: inputContent,
+      nextCounselDate: nextConsultDate,
+      date: editData?.date ?? consultDate.toISOString().slice(0, 10),
     };
 
     try {
       if (editData) {
         // 수정 모드
         // @ts-ignore
-        await putConsult(editData.id, consultData);
+        await putConsult(editData.id, consultDataEdited);
         alert("상담이 수정되었습니다.");
       } else {
         // 등록 모드

@@ -20,6 +20,7 @@ export const postConsult = async (
     semester: string;
     content: string;
     nextCounselDate: Date;
+    date: string;
   },
 ): Promise<any> => {
   try {
@@ -42,7 +43,8 @@ export const putConsult = async (
     year: number;
     semester: string;
     content: string;
-    nextCounselDate: Date;
+    nextCounselDate: string;
+    date: string;
   },
 ): Promise<any> => {
   try {

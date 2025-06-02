@@ -1,5 +1,9 @@
 import tokenInstance from "../apis/tokenInstance";
-import { Specialty, AddSpecialtyProps } from "../types/specialnotes";
+import {
+  Specialty,
+  AddSpecialtyProps,
+  UpdateSpecialtyProps,
+} from "../types/specialnotes";
 import { ApiResponse } from "../types/common";
 
 // 1. 학생의 모든 특기사항 조회
@@ -45,7 +49,7 @@ export const postSpecialty = async (
 // 4. 학생 특기사항 수정
 export const updateSpecialty = async (
   specialtyId: number,
-  specialtyData: { content: string; year: number; semester: string },
+  specialtyData: UpdateSpecialtyProps,
 ): Promise<any> => {
   try {
     const response = await tokenInstance.put(

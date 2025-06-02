@@ -61,6 +61,7 @@ export const postFeedback = async (
     content: string;
     visibleToStudent: boolean;
     visibleToParent: boolean;
+    date: string;
   },
 ): Promise<any> => {
   try {
@@ -86,6 +87,7 @@ export const putFeedback = async (
     content: string;
     visibleToStudent: boolean;
     visibleToParent: boolean;
+    date: string;
   },
 ): Promise<void> => {
   try {
