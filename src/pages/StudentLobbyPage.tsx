@@ -212,13 +212,33 @@ export default function StudentLobbyPage() {
           />
         </div>
 
-        <div onClick={() => setOpenModal("specialNote")}>
+        <div
+          onClick={
+            userInfo.role !== "ROLE_STUDENT"
+              ? () => setOpenModal("specialNote")
+              : undefined
+          }
+        >
           <Card
             cardtitle="특기 사항"
-            // headerChildren={
-            //   <DropDownMenu options={options} onSelect={handleSelect} />
-            // }
-            contentChildren={<SpecialNoteList miniView={true} />}
+            contentChildren={
+              userInfo.role === "ROLE_STUDENT" ? (
+                <p
+                  style={{
+                    height: "150px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    color: "#888",
+                    fontSize: "16px",
+                  }}
+                >
+                  교사 및 학부모만 볼 수 있습니다.
+                </p>
+              ) : (
+                <SpecialNoteList miniView={true} />
+              )
+            }
           />
         </div>
 
@@ -266,14 +286,32 @@ export default function StudentLobbyPage() {
           />
         </div>
 
-        <div onClick={() => setOpenModal("consult")}>
+        <div
+          onClick={
+            userInfo.role !== "ROLE_STUDENT"
+              ? () => setOpenModal("consult")
+              : undefined
+          }
+        >
           <Card
             cardtitle="상담 내역"
-            // headerChildren={
-            //   <DropDownMenu options={options} onSelect={handleSelect} />
-            // }
             contentChildren={
-              <ConsultList studentId={Number(id)} miniView={true} />
+              userInfo.role === "ROLE_STUDENT" ? (
+                <p
+                  style={{
+                    height: "150px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    color: "#888",
+                    fontSize: "16px",
+                  }}
+                >
+                  교사 및 학부모만 볼 수 있습니다.
+                </p>
+              ) : (
+                <ConsultList studentId={Number(id)} miniView={true} />
+              )
             }
           />
         </div>

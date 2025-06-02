@@ -14,9 +14,11 @@ export const getFeedback = async (studentId: number): Promise<Feedback[]> => {
 
 // 2. 본인의 모든 피드백 조회 [학생 권한]
 export const getMyFeedback = async (): Promise<Feedback[]> => {
-  const response = await tokenInstance.get<Feedback[]>(`/rest-api/v1/feedback`);
+  const response = await tokenInstance.get<ApiResponse<Feedback[]>>(
+    `/rest-api/v1/feedback`,
+  );
   console.log("내 피드백 조회 성공:", response.data);
-  return response.data;
+  return response.data.ieduPage.contents;
 };
 
 // 3. (학년/학기)로 본인 피드백 조회 [학생 권한]

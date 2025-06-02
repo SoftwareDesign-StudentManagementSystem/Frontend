@@ -5,6 +5,7 @@ import {
   AddAttendanceProps,
   UpdateAttendanceProps,
 } from "../types/attendance";
+import { ApiResponse } from "../types/common";
 
 // 1. 학생의 모든 출결 조회 (학부모/선생님 권한)
 
@@ -21,10 +22,10 @@ export const getAttendanceByStudent = async (
 
 // 2. 본인의 모든 출결 조회 (학생 권한)
 export const getMyAttendance = async (): Promise<Attendance[]> => {
-  const response = await tokenInstance.get<Attendance[]>(
+  const response = await tokenInstance.get<ApiResponse<Attendance[]>>(
     `/rest-api/v1/attendance`,
   );
-  return response.data;
+  return response.data.ieduPage.contents;
 };
 
 // 3. (학년/학기)로 본인 출결 조회 (학생 권한)

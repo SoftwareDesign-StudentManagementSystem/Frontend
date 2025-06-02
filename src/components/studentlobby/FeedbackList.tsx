@@ -1,75 +1,90 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { getFeedback } from "../../apis/feedback.ts";
+import { getFeedback, getMyFeedback } from "../../apis/feedback.ts";
 import { Feedback } from "../../types/feedback.ts";
+import useUserStore from "../../stores/useUserStore"; // ✅ 사용자 정보 가져오기
 
 const FeedbackList = ({
-  studentId,
-  miniView,
-  onSelectFeedback,
-}: {
+                        studentId,
+                        miniView,
+                        onSelectFeedback,
+                      }: {
   studentId: number;
   miniView?: boolean;
   onSelectFeedback?: (feedback: Feedback) => void;
 }) => {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
+  const { userInfo } = useUserStore(); // ✅ 사용자 역할 확인
 
   useEffect(() => {
-    console.log("studentId:", studentId);
-    getFeedback(studentId).then((res) => {
-      const sortedFeedbacks = res.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-      );
-      setFeedbacks(sortedFeedbacks);
-    });
-  }, [studentId]);
+    const fetchFeedbacks = async () => {
+      try {
+        let res: Feedback[] = [];
+
+        if (userInfo.role === "ROLE_STUDENT") {
+          res = await getMyFeedback(); // ✅ 학생은 본인 피드백만 조회
+        } else {
+          res = await getFeedback(studentId); // ✅ 교사/관리자/학부모는 특정 학생의 피드백 조회
+        }
+
+        const sortedFeedbacks = res.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+        );
+        setFeedbacks(sortedFeedbacks);
+      } catch (err) {
+        console.error("피드백 조회 실패:", err);
+      }
+    };
+
+    fetchFeedbacks();
+  }, [studentId, userInfo.role]);
 
   return (
     <FeedbackListWrapper>
       <table>
         <thead>
-          <tr>
-            <th>일자</th>
-            <th>유형</th>
-            <th>작성 교사</th>
-            <th>내용</th>
-          </tr>
+        <tr>
+          <th>일자</th>
+          <th>유형</th>
+          <th>작성 교사</th>
+          <th>내용</th>
+        </tr>
         </thead>
         {feedbacks.length === 0 ? (
           <tbody>
-            <tr>
-              <td colSpan={4} className="nodata">
-                피드백 정보가 없습니다.
-              </td>
-            </tr>
+          <tr>
+            <td colSpan={4} className="nodata">
+              피드백 정보가 없습니다.
+            </td>
+          </tr>
           </tbody>
         ) : (
           <tbody>
-            {(miniView ? feedbacks.slice(0, 3) : feedbacks).map(
-              (feedback, index) => {
-                const formatDate = (dateStr: string) => {
-                  const date = new Date(dateStr);
-                  const month = (date.getMonth() + 1)
-                    .toString()
-                    .padStart(2, "0");
-                  const day = date.getDate().toString().padStart(2, "0");
-                  return `${month}/${day}`;
-                };
+          {(miniView ? feedbacks.slice(0, 3) : feedbacks).map(
+            (feedback, index) => {
+              const formatDate = (dateStr: string) => {
+                const date = new Date(dateStr);
+                const month = (date.getMonth() + 1)
+                  .toString()
+                  .padStart(2, "0");
+                const day = date.getDate().toString().padStart(2, "0");
+                return `${month}/${day}`;
+              };
 
-                return (
-                  <tr
-                    key={index}
-                    onClick={() => onSelectFeedback?.(feedback)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <td>{formatDate(feedback.date)}</td>
-                    <td>{feedback.category}</td>
-                    <td>{feedback.teacherName}</td>
-                    <td className="content">{feedback.content}</td>
-                  </tr>
-                );
-              },
-            )}
+              return (
+                <tr
+                  key={index}
+                  onClick={() => onSelectFeedback?.(feedback)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <td>{formatDate(feedback.date)}</td>
+                  <td>{feedback.category}</td>
+                  <td>{feedback.teacherName}</td>
+                  <td className="content">{feedback.content}</td>
+                </tr>
+              );
+            },
+          )}
           </tbody>
         )}
       </table>
@@ -84,13 +99,10 @@ const FeedbackListWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  //margin-top: 20px;
 
   table {
     width: 100%;
     border-collapse: collapse;
-    //border: 1px solid #f1f2f8;
-    //background-color: #f9f9f9;
   }
 
   th,
@@ -105,7 +117,6 @@ const FeedbackListWrapper = styled.div`
   }
 
   th {
-    //background-color: #f0f0f0;
     font-weight: bold;
     text-align: center;
   }

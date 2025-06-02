@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import {
   getAttendanceByStudent,
+  getMyAttendance,
   updateAttendance,
 } from "../../apis/attendance";
 import {
@@ -11,12 +12,13 @@ import {
   UpdateAttendanceProps,
 } from "../../types/attendance";
 import { useLoading } from "../../stores/LoadingProvider";
+import useUserStore from "../../stores/useUserStore"; // ✅ 추가
 
 interface Props {
   studentId: number;
   selectedMonth?: string;
   miniview?: boolean;
-  canEdit?: boolean; // ✅ 추가: 교사 여부 판단
+  canEdit?: boolean;
 }
 
 const AttendanceList = ({
@@ -37,6 +39,7 @@ const AttendanceList = ({
   >([]);
   const [loading, setLoading] = useState(true);
   const { showLoading, hideLoading } = useLoading();
+  const { userInfo } = useUserStore(); // ✅ 현재 로그인한 사용자 정보
 
   useEffect(() => {
     const fetchAttendance = async () => {
@@ -44,7 +47,11 @@ const AttendanceList = ({
         if (!miniview) showLoading();
         else setLoading(true);
 
-        const data = await getAttendanceByStudent(studentId);
+        // ✅ 역할에 따라 다른 API 호출
+        const data =
+          userInfo.role === "ROLE_STUDENT"
+            ? await getMyAttendance()
+            : await getAttendanceByStudent(studentId);
 
         const filtered = data.filter((item) => {
           if (!selectedMonth || selectedMonth === "전체") return true;
@@ -74,6 +81,7 @@ const AttendanceList = ({
           }));
 
         setAttendanceData(miniview ? transformed.slice(0, 3) : transformed);
+
         if (!miniview) hideLoading();
         else setLoading(false);
       } catch (error) {
@@ -84,7 +92,7 @@ const AttendanceList = ({
     };
 
     fetchAttendance();
-  }, [studentId, selectedMonth]);
+  }, [studentId, selectedMonth, userInfo.role]);
 
   const attendanceStates: AttendanceState[] = ["출석", "결석", "지각", "조퇴"];
 
@@ -94,7 +102,7 @@ const AttendanceList = ({
   };
 
   const handleCellClick = async (dayIndex: number, periodIndex: number) => {
-    if (!canEdit || miniview) return; // ✅ 수정 권한 없으면 아무 동작도 안 함
+    if (!canEdit || miniview) return;
 
     const target = attendanceData[dayIndex];
     const updatedState = getNextState(target.periods[periodIndex].state);
@@ -107,10 +115,7 @@ const AttendanceList = ({
 
     const validPeriods = updatedPeriods.filter(
       (p): p is { period: PeriodType; state: AttendanceState } =>
-        p.state === "출석" ||
-        p.state === "결석" ||
-        p.state === "지각" ||
-        p.state === "조퇴",
+        ["출석", "결석", "지각", "조퇴"].includes(p.state),
     );
 
     const updatedAttendance: UpdateAttendanceProps = {
@@ -122,7 +127,6 @@ const AttendanceList = ({
 
     try {
       await updateAttendance(target.id, updatedAttendance);
-
       const newData = [...attendanceData];
       newData[dayIndex] = {
         ...newData[dayIndex],
@@ -190,7 +194,7 @@ const AttendanceList = ({
                   key={periodIndex}
                   onClick={() => handleCellClick(dayIndex, periodIndex)}
                   style={{
-                    cursor: canEdit && !miniview ? "pointer" : "default", // ✅ 비활성화 시 기본 커서
+                    cursor: canEdit && !miniview ? "pointer" : "default",
                     opacity: canEdit ? 1 : 0.6,
                   }}
                 >

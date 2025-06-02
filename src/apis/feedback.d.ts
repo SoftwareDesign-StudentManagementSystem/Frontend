@@ -10,6 +10,7 @@ export declare const postFeedback: (studentId: number, feedback: {
     content: string;
     visibleToStudent: boolean;
     visibleToParent: boolean;
+    date: string;
 }) => Promise<any>;
 export declare const putFeedback: (feedbackId: number, updatedData: {
     year: number;
@@ -18,5 +19,6 @@ export declare const putFeedback: (feedbackId: number, updatedData: {
     content: string;
     visibleToStudent: boolean;
     visibleToParent: boolean;
+    date: string;
 }) => Promise<void>;
 export declare const deleteFeedback: (feedbackId: number) => Promise<void>;

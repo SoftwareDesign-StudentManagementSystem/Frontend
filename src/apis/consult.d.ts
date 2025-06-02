@@ -5,12 +5,14 @@ export declare const postConsult: (studentId: number, consultData: {
     semester: string;
     content: string;
     nextCounselDate: Date;
+    date: string;
 }) => Promise<any>;
 export declare const putConsult: (consultId: number, consultData: {
     year: number;
     semester: string;
     content: string;
-    nextCounselDate: Date;
+    nextCounselDate: string;
+    date: string;
 }) => Promise<any>;
 export declare const deleteConsult: (consultId: number) => Promise<void>;
 export declare const getConsultByFilter: (studentId: number, year: number, semester: "FIRST_SEMESTER" | "SECOND_SEMESTER") => Promise<Consult[]>;

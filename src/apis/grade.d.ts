@@ -15,5 +15,5 @@ export declare const createStudentGrade: (studentId: number, data: {
 }) => Promise<import("axios").AxiosResponse<any, any>>;
 export declare const updateStudentGrade: (gradeId: number, gradeData: Partial<Grade>) => Promise<Grade>;
 export declare const deleteStudentGrade: (gradeId: number) => Promise<void>;
-export declare const getStudentGrade: (year: number, semester: number, studentId: number) => Promise<Grade[]>;
-export declare const getStudentMyGrade: (year: number, semester: number) => Promise<Grade[]>;
+export declare const getStudentGrade: (year: number, semester: number, studentId: number) => Promise<Grade>;
+export declare const getStudentMyGrade: (year: number, semester: number) => Promise<Grade>;
