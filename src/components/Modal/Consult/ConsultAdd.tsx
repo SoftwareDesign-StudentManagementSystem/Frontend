@@ -22,14 +22,16 @@ import getCurrentSemesterString from "../../../utils/getCurrentSemesterString";
 interface InputBoxProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  readOnly?: boolean;
 }
 
-const InputBox = ({ value, onChange }: InputBoxProps) => {
+const InputBox = ({ value, onChange, readOnly }: InputBoxProps) => {
   return (
     <InputBoxWrapper
       placeholder="내용을 입력해주세요."
       value={value}
       onChange={onChange}
+      readOnly={readOnly}
     />
   );
 };
@@ -58,7 +60,8 @@ const ConsultAdd = ({
   const id = studentInfo.id;
 
   const { userInfo } = useUserStore(); //현재 로그인한 사용자 정보
-  const options = [userInfo.name]; // 교사명 드롭다운 옵션
+  const options = [editData?.teacherName ?? userInfo.name]; // 교사명 드롭다운 옵션
+  const canEdit = userInfo.role === "ROLE_TEACHER";
 
   const handleSubmit = async () => {
     if (!consultDate || !inputContent || !studentInfo.year) {
@@ -156,6 +159,7 @@ const ConsultAdd = ({
                   }}
                   dateFormat="yyyy년 MM월 dd일"
                   placeholderText="날짜를 선택하세요"
+                  disabled={!canEdit}
                 />
               </DatePickerWrapper>
             </div>
@@ -166,15 +170,23 @@ const ConsultAdd = ({
           </div>
         </OptionsWrapper>
 
-        <InputBox value={inputContent} onChange={handleInputChange} />
+        <InputBox
+          value={inputContent}
+          onChange={handleInputChange}
+          readOnly={!canEdit}
+        />
 
         <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
-          <ButtonWhite text={"돌아가기"} onClick={() => setIsAddMode(false)} />
-          {editData && <ButtonRed text={"삭제"} onClick={handleDelete} />}
-          <ButtonOrange
-            text={editData ? "수정" : "저장"}
-            onClick={handleSubmit}
-          />
+          <ButtonWhite text="돌아가기" onClick={() => setIsAddMode(false)} />
+          {editData && canEdit && (
+            <ButtonRed text="삭제" onClick={handleDelete} />
+          )}
+          {canEdit && (
+            <ButtonOrange
+              text={editData ? "수정" : "저장"}
+              onClick={handleSubmit}
+            />
+          )}
         </div>
       </ConsultAddWrapper>
     </>

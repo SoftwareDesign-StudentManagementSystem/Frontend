@@ -11,18 +11,21 @@ import {
 import { useSearchParams } from "react-router-dom";
 import { UserDetailInfo } from "../../../types/members";
 import { Feedback } from "../../../types/feedback.ts";
-import ButtonRed from "../../common/ButtonRed"; // Feedback 타입 임포트
+import ButtonRed from "../../common/ButtonRed";
+import useUserStore from "../../../stores/useUserStore"; // Feedback 타입 임포트
 
 interface InputBoxProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  readOnly?: boolean;
 }
-const InputBox = ({ value, onChange }: InputBoxProps) => {
+const InputBox = ({ value, onChange, readOnly }: InputBoxProps) => {
   return (
     <InputBoxWrapper
       placeholder="내용을 입력해주세요."
       value={value}
       onChange={onChange}
+      readOnly={readOnly}
     />
   );
 };
@@ -40,6 +43,8 @@ const FeedBackAdd = ({
 }: FeedbackAddProps) => {
   const [searchParams] = useSearchParams();
   const id = Number(searchParams.get("id"));
+  const { userInfo } = useUserStore();
+  const canEdit = userInfo.role === "ROLE_TEACHER";
 
   const categories = ["성적", "태도", "출결", "행동"];
   const notifyTargets = ["학생", "학부모"];
@@ -129,7 +134,13 @@ const FeedBackAdd = ({
 
   return (
     <FeedBackAddWrapper>
-      <div className="title">피드백을 생성하실 범주를 선택해주세요.(필수)</div>
+      <div className="title">
+        {canEdit ? (
+          <>피드백을 생성하실 범주를 선택해주세요.(필수)</>
+        ) : (
+          <>피드백 범주</>
+        )}
+      </div>
       <CheckboxGroup>
         {categories.map((category) => (
           <label key={category}>
@@ -137,7 +148,9 @@ const FeedBackAdd = ({
               type="checkbox"
               checked={selectedCategories.includes(category)}
               onChange={() => toggleCategory(category)}
+              disabled={!canEdit}
             />
+
             {category}
           </label>
         ))}
@@ -153,7 +166,9 @@ const FeedBackAdd = ({
                   type="checkbox"
                   checked={selectedTargets.includes(target)}
                   onChange={() => toggleTarget(target)}
+                  disabled={!canEdit}
                 />
+
                 {target}
               </label>
             ))}
@@ -164,15 +179,20 @@ const FeedBackAdd = ({
       <InputBox
         value={inputContent}
         onChange={(e) => setInputContent(e.target.value)}
+        readOnly={!canEdit}
       />
 
       <ButtonGroup>
-        <ButtonWhite text={"돌아가기"} onClick={() => setIsAddMode(false)} />
-        {initialFeedback && <ButtonRed text="삭제" onClick={handleDelete} />}
-        <ButtonOrange
-          text={initialFeedback ? "수정" : "저장"}
-          onClick={handleSubmit}
-        />
+        <ButtonWhite text="돌아가기" onClick={() => setIsAddMode(false)} />
+        {initialFeedback && canEdit && (
+          <ButtonRed text="삭제" onClick={handleDelete} />
+        )}
+        {canEdit && (
+          <ButtonOrange
+            text={initialFeedback ? "수정" : "저장"}
+            onClick={handleSubmit}
+          />
+        )}
       </ButtonGroup>
     </FeedBackAddWrapper>
   );
@@ -189,7 +209,7 @@ const FeedBackAddWrapper = styled.div`
   box-sizing: border-box;
 
   .title {
-    font-weight: 400;
+    font-weight: 600;
     font-size: 18px;
     line-height: 150%;
     color: #000;
@@ -209,7 +229,7 @@ const CheckboxGroup = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  margin: 20px 0;
+  margin: 10px 0;
 
   label {
     display: flex;

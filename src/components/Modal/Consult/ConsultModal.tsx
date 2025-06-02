@@ -58,7 +58,7 @@ const ConsultModalContent = ({
               />
             }
           />
-          {userInfo.role !== "ROLE_STUDENT" && (
+          {userInfo.role === "ROLE_TEACHER" && (
             <>
               <ButtonWhite
                 text={"+ 상담내역 추가"}

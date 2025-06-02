@@ -59,7 +59,7 @@ const FeedBackModalContent = ({
             }
           />
 
-          {userInfo.role !== "ROLE_STUDENT" && (
+          {userInfo.role === "ROLE_TEACHER" && (
             <>
               <ButtonWhite
                 text={"+ 피드백 추가"}

@@ -50,11 +50,11 @@ const SpecialModalContent = ({
               />
             }
           />
-          {userInfo.role !== "ROLE_STUDENT" && (
+          {userInfo.role === "ROLE_TEACHER" && (
             <ButtonWhite
               text={"+ 특기사항 추가"}
               onClick={() => {
-                setEditData(undefined); // 새 작성 시 초기화
+                setEditData(undefined);
                 setIsAddMode(true);
               }}
             />

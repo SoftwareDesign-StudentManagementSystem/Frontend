@@ -74,7 +74,7 @@ const GradeSemesterView = ({ year, semester, studentId }: GradeListProps) => {
             />
           }
         />
-        {userInfo.role !== "ROLE_STUDENT" && (
+        {userInfo.role === "ROLE_TEACHER" && (
           <>
             <ButtonWhite text={"+ 성적 추가"} onClick={handleClickAdd} />
           </>

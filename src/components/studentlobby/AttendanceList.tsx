@@ -16,13 +16,15 @@ interface Props {
   studentId: number;
   selectedMonth?: string;
   miniview?: boolean;
+  canEdit?: boolean; // ✅ 추가: 교사 여부 판단
 }
 
 const AttendanceList = ({
-  studentId,
-  selectedMonth = "전체",
-  miniview,
-}: Props) => {
+                          studentId,
+                          selectedMonth = "전체",
+                          miniview,
+                          canEdit = false,
+                        }: Props) => {
   const [attendanceData, setAttendanceData] = useState<
     {
       id: number;
@@ -40,9 +42,8 @@ const AttendanceList = ({
     const fetchAttendance = async () => {
       try {
         if (!miniview) showLoading();
-        else {
-          setLoading(true);
-        }
+        else setLoading(true);
+
         const data = await getAttendanceByStudent(studentId);
 
         const filtered = data.filter((item) => {
@@ -74,9 +75,7 @@ const AttendanceList = ({
 
         setAttendanceData(miniview ? transformed.slice(0, 3) : transformed);
         if (!miniview) hideLoading();
-        else {
-          setLoading(false);
-        }
+        else setLoading(false);
       } catch (error) {
         console.error("출결 정보를 불러오는 데 실패했습니다:", error);
       } finally {
@@ -95,7 +94,8 @@ const AttendanceList = ({
   };
 
   const handleCellClick = async (dayIndex: number, periodIndex: number) => {
-    if (miniview) return;
+    if (!canEdit || miniview) return; // ✅ 수정 권한 없으면 아무 동작도 안 함
+
     const target = attendanceData[dayIndex];
     const updatedState = getNextState(target.periods[periodIndex].state);
 
@@ -161,42 +161,45 @@ const AttendanceList = ({
     <AttendanceTableWrapper>
       <table>
         <thead>
-          <tr>
-            <th>날짜</th>
-            {[...Array(8)].map((_, i) => (
-              <th key={i}>{i + 1}교시</th>
-            ))}
-          </tr>
+        <tr>
+          <th>날짜</th>
+          {[...Array(8)].map((_, i) => (
+            <th key={i}>{i + 1}교시</th>
+          ))}
+        </tr>
         </thead>
         <tbody>
-          {loading ? (
-            <tr>
-              <td colSpan={9} className="nodata">
-                로딩 중...
-              </td>
+        {loading ? (
+          <tr>
+            <td colSpan={9} className="nodata">
+              로딩 중...
+            </td>
+          </tr>
+        ) : attendanceData.length === 0 ? (
+          <tr>
+            <td colSpan={9} className="nodata">
+              출결 정보가 없습니다.
+            </td>
+          </tr>
+        ) : (
+          attendanceData.map((day, dayIndex) => (
+            <tr key={dayIndex}>
+              <td>{day.date}</td>
+              {day.periods.map((p, periodIndex) => (
+                <td
+                  key={periodIndex}
+                  onClick={() => handleCellClick(dayIndex, periodIndex)}
+                  style={{
+                    cursor: canEdit && !miniview ? "pointer" : "default", // ✅ 비활성화 시 기본 커서
+                    opacity: canEdit ? 1 : 0.6,
+                  }}
+                >
+                  {convertState(p.state)}
+                </td>
+              ))}
             </tr>
-          ) : attendanceData.length === 0 ? (
-            <tr>
-              <td colSpan={9} className="nodata">
-                출결 정보가 없습니다.
-              </td>
-            </tr>
-          ) : (
-            attendanceData.map((day, dayIndex) => (
-              <tr key={dayIndex}>
-                <td>{day.date}</td>
-                {day.periods.map((p, periodIndex) => (
-                  <td
-                    key={periodIndex}
-                    onClick={() => handleCellClick(dayIndex, periodIndex)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    {convertState(p.state)}
-                  </td>
-                ))}
-              </tr>
-            ))
-          )}
+          ))
+        )}
         </tbody>
       </table>
     </AttendanceTableWrapper>
@@ -208,7 +211,7 @@ export default AttendanceList;
 const AttendanceTableWrapper = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column; /* 추가 */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
@@ -227,10 +230,6 @@ const AttendanceTableWrapper = styled.div`
   th {
     font-weight: bold;
     text-align: center;
-  }
-
-  button {
-    width: fit-content;
   }
 
   .nodata {

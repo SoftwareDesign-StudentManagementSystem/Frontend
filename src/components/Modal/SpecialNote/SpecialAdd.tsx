@@ -13,6 +13,7 @@ import { Specialty } from "../../../types/specialnotes";
 import DatePicker from "react-datepicker";
 import { DatePickerOverride } from "../../../resources/styles/CommonStyles";
 import { UserDetailInfo } from "../../../types/members";
+import useUserStore from "../../../stores/useUserStore";
 
 interface SpecialAddProps {
   setIsAddMode: (arg0: boolean) => void;
@@ -25,6 +26,9 @@ const SpecialAdd = ({
   studentInfo,
   editData,
 }: SpecialAddProps) => {
+  const { userInfo } = useUserStore();
+  const canEdit = userInfo.role === "ROLE_TEACHER";
+
   const [content, setContent] = useState(editData?.content ?? "");
   const [recordDate, setRecordDate] = useState<Date>(
     editData ? new Date(editData.date) : new Date(),
@@ -91,6 +95,7 @@ const SpecialAdd = ({
               }}
               dateFormat="yyyy년 MM월 dd일"
               placeholderText="날짜를 선택하세요"
+              disabled={!canEdit}
             />
           </DatePickerWrapper>
         </div>
@@ -99,12 +104,22 @@ const SpecialAdd = ({
           placeholder="내용을 입력해주세요."
           value={content}
           onChange={(e) => setContent(e.target.value)}
+          readOnly={!canEdit}
         />
 
         <ButtonGroup>
           <ButtonWhite text="돌아가기" onClick={() => setIsAddMode(false)} />
-          {isEdit && <ButtonRed text="삭제" onClick={handleDelete} />}
-          <ButtonOrange text={isEdit ? "수정" : "저장"} onClick={handleSave} />
+          {isEdit && canEdit && (
+            <ButtonRed text="삭제" onClick={handleDelete} />
+          )}
+          {canEdit ? (
+            <ButtonOrange
+              text={isEdit ? "수정" : "저장"}
+              onClick={handleSave}
+            />
+          ) : (
+            <></>
+          )}
         </ButtonGroup>
       </FeedBackAddWrapper>
     </>
