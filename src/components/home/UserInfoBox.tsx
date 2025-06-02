@@ -18,6 +18,9 @@ const UserInfoBox = ({
       <span className="name">
         {userInfo.name} {roleString}님
       </span>
+      {roleString === "교사" && (
+        <span className="subject">담당 과목 : {userInfo.subject}</span>
+      )}
       <span className="info">
         <span style={{ color: "#FFB608" }}>{userInfo.schoolName}</span>{" "}
         {userInfo.role !== "ROLE_PARENT" && (
@@ -39,13 +42,19 @@ const UserInfoWrapper = styled.div`
   padding: 12px 0;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
   align-items: center;
   justify-content: center;
 
   .name {
     font-weight: 600;
     font-size: 24px;
+    text-align: center;
+    color: #333333;
+  }
+  .subject {
+    font-weight: 600;
+    font-size: 18px;
     text-align: center;
     color: #333333;
   }
