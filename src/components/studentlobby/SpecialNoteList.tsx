@@ -114,6 +114,11 @@ const SpecialNoteListWrapper = styled.div`
 
   .content {
     text-align: left;
+    min-width: 200px;
+    max-width: 250px; /* 필요에 따라 너비 조절 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   th {

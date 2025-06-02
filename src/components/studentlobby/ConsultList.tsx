@@ -5,10 +5,10 @@ import { getConsult } from "../../apis/consult.ts";
 import { useLoading } from "../../stores/LoadingProvider.tsx";
 
 const ConsultList = ({
-                       studentId,
-                       onSelect,
-                       miniView,
-                     }: {
+  studentId,
+  onSelect,
+  miniView,
+}: {
   studentId: number;
   onSelect?: (consult: Consult) => void;
   miniView?: boolean;
@@ -47,34 +47,36 @@ const ConsultList = ({
     <ConsultListWrapper>
       <table>
         <thead>
-        <tr>
-          <th>상담일</th>
-          <th>다음 상담 예정일</th>
-          <th>작성 교사</th>
-          <th>내용</th>
-        </tr>
+          <tr>
+            <th>상담일</th>
+            <th>다음 상담</th>
+            <th>작성 교사</th>
+            <th>내용</th>
+          </tr>
         </thead>
         <tbody>
-        {consultations.length === 0 ? (
-          <tr>
-            <td colSpan={4} className="nodata">
-              상담 정보가 없습니다.
-            </td>
-          </tr>
-        ) : (
-          (miniView ? consultations.slice(0, 3) : consultations).map((consultation, index) => (
-            <tr
-              key={index}
-              onClick={() => onSelect?.(consultation)}
-              style={{ cursor: "pointer" }}
-            >
-              <td>{formatDate(consultation.date)}</td>
-              <td>{formatDate(consultation.nextCounselDate)}</td>
-              <td>{consultation.teacherName}</td>
-              <td className="content">{consultation.content}</td>
+          {consultations.length === 0 ? (
+            <tr>
+              <td colSpan={4} className="nodata">
+                상담 정보가 없습니다.
+              </td>
             </tr>
-          ))
-        )}
+          ) : (
+            (miniView ? consultations.slice(0, 3) : consultations).map(
+              (consultation, index) => (
+                <tr
+                  key={index}
+                  onClick={() => onSelect?.(consultation)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <td>{formatDate(consultation.date)}</td>
+                  <td>{formatDate(consultation.nextCounselDate)}</td>
+                  <td>{consultation.teacherName}</td>
+                  <td className="content">{consultation.content}</td>
+                </tr>
+              ),
+            )
+          )}
         </tbody>
       </table>
     </ConsultListWrapper>
@@ -103,6 +105,11 @@ const ConsultListWrapper = styled.div`
 
   .content {
     text-align: left;
+    min-width: 200px;
+    max-width: 250px; /* 필요에 따라 너비 조절 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   th {
