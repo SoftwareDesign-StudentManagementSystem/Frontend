@@ -7,6 +7,12 @@ const CommonStyles = createGlobalStyle`
         background: none;
         cursor: pointer;
     }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin:0;
+  }
   
 
 `;

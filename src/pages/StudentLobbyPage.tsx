@@ -325,6 +325,7 @@ const PageWrapper = styled.div`
   height: 100%;
   width: 100%;
   box-sizing: border-box;
+
   //padding-bottom: 500px;
   //overflow: hidden; // 전체 스크롤 차단
 `;
@@ -383,6 +384,6 @@ const MainContent = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    padding: 16px;
+    padding: 16px 8px;
   }
 `;
