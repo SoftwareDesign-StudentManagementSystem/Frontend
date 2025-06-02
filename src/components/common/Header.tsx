@@ -212,7 +212,7 @@ const StyledHeader = styled.header`
   @media (max-width: 768px) {
     .LogoWrapper {
       span {
-        font-size: 15px; /* 모바일에서는 더 작게 */
+        display: none;
       }
     }
   }
