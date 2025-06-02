@@ -13,7 +13,7 @@ const GradeSemesterView = ({ year, semester, studentId }: GradeListProps) => {
   const { userInfo } = useUserStore();
 
   const [showInputRow, setShowInputRow] = useState(false);
-  const [grades, setGrades] = useState<Grade[]>([]);
+  const [grades, setGrades] = useState<Grade>();
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const GradeSemesterView = ({ year, semester, studentId }: GradeListProps) => {
   return (
     <GradeAddWrapper>
       {/* 이 위치에 레이더차트 삽입 */}
-      {!loading && (
+      {!loading && grades && (
         <div
           style={{
             width: "100%",

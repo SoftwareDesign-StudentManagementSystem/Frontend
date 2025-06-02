@@ -1,11 +1,16 @@
 import styled from "styled-components";
-import { getStudentGrade, getStudentMyGrade } from "../../apis/grade.ts";
+import {
+  getStudentGrade,
+  getStudentMyGrade,
+  createStudentGrade,
+  updateStudentGrade,
+  deleteStudentGrade,
+} from "../../apis/grade.ts";
 import { useEffect, useState } from "react";
 import { Grade, GradeListProps, SubjectGrade } from "../../types/grades.ts";
 import useUserStore from "../../stores/useUserStore.ts";
 import { useLoading } from "../../stores/LoadingProvider.tsx";
 
-// props 타입에 showInputRow, setShowInputRow 추가
 interface GradeListExtendedProps extends GradeListProps {
   showInputRow?: boolean;
   setShowInputRow?: (v: boolean) => void;
@@ -20,15 +25,14 @@ const GradeList = ({
   setShowInputRow,
 }: GradeListExtendedProps) => {
   const { userInfo } = useUserStore();
+
   const { showLoading, hideLoading } = useLoading();
 
-  const [grades, setGrades] = useState<Grade[]>([]);
-  const [newGrade, setNewGrade] = useState({
-    subject: "",
-    score: "",
-    achievementLevel: "",
-    relativeRankGrade: "",
-  });
+  const [grades, setGrades] = useState<Grade>();
+  const [newScore, setNewScore] = useState("");
+
+  const [editingSubject, setEditingSubject] = useState<string | null>(null);
+  const [editingScore, setEditingScore] = useState<string>("");
 
   useEffect(() => {
     if (!userInfo.id) return;
@@ -53,33 +57,63 @@ const GradeList = ({
     fetchGrades();
   }, [year, semester, studentId, userInfo]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewGrade({ ...newGrade, [e.target.name]: e.target.value });
+  const handleAddGrade = async () => {
+    if (!newScore.trim()) return;
+
+    try {
+      showLoading();
+      const semesterEnum =
+        semester === 1 ? "FIRST_SEMESTER" : "SECOND_SEMESTER";
+
+      console.log(year, semesterEnum, studentId, newScore);
+
+      await createStudentGrade(studentId, {
+        year,
+        semester: semesterEnum,
+        score: Number(newScore),
+      });
+
+      const updated = await getStudentGrade(year, semester, studentId);
+      setGrades(updated);
+    } catch (err) {
+      console.error("등록 실패", err);
+    } finally {
+      hideLoading();
+      setNewScore("");
+      if (setShowInputRow) setShowInputRow(false);
+    }
   };
 
-  const handleAddGrade = () => {
-    if (!newGrade.score.trim()) return;
+  const handleDeleteGrade = async () => {
+    try {
+      showLoading();
+      if (grades === undefined) return;
 
-    setGrades((prev) => ({
-      ...prev,
-      [newGrade.subject]: {
-        score: newGrade.score,
-        achievementLevel: newGrade.achievementLevel,
-        relativeRankGrade: newGrade.relativeRankGrade,
-      },
-    }));
-
-    setNewGrade({
-      subject: "",
-      score: "",
-      achievementLevel: "",
-      relativeRankGrade: "",
-    });
-
-    if (setShowInputRow) setShowInputRow(false);
+      await deleteStudentGrade(grades.id);
+      const updated = await getStudentGrade(year, semester, studentId);
+      setGrades(updated);
+    } catch (err) {
+      console.error("삭제 실패", err);
+    } finally {
+      hideLoading();
+    }
   };
 
-  // 유효한 과목 리스트만 필터링
+  const handleSaveEdit = async () => {
+    try {
+      showLoading();
+      if (grades === undefined) return;
+      await updateStudentGrade(grades.id, { score: Number(editingScore) });
+      const updated = await getStudentGrade(year, semester, studentId);
+      setGrades(updated);
+      setEditingSubject(null);
+    } catch (err) {
+      console.error("수정 실패", err);
+    } finally {
+      hideLoading();
+    }
+  };
+
   const validGradeEntries = Object.entries(grades ?? {}).filter(
     ([key]) =>
       ![
@@ -92,7 +126,6 @@ const GradeList = ({
       ].includes(key),
   );
 
-  // miniView가 true면 상위 3개만 보여줌
   const displayedGrades = miniView
     ? validGradeEntries.slice(0, 3)
     : validGradeEntries;
@@ -106,26 +139,58 @@ const GradeList = ({
             <th>원점수/과목 평균</th>
             <th>성취도 (수강자 수)</th>
             <th>석차 등급</th>
+            {!miniView && <th>관리</th>}
           </tr>
         </thead>
         <tbody>
           {displayedGrades.length === 0 ? (
             <tr>
-              <td colSpan={4} className="nodata">
+              <td colSpan={miniView ? 4 : 5} className="nodata">
                 성적 정보가 없습니다.
               </td>
             </tr>
           ) : (
-            displayedGrades.map(([subject, grade]) => {
+            displayedGrades.map(([subject, grade], index) => {
               const subjectGrade = grade as unknown as SubjectGrade;
+              const isEditing = editingSubject === index.toString();
+
               return (
                 <tr key={subject}>
                   <td>{subject}</td>
                   <td>
-                    {subjectGrade.score} / {subjectGrade.average}
+                    {isEditing ? (
+                      <StyledInput
+                        name="editingScore"
+                        value={editingScore}
+                        onChange={(e) => setEditingScore(e.target.value)}
+                      />
+                    ) : (
+                      `${subjectGrade.score} / ${subjectGrade.average}`
+                    )}
                   </td>
                   <td>{subjectGrade.achievementLevel}</td>
                   <td>{subjectGrade.relativeRankGrade}</td>
+                  {!miniView && (
+                    <td>
+                      {isEditing ? (
+                        <button onClick={() => handleSaveEdit()}>💾</button>
+                      ) : (
+                        // 수정 버튼: 교사가 해당 과목 담당일 때만 보임
+                        userInfo.role === "ROLE_TEACHER" &&
+                        userInfo.subject === subject && (
+                          <button
+                            onClick={() => {
+                              setEditingSubject(index.toString());
+                              setEditingScore(subjectGrade.score.toString());
+                            }}
+                          >
+                            ✏️
+                          </button>
+                        )
+                      )}
+                      <button onClick={() => handleDeleteGrade()}>🗑</button>
+                    </td>
+                  )}
                 </tr>
               );
             })
@@ -134,16 +199,25 @@ const GradeList = ({
           {!miniView && showInputRow && (
             <tr>
               <td colSpan={4}>
-                <StyledInput
-                  type="text"
-                  name="score"
-                  value={newGrade.score}
-                  onChange={handleInputChange}
-                  placeholder="점수"
-                />
-                <button onClick={handleAddGrade} style={{ marginLeft: "10px" }}>
-                  저장
-                </button>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: "10px",
+                  }}
+                >
+                  <div style={{ minWidth: "fit-content" }}>한국사</div>
+                  <StyledInput
+                    type="text"
+                    value={newScore}
+                    onChange={(e) => setNewScore(e.target.value)}
+                    placeholder="점수"
+                  />
+                </div>
+              </td>
+              <td>
+                <button onClick={handleAddGrade}>저장</button>
               </td>
             </tr>
           )}
@@ -185,6 +259,7 @@ const GradeListWrapper = styled.div`
 
   button {
     width: fit-content;
+    margin: 0 4px;
   }
 
   .nodata {
@@ -196,7 +271,6 @@ const GradeListWrapper = styled.div`
   }
 `;
 
-// 중간에 추가
 const StyledInput = styled.input`
   width: 80%;
   padding: 8px 10px;
