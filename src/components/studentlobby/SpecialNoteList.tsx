@@ -7,11 +7,13 @@ import { useSearchParams } from "react-router-dom";
 interface SpecialNoteListProps {
   setIsAddMode?: (value: boolean) => void;
   setEditData?: (note: Specialty) => void;
+  miniView?: boolean;
 }
 
 const SpecialNoteList = ({
   setIsAddMode,
   setEditData,
+  miniView,
 }: SpecialNoteListProps) => {
   const [notes, setNotes] = useState<Specialty[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,7 +27,7 @@ const SpecialNoteList = ({
         const sorted = data.sort(
           (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
         );
-        setNotes(sorted.slice(0, 3));
+        setNotes(miniView ? sorted.slice(0, 3) : sorted);
       } catch (error) {
         console.error("특기사항 로딩 실패:", error);
       } finally {

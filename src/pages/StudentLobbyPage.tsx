@@ -218,7 +218,7 @@ export default function StudentLobbyPage() {
             // headerChildren={
             //   <DropDownMenu options={options} onSelect={handleSelect} />
             // }
-            contentChildren={<SpecialNoteList />}
+            contentChildren={<SpecialNoteList miniView={true} />}
           />
         </div>
 
@@ -272,7 +272,9 @@ export default function StudentLobbyPage() {
             // headerChildren={
             //   <DropDownMenu options={options} onSelect={handleSelect} />
             // }
-            contentChildren={<ConsultList studentId={Number(id)} />}
+            contentChildren={
+              <ConsultList studentId={Number(id)} miniView={true} />
+            }
           />
         </div>
       </MainContent>

@@ -65,7 +65,7 @@ const FeedbackList = ({
                     <td>{formatDate(feedback.date)}</td>
                     <td>{feedback.category}</td>
                     <td>{feedback.teacherName}</td>
-                    <td>{feedback.content}</td>
+                    <td className="content">{feedback.content}</td>
                   </tr>
                 );
               },
