@@ -9,23 +9,23 @@ import ReportCreateModal from "../Modal/ReportCreateModal.tsx";
 import NotificationList from "../header/NotificationList.tsx";
 
 import Logo from "../../assets/iedulogo.png";
+import UserInfoBox from "../home/UserInfoBox";
 
+const getLabel = (type: string) => {
+  switch (type) {
+    case "ROLE_TEACHER":
+      return "교사";
+    case "ROLE_STUDENT":
+      return "학생";
+    case "ROLE_PARENT":
+      return "학부모";
+    case "ROLE_ADMIN":
+      return "관리자";
+    default:
+      return type;
+  }
+};
 const UserTypeLabel = ({ type }: { type: string }) => {
-  const getLabel = (type: string) => {
-    switch (type) {
-      case "ROLE_TEACHER":
-        return "교사";
-      case "ROLE_STUDENT":
-        return "학생";
-      case "ROLE_PARENT":
-        return "학부모";
-      case "ROLE_ADMIN":
-        return "관리자";
-      default:
-        return type;
-    }
-  };
-
   return (
     <UserTypeLabelWrapper>
       <div>{getLabel(type)}</div>
@@ -69,6 +69,7 @@ export default function Header() {
   const [openModal, setOpenModal] = useState<string | null>(null);
   const closeModal = () => setOpenModal(null);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showUserInfoBox, setShowUserInfoBox] = useState(false);
 
   const handleLogout = () => {
     setUserInfo({
@@ -118,6 +119,14 @@ export default function Header() {
       {openModal === "reportCreate" && (
         <ReportCreateModal onClose={closeModal} />
       )}
+      {showUserInfoBox && (
+        <UserInfoDropdown>
+          <UserInfoBox
+            userInfo={userInfo}
+            roleString={getLabel(userInfo.role)}
+          />
+        </UserInfoDropdown>
+      )}
       <StyledHeader>
         <div className="LogoWrapper" onClick={() => navigate("/home")}>
           <img src={Logo} alt="logo" style={{ height: "60%" }} />
@@ -130,12 +139,17 @@ export default function Header() {
               onClick={() => setShowNotifications((prev) => !prev)}
             />
           )}
-          <div className="UserWrapper">
+          <div
+            className="UserWrapper"
+            onClick={() => setShowUserInfoBox((prev) => !prev)}
+            style={{ position: "relative" }}
+          >
             <UserTypeLabel type={userInfo.role} />
             <button className="btntype1">{userInfo.name} 님</button>
           </div>
 
           {showNotifications && <NotificationList />}
+
           <button className="btntype1" onClick={handleLogout}>
             로그아웃
           </button>
@@ -202,6 +216,7 @@ const StyledHeader = styled.header`
     .UserWrapper {
       width: fit-content;
       gap: 10px;
+      cursor: pointer;
     }
   }
 
@@ -243,4 +258,17 @@ const NotificationBtn = styled.img`
     width: 20px;
     height: 20px;
   }
+`;
+
+const UserInfoDropdown = styled.div`
+  position: absolute;
+  top: 80px;
+  right: 110px;
+  width: fit-content;
+  height: fit-content;
+  background-color: white;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  z-index: 1000;
+  padding: 16px 40px;
 `;
