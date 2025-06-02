@@ -158,7 +158,7 @@ export default function Header() {
           {/*  로그아웃2*/}
           {/*</button>*/}
 
-          {isStudentLobby && (
+          {isStudentLobby && userInfo.role === "ROLE_TEACHER" && (
             <ButtonOrange
               text={"보고서 생성"}
               onClick={() => setOpenModal("reportCreate")}
