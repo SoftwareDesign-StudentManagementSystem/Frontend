@@ -12,7 +12,6 @@ export default function SignUpPage() {
 const SignUpPageWrapper = styled.div`
   width: 98vw;
   height: 98vh;
-
   display: flex;
   flex-direction: row;
 
