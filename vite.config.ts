@@ -4,6 +4,8 @@ import istanbul from "vite-plugin-istanbul";
 
 // https://vite.dev/config/
 export default defineConfig({
+  assetsInclude: ["**/*.svg"],
+
   plugins: [
     react(),
     istanbul({
