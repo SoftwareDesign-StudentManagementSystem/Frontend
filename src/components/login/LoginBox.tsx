@@ -40,7 +40,7 @@ const LoginBox = () => {
 
   return (
     <LoginBoxWrapper>
-      <Logo src={logoimg} />
+      <Logo src={logoimg} alt="logo" />
       <ContentWrapper>
         <div className="maintitle">
           안녕하세요!
