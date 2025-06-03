@@ -14,7 +14,6 @@ const SignUpPageWrapper = styled.div`
   height: 98vh;
   display: flex;
   flex-direction: row;
-
   align-items: center;
   justify-content: center;
 `;
