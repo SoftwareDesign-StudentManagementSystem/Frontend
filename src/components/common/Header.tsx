@@ -138,6 +138,7 @@ export default function Header() {
             <NotificationBtn
               src={notification}
               onClick={() => setShowNotifications((prev) => !prev)}
+              data-testid="notification-button"
             />
           )}
           <div

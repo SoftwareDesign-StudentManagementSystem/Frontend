@@ -1,18 +1,18 @@
 import styled from "styled-components";
 
-const ButtonDelete = ({
-                        text,
-                        onClick,
-                      }: {
+const ButtonRed = ({
+  text,
+  onClick,
+}: {
   text: string;
   onClick: () => void;
 }) => {
-  return <ButtonDeleteWrapper onClick={onClick}>{text}</ButtonDeleteWrapper>;
+  return <ButtonRedWrapper onClick={onClick}>{text}</ButtonRedWrapper>;
 };
 
-export default ButtonDelete;
+export default ButtonRed;
 
-const ButtonDeleteWrapper = styled.button`
+const ButtonRedWrapper = styled.button`
   box-sizing: border-box;
 
   display: flex;
@@ -36,7 +36,9 @@ const ButtonDeleteWrapper = styled.button`
   background-color: transparent;
 
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 
   &:hover {
     background-color: #e74c3c;

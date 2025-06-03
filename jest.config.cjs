@@ -7,7 +7,10 @@ module.exports = {
     "\\.(svg|png|jpg|jpeg|gif)$": "<rootDir>/__mocks__/fileMock.js", // 이미지 파일 mock 처리
   },
   testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["@testing-library/jest-dom/extend-expect"],
+  setupFilesAfterEnv: [
+    "@testing-library/jest-dom/extend-expect",
+    "<rootDir>/jest.setup.ts",
+  ],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
   setupFiles: ["<rootDir>/jest.setup.ts"],
 };

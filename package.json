@@ -13,6 +13,7 @@
   "dependencies": {
     "@vitejs/plugin-react-swc": "^3.8.1",
     "axios": "^1.8.4",
+    "axios-mock-adapter": "^2.1.0",
     "chart.js": "^4.4.9",
     "intersection-observer": "^0.12.2",
     "lucide-react": "^0.507.0",
