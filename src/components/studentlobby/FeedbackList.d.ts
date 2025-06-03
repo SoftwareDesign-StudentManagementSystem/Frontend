@@ -1,4 +1,4 @@
-import { Feedback } from "../../types/feedback.ts";
+import { Feedback } from "../../types/feedback";
 declare const FeedbackList: ({ studentId, miniView, onSelectFeedback, }: {
     studentId: number;
     miniView?: boolean;

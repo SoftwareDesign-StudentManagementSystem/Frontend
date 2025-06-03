@@ -5,11 +5,11 @@ import {
   createStudentGrade,
   updateStudentGrade,
   deleteStudentGrade,
-} from "../../apis/grade.ts";
+} from "../../apis/grade";
 import { useEffect, useState } from "react";
-import { Grade, GradeListProps, SubjectGrade } from "../../types/grades.ts";
-import useUserStore from "../../stores/useUserStore.ts";
-import { useLoading } from "../../stores/LoadingProvider.tsx";
+import { Grade, GradeListProps, SubjectGrade } from "../../types/grades";
+import useUserStore from "../../stores/useUserStore";
+import { useLoading } from "../../stores/LoadingProvider";
 
 interface GradeListExtendedProps extends GradeListProps {
   showInputRow?: boolean;

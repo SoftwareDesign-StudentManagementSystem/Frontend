@@ -2,33 +2,33 @@ import styled from "styled-components";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
-import { UserDetailInfo, UserInfo } from "../types/members.ts";
-import Card from "../components/common/Card.tsx";
-import DropDownMenu from "../components/common/DropDownMenu.tsx";
-import StudentInfo from "../components/studentlobby/StudentInfo.tsx";
-import SpecialNoteList from "../components/studentlobby/SpecialNoteList.tsx";
-import GradeList from "../components/studentlobby/GradeList.tsx";
-import FeedbackList from "../components/studentlobby/FeedbackList.tsx";
-import ConsultList from "../components/studentlobby/ConsultList.tsx";
-import AttendanceList from "../components/studentlobby/AttendanceList.tsx";
+import { UserDetailInfo, UserInfo } from "../types/members";
+import Card from "../components/common/Card";
+import DropDownMenu from "../components/common/DropDownMenu";
+import StudentInfo from "../components/studentlobby/StudentInfo";
+import SpecialNoteList from "../components/studentlobby/SpecialNoteList";
+import GradeList from "../components/studentlobby/GradeList";
+import FeedbackList from "../components/studentlobby/FeedbackList";
+import ConsultList from "../components/studentlobby/ConsultList";
+import AttendanceList from "../components/studentlobby/AttendanceList";
 
-import StudentInfoModal from "../components/Modal/StudentInfoModal.tsx";
-import FeedBackModal from "../components/Modal/FeedBack/FeedBackModal.tsx";
-import ConsultModal from "../components/Modal/Consult/ConsultModal.tsx";
-import SpecialModal from "../components/Modal/SpecialNote/SpecialModal.tsx";
-import AttendanceModal from "../components/Modal/Attendance/AttendanceModal.tsx";
-import GradeModal from "../components/Modal/Grade/GradeModal.tsx";
+import StudentInfoModal from "../components/Modal/StudentInfoModal";
+import FeedBackModal from "../components/Modal/FeedBack/FeedBackModal";
+import ConsultModal from "../components/Modal/Consult/ConsultModal";
+import SpecialModal from "../components/Modal/SpecialNote/SpecialModal";
+import AttendanceModal from "../components/Modal/Attendance/AttendanceModal";
+import GradeModal from "../components/Modal/Grade/GradeModal";
 import {
   getFilteredStudentList,
   getMemberDetailInfo,
   getStudentInfo,
-} from "../apis/members.ts";
-import useUserStore from "../stores/useUserStore.ts";
-import { getRandomProfileImage } from "../utils/getRandomProfileImage.ts";
-import ListHeader from "../components/home/ListHeader.tsx";
-import StudentList from "../components/home/StudentList.tsx";
-import getCurrentSemester from "../utils/getCurrentSemester.ts";
-import { useLoading } from "../stores/LoadingProvider.tsx";
+} from "../apis/members";
+import useUserStore from "../stores/useUserStore";
+import { getRandomProfileImage } from "../utils/getRandomProfileImage";
+import ListHeader from "../components/home/ListHeader";
+import StudentList from "../components/home/StudentList";
+import getCurrentSemester from "../utils/getCurrentSemester";
+import { useLoading } from "../stores/LoadingProvider";
 
 export default function StudentLobbyPage() {
   const { showLoading, hideLoading } = useLoading();

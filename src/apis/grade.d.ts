@@ -1,4 +1,4 @@
-import { Grade } from "../types/grades.ts";
+import { Grade } from "../types/grades";
 export declare const getMyGrades: () => Promise<Grade[]>;
 export declare const getAllGradesByStudent: (studentId: number) => Promise<Grade[]>;
 export declare const getGradesByClassFilter: (params: {

@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { getNotification, putNotificationRead } from "../../apis/header.ts";
+import { getNotification, putNotificationRead } from "../../apis/header";
 import { useEffect, useState } from "react";
-import { Notification } from "../../types/header.ts";
-import FollowModal from "../Modal/FollowModal.tsx";
-import useUserStore from "../../stores/useUserStore.ts";
+import { Notification } from "../../types/header";
+import FollowModal from "../Modal/FollowModal";
+import useUserStore from "../../stores/useUserStore";
 
 export default function NotificationList() {
   const { userDetailInfo } = useUserStore();

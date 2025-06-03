@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { getFeedback, getMyFeedback } from "../../apis/feedback.ts";
-import { Feedback } from "../../types/feedback.ts";
+import { getFeedback, getMyFeedback } from "../../apis/feedback";
+import { Feedback } from "../../types/feedback";
 import useUserStore from "../../stores/useUserStore"; // ✅ 사용자 정보 가져오기
 
 const FeedbackList = ({

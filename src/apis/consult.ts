@@ -1,5 +1,5 @@
 import tokenInstance from "../apis/tokenInstance";
-import { Consult } from "../types/consults.ts";
+import { Consult } from "../types/consults";
 import { ApiResponse } from "../types/common";
 
 // 학생 id로 상담 기록 조회

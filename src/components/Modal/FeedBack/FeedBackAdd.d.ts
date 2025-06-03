@@ -1,5 +1,5 @@
 import { UserDetailInfo } from "../../../types/members";
-import { Feedback } from "../../../types/feedback.ts";
+import { Feedback } from "../../../types/feedback";
 interface FeedbackAddProps {
     setIsAddMode: (value: boolean) => void;
     studentInfo: UserDetailInfo;

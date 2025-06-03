@@ -53,7 +53,7 @@ export const getStudentFilteredFeedback = async (
 };
 
 // 5. 피드백 기록 추가 [선생님 권한] - 이미 구현되어 있음
-// feedback.ts
+// feedback
 export const postFeedback = async (
   studentId: number,
   feedback: {

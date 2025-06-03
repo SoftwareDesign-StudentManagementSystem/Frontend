@@ -12,7 +12,7 @@ export type SemesterType = "FIRST_SEMESTER" | "SECOND_SEMESTER";
 
 export type FeedbackCategory = "성적" | "생활" | "태도" | "기타"; // 필요시 확장
 
-// types/feedback.ts
+// types/feedback
 export interface AddFeedbackProps {
   year: number;
   semester: "FIRST_SEMESTER" | "SECOND_SEMESTER";

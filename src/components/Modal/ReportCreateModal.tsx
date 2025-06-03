@@ -4,7 +4,7 @@ import { useState } from "react";
 import ButtonOrange from "../common/ButtonOrange";
 import DropDownMenu from "../common/DropDownMenu";
 import { postReportRequest } from "../../apis/reportcreate";
-import { useLoading } from "../../stores/LoadingProvider.tsx";
+import { useLoading } from "../../stores/LoadingProvider";
 
 const ReportCreateModal = ({ onClose }: { onClose: () => void }) => {
   return (

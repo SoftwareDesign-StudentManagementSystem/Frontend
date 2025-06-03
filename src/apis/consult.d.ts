@@ -1,4 +1,4 @@
-import { Consult } from "../types/consults.ts";
+import { Consult } from "../types/consults";
 export declare const getConsult: (studentId: number) => Promise<Consult[]>;
 export declare const postConsult: (studentId: number, consultData: {
     year: number;

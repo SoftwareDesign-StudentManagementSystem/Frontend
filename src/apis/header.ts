@@ -1,6 +1,6 @@
 import tokenInstance from "../apis/tokenInstance";
 import { ApiResponse } from "../types/common";
-import { Notification } from "../types/header.ts";
+import { Notification } from "../types/header";
 
 // 알림 목록 조회
 export const getNotification = async (): Promise<Notification[]> => {

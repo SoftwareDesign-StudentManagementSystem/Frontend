@@ -1,9 +1,9 @@
-import Modal from "../Modal.tsx";
+import Modal from "../Modal";
 import styled from "styled-components";
 
-import Card from "../../common/Card.tsx";
+import Card from "../../common/Card";
 import { useState } from "react";
-import AttendanceList from "../../studentlobby/AttendanceList.tsx";
+import AttendanceList from "../../studentlobby/AttendanceList";
 import { useSearchParams } from "react-router-dom";
 import DropDownMenu from "../../common/DropDownMenu";
 

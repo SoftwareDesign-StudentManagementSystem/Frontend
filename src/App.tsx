@@ -4,13 +4,13 @@ import { getMemberInfo } from "./apis/members";
 import useUserStore from "./stores/useUserStore";
 // import ScrollBarStyles from "resources/styles/ScrollBarStyles";
 import RootPage from "./pages/RootPage";
-import StudentLobbyPage from "./pages/StudentLobbyPage.tsx";
+import StudentLobbyPage from "./pages/StudentLobbyPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
-import ChildRegisterPage from "./pages/ChildRegisterPage.tsx";
-import HomePage from "./pages/HomePage.tsx";
-import { LoadingProvider } from "./stores/LoadingProvider.tsx";
-import GlobalLoading from "./components/common/GlobalLoading.tsx";
+import ChildRegisterPage from "./pages/ChildRegisterPage";
+import HomePage from "./pages/HomePage";
+import { LoadingProvider } from "./stores/LoadingProvider";
+import GlobalLoading from "./components/common/GlobalLoading";
 
 function App() {
   const location = useLocation();

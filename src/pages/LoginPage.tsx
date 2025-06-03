@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import LoginBox from "../components/login/LoginBox.tsx";
+import LoginBox from "../components/login/LoginBox";
 
 export default function LoginPage() {
   return (

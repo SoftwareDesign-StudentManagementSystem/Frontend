@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
-import ButtonWhite from "../common/ButtonWhite.tsx";
+import ButtonWhite from "../common/ButtonWhite";
 import { UserInfo } from "../../types/members";
-import useUserStore from "../../stores/useUserStore.ts"; // 경로 주의
+import useUserStore from "../../stores/useUserStore"; // 경로 주의
 
 interface SearchStudentProps {
   students: UserInfo[];

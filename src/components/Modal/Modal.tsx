@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ModalProps } from "../../types/modal.ts";
+import { ModalProps } from "../../types/modal";
 import { createPortal } from "react-dom";
 
 const modalRoot = document.getElementById("modal-root") || document.body;

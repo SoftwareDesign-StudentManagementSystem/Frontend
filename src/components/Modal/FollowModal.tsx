@@ -1,8 +1,8 @@
 import Modal from "./Modal";
 import styled from "styled-components";
-import ButtonOrange from "../common/ButtonOrange.tsx";
-import ButtonWhite from "../common/ButtonWhite.tsx";
-import { postFollowAccept } from "../../apis/members.ts";
+import ButtonOrange from "../common/ButtonOrange";
+import ButtonWhite from "../common/ButtonWhite";
+import { postFollowAccept } from "../../apis/members";
 
 const FollowModal = ({
   onClose,

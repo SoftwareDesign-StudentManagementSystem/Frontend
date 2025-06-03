@@ -1,4 +1,4 @@
-import { GradeListProps } from "../../types/grades.ts";
+import { GradeListProps } from "../../types/grades";
 interface GradeListExtendedProps extends GradeListProps {
     showInputRow?: boolean;
     setShowInputRow?: (v: boolean) => void;

@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import Card from "../../common/Card.tsx";
-import GradeList from "../../studentlobby/GradeList.tsx";
-import ButtonWhite from "../../common/ButtonWhite.tsx";
-import { Grade, GradeListProps } from "../../../types/grades.ts";
+import Card from "../../common/Card";
+import GradeList from "../../studentlobby/GradeList";
+import ButtonWhite from "../../common/ButtonWhite";
+import { Grade, GradeListProps } from "../../../types/grades";
 import { useEffect, useState } from "react";
-import GradeRadarChart from "./GradeRadarChart.tsx";
-import { getStudentGrade, getStudentMyGrade } from "../../../apis/grade.ts";
-import useUserStore from "../../../stores/useUserStore.ts";
+import GradeRadarChart from "./GradeRadarChart";
+import { getStudentGrade, getStudentMyGrade } from "../../../apis/grade";
+import useUserStore from "../../../stores/useUserStore";
 
 // 각 학기별 성적을 보여주는 화면
 const GradeSemesterView = ({ year, semester, studentId }: GradeListProps) => {

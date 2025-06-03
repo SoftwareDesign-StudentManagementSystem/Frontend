@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { Consult } from "../../types/consults.ts";
-import { getConsult } from "../../apis/consult.ts";
-import { useLoading } from "../../stores/LoadingProvider.tsx";
+import { Consult } from "../../types/consults";
+import { getConsult } from "../../apis/consult";
+import { useLoading } from "../../stores/LoadingProvider";
 
 const ConsultList = ({
   studentId,

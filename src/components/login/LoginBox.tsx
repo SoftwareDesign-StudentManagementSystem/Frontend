@@ -2,8 +2,8 @@ import styled from "styled-components";
 import logoimg from "../../assets/logo.svg";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../apis/members.ts";
-import { useLoading } from "../../stores/LoadingProvider.tsx"; // 로그인 요청 함수 import
+import { login } from "../../apis/members";
+import { useLoading } from "../../stores/LoadingProvider"; // 로그인 요청 함수 import
 
 const LoginBox = () => {
   const { showLoading, hideLoading } = useLoading();

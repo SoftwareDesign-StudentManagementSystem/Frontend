@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import SignUpBox from "../components/signup/SignUpBox.tsx";
+import SignUpBox from "../components/signup/SignUpBox";
 
 export default function SignUpPage() {
   return (

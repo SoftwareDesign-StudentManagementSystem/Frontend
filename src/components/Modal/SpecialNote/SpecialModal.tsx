@@ -1,12 +1,12 @@
-import Modal from "../Modal.tsx";
+import Modal from "../Modal";
 import styled from "styled-components";
 
-import Card from "../../common/Card.tsx";
-import SpecialAdd from "./SpecialAdd.tsx";
-import ButtonWhite from "../../common/ButtonWhite.tsx";
+import Card from "../../common/Card";
+import SpecialAdd from "./SpecialAdd";
+import ButtonWhite from "../../common/ButtonWhite";
 import { useState } from "react";
-import SpecialNoteList from "../../studentlobby/SpecialNoteList.tsx";
-import useUserStore from "../../../stores/useUserStore.ts";
+import SpecialNoteList from "../../studentlobby/SpecialNoteList";
+import useUserStore from "../../../stores/useUserStore";
 import { UserDetailInfo } from "../../../types/members";
 import { Specialty } from "../../../types/specialnotes";
 

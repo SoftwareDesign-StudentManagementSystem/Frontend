@@ -1,13 +1,13 @@
-// GradeModal.tsx
-import Modal from "../Modal.tsx";
+// GradeModal
+import Modal from "../Modal";
 import styled from "styled-components";
 
-import Card from "../../common/Card.tsx";
-import GradeSemesterView from "./GradeSemesterView.tsx";
+import Card from "../../common/Card";
+import GradeSemesterView from "./GradeSemesterView";
 import { useState } from "react";
-import GradeList from "../../studentlobby/GradeList.tsx";
+import GradeList from "../../studentlobby/GradeList";
 
-import ButtonWhite from "../../common/ButtonWhite.tsx";
+import ButtonWhite from "../../common/ButtonWhite";
 
 const GradeModal = ({
   onClose,
@@ -39,8 +39,8 @@ const gradeData = [
   { grade: 3, semester: 2 },
 ];
 
-import getCurrentSemester from "../../../utils/getCurrentSemester.ts";
-import { UserDetailInfo } from "../../../types/members.ts";
+import getCurrentSemester from "../../../utils/getCurrentSemester";
+import { UserDetailInfo } from "../../../types/members";
 
 const GradeModalContent = ({
   studentId,

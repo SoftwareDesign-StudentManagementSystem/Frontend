@@ -1,20 +1,16 @@
 import styled from "styled-components";
-import InputBoxWrapper from "../../../resources/styles/InputBoxWrapper.tsx";
+import InputBoxWrapper from "../../../resources/styles/InputBoxWrapper";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { useState } from "react";
-import DropDownMenu from "../../common/DropDownMenu.tsx";
-import useUserStore from "../../../stores/useUserStore.ts";
-import ButtonOrange from "../../common/ButtonOrange.tsx";
-import {
-  deleteConsult,
-  postConsult,
-  putConsult,
-} from "../../../apis/consult.ts";
-import ButtonWhite from "../../common/ButtonWhite.tsx";
-import { DatePickerOverride } from "../../../resources/styles/CommonStyles.tsx";
-import { Consult } from "../../../types/consults.ts";
+import DropDownMenu from "../../common/DropDownMenu";
+import useUserStore from "../../../stores/useUserStore";
+import ButtonOrange from "../../common/ButtonOrange";
+import { deleteConsult, postConsult, putConsult } from "../../../apis/consult";
+import ButtonWhite from "../../common/ButtonWhite";
+import { DatePickerOverride } from "../../../resources/styles/CommonStyles";
+import { Consult } from "../../../types/consults";
 import ButtonRed from "../../common/ButtonRed";
 import { UserDetailInfo } from "../../../types/members";
 import getCurrentSemesterString from "../../../utils/getCurrentSemesterString";

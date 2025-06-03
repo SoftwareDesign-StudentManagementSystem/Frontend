@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import human from "../../assets/human.svg";
-import ButtonOrange from "../common/ButtonOrange.tsx";
+import ButtonOrange from "../common/ButtonOrange";
 import { useNavigate } from "react-router-dom";
-import { UserInfo } from "../../types/members.ts";
+import { UserInfo } from "../../types/members";
 
 interface StudentListProps {
   students: UserInfo[];

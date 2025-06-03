@@ -1,16 +1,16 @@
 import styled from "styled-components";
 import { useState } from "react";
-import InputBoxWrapper from "../../../resources/styles/InputBoxWrapper.tsx";
-import ButtonWhite from "../../common/ButtonWhite.tsx";
-import ButtonOrange from "../../common/ButtonOrange.tsx";
+import InputBoxWrapper from "../../../resources/styles/InputBoxWrapper";
+import ButtonWhite from "../../common/ButtonWhite";
+import ButtonOrange from "../../common/ButtonOrange";
 import {
   deleteFeedback,
   postFeedback,
   putFeedback,
-} from "../../../apis/feedback.ts"; // 수정 API 추가
+} from "../../../apis/feedback"; // 수정 API 추가
 import { useSearchParams } from "react-router-dom";
 import { UserDetailInfo } from "../../../types/members";
-import { Feedback } from "../../../types/feedback.ts";
+import { Feedback } from "../../../types/feedback";
 import ButtonRed from "../../common/ButtonRed";
 import useUserStore from "../../../stores/useUserStore"; // Feedback 타입 임포트
 

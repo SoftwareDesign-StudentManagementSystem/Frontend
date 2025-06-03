@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { UserDetailInfo } from "../../types/members.ts";
+import { UserDetailInfo } from "../../types/members";
 
 const StudentInfo = ({
   studentInfo,

@@ -5,8 +5,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import notification from "../../assets/notification.svg";
 import ButtonOrange from "./ButtonOrange";
 import { useState } from "react";
-import ReportCreateModal from "../Modal/ReportCreateModal.tsx";
-import NotificationList from "../header/NotificationList.tsx";
+import ReportCreateModal from "../Modal/ReportCreateModal";
+import NotificationList from "../header/NotificationList";
 
 import Logo from "../../assets/iedulogo.png";
 import UserInfoBox from "../home/UserInfoBox";

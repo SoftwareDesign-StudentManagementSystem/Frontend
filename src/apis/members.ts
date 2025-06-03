@@ -3,7 +3,7 @@ import tokenInstance from "../apis/tokenInstance";
 import refreshInstance from "../apis/refreshInstance";
 import { ApiResponse } from "../types/common";
 import { TokenInfo, UserInfo, UserDetailInfo } from "../types/members";
-import useUserStore from "../stores/useUserStore.ts";
+import useUserStore from "../stores/useUserStore";
 
 // 본인 회원 정보 조회
 export const getMemberInfo = async (): Promise<ApiResponse<UserInfo>> => {

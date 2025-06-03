@@ -1,21 +1,21 @@
 import styled from "styled-components";
-import Card from "../components/common/Card.tsx";
+import Card from "../components/common/Card";
 import SearchStudent from "../components/home/SearchStudent";
 import ListHeader from "../components/home/ListHeader";
-import StudentList from "../components/home/StudentList.tsx";
-import UserInfoBox from "../components/home/UserInfoBox.tsx";
-import useUserStore from "../stores/useUserStore.ts";
+import StudentList from "../components/home/StudentList";
+import UserInfoBox from "../components/home/UserInfoBox";
+import useUserStore from "../stores/useUserStore";
 import { useEffect, useState } from "react";
-import { UserInfo } from "../types/members.ts";
+import { UserInfo } from "../types/members";
 import {
   getMemberDetailInfo,
   getStudentList,
   getFilteredStudentList,
-} from "../apis/members.ts";
+} from "../apis/members";
 import { useNavigate } from "react-router-dom";
-import ButtonWhite from "../components/common/ButtonWhite.tsx";
-import SlideBanner from "../components/home/SlideBanner.tsx";
-import { useLoading } from "../stores/LoadingProvider.tsx";
+import ButtonWhite from "../components/common/ButtonWhite";
+import SlideBanner from "../components/home/SlideBanner";
+import { useLoading } from "../stores/LoadingProvider";
 
 export default function HomePage() {
   const navigate = useNavigate();

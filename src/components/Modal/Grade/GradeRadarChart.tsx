@@ -1,4 +1,4 @@
-// GradeRadarChart.tsx
+// GradeRadarChart
 import { Radar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { SubjectScore } from "../../../types/grades.ts";
+import { SubjectScore } from "../../../types/grades";
 
 ChartJS.register(
   RadialLinearScale,

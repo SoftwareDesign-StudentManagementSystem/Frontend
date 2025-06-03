@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import ChildRegisterBox from "../components/childregister/ChildRegisterBox.tsx";
+import ChildRegisterBox from "../components/childregister/ChildRegisterBox";
 
 export default function ChildRegisterPage() {
   return (

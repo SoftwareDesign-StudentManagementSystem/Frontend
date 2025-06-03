@@ -1,4 +1,4 @@
-import { UserDetailInfo } from "../../types/members.ts";
+import { UserDetailInfo } from "../../types/members";
 declare const StudentInfo: ({ studentInfo, profileImage, }: {
     studentInfo: UserDetailInfo | undefined;
     profileImage: string;

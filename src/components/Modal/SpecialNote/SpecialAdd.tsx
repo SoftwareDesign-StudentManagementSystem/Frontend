@@ -1,14 +1,14 @@
 import styled from "styled-components";
-import InputBoxWrapper from "../../../resources/styles/InputBoxWrapper.tsx";
-import ButtonWhite from "../../common/ButtonWhite.tsx";
-import ButtonOrange from "../../common/ButtonOrange.tsx";
-import ButtonRed from "../../common/ButtonRed.tsx"; // 삭제 버튼 import
+import InputBoxWrapper from "../../../resources/styles/InputBoxWrapper";
+import ButtonWhite from "../../common/ButtonWhite";
+import ButtonOrange from "../../common/ButtonOrange";
+import ButtonRed from "../../common/ButtonRed"; // 삭제 버튼 import
 import { useState } from "react";
 import {
   deleteSpecialty,
   postSpecialty,
   updateSpecialty,
-} from "../../../apis/specialnote.ts";
+} from "../../../apis/specialnote";
 import { Specialty } from "../../../types/specialnotes";
 import DatePicker from "react-datepicker";
 import { DatePickerOverride } from "../../../resources/styles/CommonStyles";

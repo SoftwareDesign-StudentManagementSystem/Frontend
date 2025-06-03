@@ -4,8 +4,8 @@ import { useState } from "react";
 import ButtonOrange from "../common/ButtonOrange";
 import ButtonRed from "../common/ButtonRed";
 import Modal from "./Modal";
-import { UserDetailInfo } from "../../types/members.ts";
-import useUserStore from "../../stores/useUserStore.ts";
+import { UserDetailInfo } from "../../types/members";
+import useUserStore from "../../stores/useUserStore";
 
 const StudentInfoModal = ({
   onClose,

@@ -1,5 +1,5 @@
 import "react-datepicker/dist/react-datepicker.css";
-import { Consult } from "../../../types/consults.ts";
+import { Consult } from "../../../types/consults";
 import { UserDetailInfo } from "../../../types/members";
 interface ConsultAddProps {
     setIsAddMode: (value: boolean) => void;

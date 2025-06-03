@@ -1,4 +1,4 @@
-import { UserInfo } from "../../types/members.ts";
+import { UserInfo } from "../../types/members";
 interface StudentListProps {
     students: UserInfo[];
     maxHeight?: string;

@@ -1,14 +1,14 @@
-import Modal from "../Modal.tsx";
+import Modal from "../Modal";
 import styled from "styled-components";
 
-import Card from "../../common/Card.tsx";
-import ConsultAdd from "./ConsultAdd.tsx";
-import ButtonWhite from "../../common/ButtonWhite.tsx";
+import Card from "../../common/Card";
+import ConsultAdd from "./ConsultAdd";
+import ButtonWhite from "../../common/ButtonWhite";
 import { useState } from "react";
-import ConsultList from "../../studentlobby/ConsultList.tsx";
+import ConsultList from "../../studentlobby/ConsultList";
 import { useSearchParams } from "react-router-dom";
-import useUserStore from "../../../stores/useUserStore.ts";
-import { Consult } from "../../../types/consults.ts";
+import useUserStore from "../../../stores/useUserStore";
+import { Consult } from "../../../types/consults";
 import { UserDetailInfo } from "../../../types/members";
 
 const ConsultModal = ({

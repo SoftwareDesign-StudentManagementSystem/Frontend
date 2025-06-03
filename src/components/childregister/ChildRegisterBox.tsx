@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import logoimg from "../../assets/logo.svg";
 import { useState } from "react";
-import { postFollow } from "../../apis/members.ts";
+import { postFollow } from "../../apis/members";
 import { useNavigate } from "react-router-dom";
 
 const ChildRegisterBox = () => {

@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import logoimg from "../../assets/logo.svg";
 import { useState } from "react";
-import { signup } from "../../apis/members.ts";
+import { signup } from "../../apis/members";
 import { useNavigate } from "react-router-dom";
-import { useLoading } from "../../stores/LoadingProvider.tsx"; // signup API import 추가
+import { useLoading } from "../../stores/LoadingProvider"; // signup API import 추가
 
 const SignUpBox = () => {
   const { showLoading, hideLoading } = useLoading();

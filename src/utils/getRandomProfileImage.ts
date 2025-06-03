@@ -1,4 +1,4 @@
-// src/utils/getRandomProfileImage.ts
+// src/utils/getRandomProfileImage
 
 import profile1 from "../assets/profile/profile1.png";
 import profile2 from "../assets/profile/profile2.png";

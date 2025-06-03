@@ -1,13 +1,13 @@
-import Modal from "../Modal.tsx";
+import Modal from "../Modal";
 import styled from "styled-components";
 
-import Card from "../../common/Card.tsx";
-import FeedbackList from "../../studentlobby/FeedbackList.tsx";
-import FeedBackAdd from "./FeedBackAdd.tsx";
-import ButtonWhite from "../../common/ButtonWhite.tsx";
+import Card from "../../common/Card";
+import FeedbackList from "../../studentlobby/FeedbackList";
+import FeedBackAdd from "./FeedBackAdd";
+import ButtonWhite from "../../common/ButtonWhite";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import useUserStore from "../../../stores/useUserStore.ts";
+import useUserStore from "../../../stores/useUserStore";
 import { UserDetailInfo } from "../../../types/members";
 import { Feedback } from "../../../types/feedback";
 

@@ -1,5 +1,5 @@
 import tokenInstance from "../apis/tokenInstance";
-import { Grade } from "../types/grades.ts";
+import { Grade } from "../types/grades";
 import { ApiResponse } from "../types/common";
 
 // ✅ 본인의 모든 성적 조회 [학생 권한]

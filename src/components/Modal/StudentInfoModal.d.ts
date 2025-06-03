@@ -1,4 +1,4 @@
-import { UserDetailInfo } from "../../types/members.ts";
+import { UserDetailInfo } from "../../types/members";
 declare const StudentInfoModal: ({ onClose, studentInfo, profileImage, }: {
     onClose: () => void;
     studentInfo?: UserDetailInfo;

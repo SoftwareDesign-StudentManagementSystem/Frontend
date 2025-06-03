@@ -1,4 +1,4 @@
-import { Consult } from "../../types/consults.ts";
+import { Consult } from "../../types/consults";
 declare const ConsultList: ({ studentId, onSelect, miniView, }: {
     studentId: number;
     onSelect?: (consult: Consult) => void;
