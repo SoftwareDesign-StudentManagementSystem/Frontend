@@ -20,3 +20,13 @@ export interface FollowRequestBody {
 export declare const postFollow: (body: FollowRequestBody) => Promise<ApiResponse>;
 export declare const postFollowAccept: (memberId: number) => Promise<ApiResponse>;
 export declare const getFilteredStudentList: (year: number, classId?: number, number?: number) => Promise<UserInfo[]>;
+export interface BasicUpdateForm {
+    password: string;
+    name: string;
+    phone: string;
+    email: string;
+    birthday: string;
+    schoolName: string;
+    gender: "MALE" | "FEMALE";
+}
+export declare const updateMemberInfo: (basicUpdateForm: BasicUpdateForm, imageFile?: File) => Promise<ApiResponse<string>>;

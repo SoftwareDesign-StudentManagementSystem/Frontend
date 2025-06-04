@@ -184,7 +184,9 @@ export default function StudentLobbyPage() {
         {openModal === "consult" && studentInfo && (
           <ConsultModal onClose={closeModal} studentInfo={studentInfo} />
         )}
-        {openModal === "attendance" && <AttendanceModal onClose={closeModal} />}
+        {openModal === "attendance" && studentInfo && (
+          <AttendanceModal onClose={closeModal} studentInfo={studentInfo} />
+        )}
         {openModal === "grade" && (
           <GradeModal
             onClose={closeModal}
@@ -269,7 +271,11 @@ export default function StudentLobbyPage() {
             //   <DropDownMenu options={options} onSelect={handleSelect} />
             // }
             contentChildren={
-              <AttendanceList studentId={Number(id)} miniview={true} />
+              <AttendanceList
+                studentId={Number(id)}
+                miniview={true}
+                selectedGrade={selectedYear}
+              />
             }
           />
         </div>

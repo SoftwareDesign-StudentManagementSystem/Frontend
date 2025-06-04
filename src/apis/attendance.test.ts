@@ -7,14 +7,9 @@ import {
   postAttendance,
   updateAttendance,
   deleteAttendance,
-} from "./attendance"; // 테스트 대상
-import {
-  AddAttendanceProps,
-  SemesterType,
-  UpdateAttendanceProps,
-} from "../types/attendance";
+} from "./attendance";
+import { AddAttendanceProps, UpdateAttendanceProps } from "../types/attendance";
 
-// Axios 인스턴스 mock
 jest.mock("../apis/tokenInstance", () => ({
   get: jest.fn(),
   post: jest.fn(),
@@ -48,36 +43,33 @@ describe("attendance API 함수들", () => {
   });
 
   it("내 필터 출결 조회 (학생)", async () => {
-    const mockContents = ["출결4"];
-    (tokenInstance.get as jest.Mock).mockResolvedValue({ data: mockContents });
+    const mockData = { ieduPage: { contents: ["출결4"] } };
+    (tokenInstance.get as jest.Mock).mockResolvedValue({ data: mockData });
 
-    const result = await getFilteredMyAttendance(
-      3,
-      "FIRST_SEMESTER" as SemesterType,
-    );
+    const result = await getFilteredMyAttendance(3, 1);
 
     expect(tokenInstance.get).toHaveBeenCalledWith(
       "/rest-api/v1/attendance/filter",
       {
-        params: { year: 3, semester: "FIRST_SEMESTER" },
+        params: { year: 3, semester: 1 },
       },
     );
-    expect(result).toEqual(mockContents);
+    expect(result).toEqual(["출결4"]);
   });
 
   it("학생 필터 출결 조회 (선생님/학부모)", async () => {
-    const mockContents = ["출결5"];
-    (tokenInstance.get as jest.Mock).mockResolvedValue({ data: mockContents });
+    const mockData = { ieduPage: { contents: ["출결5"] } };
+    (tokenInstance.get as jest.Mock).mockResolvedValue({ data: mockData });
 
-    const result = await getFilteredStudentAttendance(5, 3, "SECOND_SEMESTER");
+    const result = await getFilteredStudentAttendance(5, 3, 2);
 
     expect(tokenInstance.get).toHaveBeenCalledWith(
       "/rest-api/v1/attendance/filter/5",
       {
-        params: { year: 3, semester: "SECOND_SEMESTER" },
+        params: { year: 3, semester: 2 },
       },
     );
-    expect(result).toEqual(mockContents);
+    expect(result).toEqual(["출결5"]);
   });
 
   it("출결 생성 (postAttendance)", async () => {

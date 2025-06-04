@@ -13,11 +13,14 @@ import {
 } from "../../types/attendance";
 import { useLoading } from "../../stores/LoadingProvider";
 import useUserStore from "../../stores/useUserStore";
+// import { UserDetailInfo } from "../../types/members";
 
 interface Props {
   studentId: number;
+  selectedGrade: number;
   selectedMonth?: string;
   miniview?: boolean;
+  // studentInfo?: UserDetailInfo;
   canEdit?: boolean;
 }
 
@@ -30,15 +33,22 @@ const parseMonthFromLabel = (label: string): number => {
   return parseInt(label.replace("월", ""), 10);
 };
 
-const getCurrentSemester = (): SemesterType => {
-  const month = new Date().getMonth() + 1;
-  return month <= 8 ? "FIRST_SEMESTER" : "SECOND_SEMESTER";
+const getCurrentSemester = (month: number): number => {
+  if (month >= 3 && month <= 7) {
+    return 1;
+  } else if (month >= 9 && month <= 12) {
+    return 2;
+  } else {
+    throw new Error("유효하지 않은 학기 범위입니다.");
+  }
 };
 
 const AttendanceList = ({
   studentId,
+  selectedGrade,
   selectedMonth = getCurrentMonthLabel(), // ✅ 현재월로 기본값 설정
   miniview,
+  // studentInfo,
   canEdit = false,
 }: Props) => {
   const [attendanceData, setAttendanceData] = useState<
@@ -61,16 +71,19 @@ const AttendanceList = ({
         if (!miniview) showLoading();
         else setLoading(true);
 
-        const currentYear = new Date().getFullYear();
-        const currentSemester = getCurrentSemester();
         const month = parseMonthFromLabel(selectedMonth); // ✅ 여기서 숫자로 변환
+        const currentSemester = getCurrentSemester(month);
 
         const data =
           userInfo.role === "ROLE_STUDENT"
-            ? await getFilteredMyAttendance(currentYear, currentSemester, month)
+            ? await getFilteredMyAttendance(
+                selectedGrade,
+                currentSemester,
+                month,
+              )
             : await getFilteredStudentAttendance(
                 studentId,
-                currentYear,
+                selectedGrade,
                 currentSemester,
                 month,
               );
@@ -108,7 +121,7 @@ const AttendanceList = ({
     };
 
     fetchAttendance();
-  }, [studentId, userInfo.role, selectedMonth]);
+  }, [studentId, userInfo.role, selectedMonth, selectedGrade]);
   const attendanceStates: AttendanceState[] = ["출석", "결석", "지각", "조퇴"];
 
   const getNextState = (current: AttendanceState | ""): AttendanceState => {

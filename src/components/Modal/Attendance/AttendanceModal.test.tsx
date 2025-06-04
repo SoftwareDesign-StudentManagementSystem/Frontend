@@ -46,6 +46,29 @@ jest.mock("react-router-dom", () => {
   };
 });
 
+import { UserDetailInfo } from "../../../types/members";
+
+const mockStudentInfo: UserDetailInfo = {
+  id: 1,
+  accountId: 101,
+  name: "홍길동",
+  phone: "010-1234-5678",
+  email: "hong@example.com",
+  birthday: "2012-05-07",
+  gender: "MALE",
+  profileImageUrl: null,
+  role: "ROLE_STUDENT",
+  schoolName: "테스트초등학교",
+  classId: 2,
+  number: 15,
+  subject: null,
+  year: 3,
+  childrenList: [],
+  parentList: [],
+  followReqList: [],
+  followRecList: [],
+};
+
 describe("AttendanceModal 컴포넌트", () => {
   beforeEach(() => {
     (ReactRouterDom.useSearchParams as jest.Mock).mockReturnValue([
@@ -58,7 +81,9 @@ describe("AttendanceModal 컴포넌트", () => {
   };
 
   it("모달과 관련 UI 요소가 정상적으로 렌더링되어야 함", () => {
-    renderWithRouter(<AttendanceModal onClose={jest.fn()} />);
+    renderWithRouter(
+      <AttendanceModal onClose={jest.fn()} studentInfo={mockStudentInfo} />,
+    );
 
     expect(screen.getAllByText("출결").length).toBeGreaterThan(0);
     expect(
@@ -68,11 +93,18 @@ describe("AttendanceModal 컴포넌트", () => {
   });
 
   it("드롭다운에서 월 선택 시 이벤트가 잘 반영되어야 함", () => {
-    renderWithRouter(<AttendanceModal onClose={jest.fn()} />);
+    renderWithRouter(
+      <AttendanceModal onClose={jest.fn()} studentInfo={mockStudentInfo} />,
+    );
 
-    const dropdown = screen.getByTestId("dropdown") as HTMLSelectElement;
-    fireEvent.change(dropdown, { target: { value: "5월" } });
+    // 모든 dropdown을 가져와 배열로 받기
+    const dropdowns = screen.getAllByTestId("dropdown");
 
-    expect(dropdown.value).toBe("5월");
+    // 월 선택 드롭다운은 두 번째라고 가정 (index 1)
+    const monthDropdown = dropdowns[1] as HTMLSelectElement;
+
+    fireEvent.change(monthDropdown, { target: { value: "5월" } });
+
+    expect(monthDropdown.value).toBe("5월");
   });
 });

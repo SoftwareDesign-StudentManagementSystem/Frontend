@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 interface LoadingContextType {
-    showLoading: () => void;
+    showLoading: (timeoutMs?: number) => void;
     hideLoading: () => void;
     isLoading: boolean;
 }

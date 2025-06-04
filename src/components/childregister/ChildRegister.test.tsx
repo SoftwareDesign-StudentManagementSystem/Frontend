@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import ChildRegisterBox from "./ChildRegisterBox";
 import { BrowserRouter } from "react-router-dom";
 import * as memberApi from "../../apis/members";
+import { LoadingProvider } from "../../stores/LoadingProvider";
 
 // navigate를 모킹합니다.
 const mockedNavigate = jest.fn();
@@ -21,7 +22,11 @@ describe("ChildRegisterBox", () => {
   const renderComponent = () => {
     return render(
       <BrowserRouter>
-        <ChildRegisterBox />
+        <LoadingProvider>
+          {" "}
+          {/* ✅ 필수 Provider로 감싸기 */}
+          <ChildRegisterBox />
+        </LoadingProvider>
       </BrowserRouter>,
     );
   };

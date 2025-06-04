@@ -1,5 +1,5 @@
-declare const ButtonDelete: ({ text, onClick, }: {
+declare const ButtonRed: ({ text, onClick, }: {
     text: string;
     onClick: () => void;
 }) => import("react/jsx-runtime").JSX.Element;
-export default ButtonDelete;
+export default ButtonRed;
