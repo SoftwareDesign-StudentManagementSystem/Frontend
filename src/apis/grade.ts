@@ -68,6 +68,7 @@ export const updateStudentGrade = async (
 // ✅ 학생 성적 삭제 [선생님 권한]
 export const deleteStudentGrade = async (gradeId: number): Promise<void> => {
   await tokenInstance.delete(`/rest-api/v1/grade/${gradeId}`);
+  console.log(gradeId);
 };
 
 // ✅ 기존 구현 (학년/학기)로 학생 성적 조회 [학부모/선생님 권한]

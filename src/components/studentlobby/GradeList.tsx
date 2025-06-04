@@ -75,6 +75,7 @@ const GradeList = ({
 
       const updated = await getStudentGrade(year, semester, studentId);
       setGrades(updated);
+      alert("성적 등록에 성공하였습니다. 목록에 업데이트는 시간이 소요됩니다.");
     } catch (err) {
       console.error("등록 실패", err);
     } finally {
@@ -151,7 +152,22 @@ const GradeList = ({
             </tr>
           ) : (
             displayedGrades.map(([subject, grade], index) => {
-              const subjectGrade = grade as unknown as SubjectGrade;
+              if (grade === null || grade === undefined) {
+                return (
+                  <tr key={subject}>
+                    <td>{subject}</td>
+                    <td
+                      colSpan={miniView ? 3 : 4}
+                      style={{ textAlign: "center", color: "#888" }}
+                    >
+                      유효하지 않은 성적 정보입니다.
+                    </td>
+                    {!miniView && <td></td>}
+                  </tr>
+                );
+              }
+
+              const subjectGrade = grade as SubjectGrade;
               const isEditing = editingSubject === index.toString();
 
               return (
@@ -165,30 +181,35 @@ const GradeList = ({
                         onChange={(e) => setEditingScore(e.target.value)}
                       />
                     ) : (
-                      `${subjectGrade.score} / ${subjectGrade.average}`
+                      `${subjectGrade.score ?? "-"} / ${subjectGrade.average ?? "-"}`
                     )}
                   </td>
-                  <td>{subjectGrade.achievementLevel}</td>
-                  <td>{subjectGrade.relativeRankGrade}</td>
+                  <td>{subjectGrade.achievementLevel ?? "-"}</td>
+                  <td>{subjectGrade.relativeRankGrade ?? "-"}</td>
                   {!miniView && (
                     <td>
                       {isEditing ? (
                         <button onClick={() => handleSaveEdit()}>💾</button>
                       ) : (
-                        // 수정 버튼: 교사가 해당 과목 담당일 때만 보임
                         userInfo.role === "ROLE_TEACHER" &&
                         userInfo.subject === subject && (
-                          <button
-                            onClick={() => {
-                              setEditingSubject(index.toString());
-                              setEditingScore(subjectGrade.score.toString());
-                            }}
-                          >
-                            ✏️
-                          </button>
+                          <>
+                            <button
+                              onClick={() => {
+                                setEditingSubject(index.toString());
+                                setEditingScore(
+                                  subjectGrade.score?.toString() ?? "",
+                                );
+                              }}
+                            >
+                              ✏️
+                            </button>
+                            <button onClick={() => handleDeleteGrade()}>
+                              🗑
+                            </button>
+                          </>
                         )
                       )}
-                      <button onClick={() => handleDeleteGrade()}>🗑</button>
                     </td>
                   )}
                 </tr>
@@ -207,7 +228,9 @@ const GradeList = ({
                     gap: "10px",
                   }}
                 >
-                  <div style={{ minWidth: "fit-content" }}>한국사</div>
+                  <div style={{ minWidth: "fit-content" }}>
+                    {userInfo.subject}
+                  </div>
                   <StyledInput
                     type="text"
                     value={newScore}
