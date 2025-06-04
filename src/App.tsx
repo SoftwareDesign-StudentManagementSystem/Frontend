@@ -11,6 +11,7 @@ import ChildRegisterPage from "./pages/ChildRegisterPage";
 import HomePage from "./pages/HomePage";
 import { LoadingProvider } from "./stores/LoadingProvider";
 import GlobalLoading from "./components/common/GlobalLoading";
+import StudentInfoByAdminPage from "./pages/StudentInfoByAdminPage";
 
 function App() {
   const location = useLocation();
@@ -72,6 +73,10 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/studentlobby" element={<StudentLobbyPage />} />
           <Route path="/childregister" element={<ChildRegisterPage />} />
+          <Route
+            path="/studentInfoByAdmin"
+            element={<StudentInfoByAdminPage />}
+          />
         </Route>
       </Routes>
     </>

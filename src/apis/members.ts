@@ -182,3 +182,47 @@ export const getFilteredStudentList = async (
     throw error;
   }
 };
+
+// 회원 정보 수정 요청용 타입
+export interface BasicUpdateForm {
+  password: string;
+  name: string;
+  phone: string;
+  email: string;
+  birthday: string;
+  schoolName: string;
+  gender: "MALE" | "FEMALE";
+}
+
+// 회원 정보 수정 API
+export const updateMemberInfo = async (
+  basicUpdateForm: BasicUpdateForm,
+  imageFile?: File, // 선택사항
+): Promise<ApiResponse<string>> => {
+  try {
+    const formData = new FormData();
+    formData.append(
+      "basicUpdateForm",
+      new Blob([JSON.stringify(basicUpdateForm)], { type: "application/json" }),
+    );
+
+    if (imageFile) {
+      formData.append("imageFile", imageFile);
+    }
+
+    const response = await tokenInstance.put<ApiResponse<string>>(
+      "/rest-api/v1/member/basic",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("회원 정보 수정 실패:", error);
+    throw new Error("회원 정보 수정 중 오류가 발생했습니다.");
+  }
+};

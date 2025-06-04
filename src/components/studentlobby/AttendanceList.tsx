@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import {
-  getAttendanceByStudent,
-  getMyAttendance,
+  getFilteredMyAttendance,
+  getFilteredStudentAttendance,
   updateAttendance,
 } from "../../apis/attendance";
 import {
@@ -12,7 +12,7 @@ import {
   UpdateAttendanceProps,
 } from "../../types/attendance";
 import { useLoading } from "../../stores/LoadingProvider";
-import useUserStore from "../../stores/useUserStore"; // ✅ 추가
+import useUserStore from "../../stores/useUserStore";
 
 interface Props {
   studentId: number;
@@ -21,12 +21,26 @@ interface Props {
   canEdit?: boolean;
 }
 
+// ⬇️ 현재월 구해서 기본값으로 사용
+const getCurrentMonthLabel = () => {
+  const now = new Date();
+  return `${now.getMonth() + 1}월`;
+};
+const parseMonthFromLabel = (label: string): number => {
+  return parseInt(label.replace("월", ""), 10);
+};
+
+const getCurrentSemester = (): SemesterType => {
+  const month = new Date().getMonth() + 1;
+  return month <= 8 ? "FIRST_SEMESTER" : "SECOND_SEMESTER";
+};
+
 const AttendanceList = ({
-                          studentId,
-                          selectedMonth = "전체",
-                          miniview,
-                          canEdit = false,
-                        }: Props) => {
+  studentId,
+  selectedMonth = getCurrentMonthLabel(), // ✅ 현재월로 기본값 설정
+  miniview,
+  canEdit = false,
+}: Props) => {
   const [attendanceData, setAttendanceData] = useState<
     {
       id: number;
@@ -47,19 +61,21 @@ const AttendanceList = ({
         if (!miniview) showLoading();
         else setLoading(true);
 
-        // ✅ 역할에 따라 다른 API 호출
+        const currentYear = new Date().getFullYear();
+        const currentSemester = getCurrentSemester();
+        const month = parseMonthFromLabel(selectedMonth); // ✅ 여기서 숫자로 변환
+
         const data =
           userInfo.role === "ROLE_STUDENT"
-            ? await getMyAttendance()
-            : await getAttendanceByStudent(studentId);
+            ? await getFilteredMyAttendance(currentYear, currentSemester, month)
+            : await getFilteredStudentAttendance(
+                studentId,
+                currentYear,
+                currentSemester,
+                month,
+              );
 
-        const filtered = data.filter((item) => {
-          if (!selectedMonth || selectedMonth === "전체") return true;
-          const month = new Date(item.date).getMonth() + 1;
-          return selectedMonth === `${month}월`;
-        });
-
-        const transformed = filtered
+        const transformed = data
           .sort(
             (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
           )
@@ -92,8 +108,7 @@ const AttendanceList = ({
     };
 
     fetchAttendance();
-  }, [studentId, selectedMonth, userInfo.role]);
-
+  }, [studentId, userInfo.role, selectedMonth]);
   const attendanceStates: AttendanceState[] = ["출석", "결석", "지각", "조퇴"];
 
   const getNextState = (current: AttendanceState | ""): AttendanceState => {
@@ -148,8 +163,8 @@ const AttendanceList = ({
 
   const convertState = (state: string) => {
     switch (state) {
-      case "출석":
-        return "O";
+      // case "출석":
+      //   return "";
       case "결석":
         return "🖤";
       case "지각":
@@ -157,7 +172,7 @@ const AttendanceList = ({
       case "조퇴":
         return "◎";
       default:
-        return "-";
+        return "O";
     }
   };
 
@@ -165,45 +180,45 @@ const AttendanceList = ({
     <AttendanceTableWrapper>
       <table>
         <thead>
-        <tr>
-          <th>날짜</th>
-          {[...Array(8)].map((_, i) => (
-            <th key={i}>{i + 1}교시</th>
-          ))}
-        </tr>
+          <tr>
+            <th>날짜</th>
+            {[...Array(8)].map((_, i) => (
+              <th key={i}>{i + 1}교시</th>
+            ))}
+          </tr>
         </thead>
         <tbody>
-        {loading ? (
-          <tr>
-            <td colSpan={9} className="nodata">
-              로딩 중...
-            </td>
-          </tr>
-        ) : attendanceData.length === 0 ? (
-          <tr>
-            <td colSpan={9} className="nodata">
-              출결 정보가 없습니다.
-            </td>
-          </tr>
-        ) : (
-          attendanceData.map((day, dayIndex) => (
-            <tr key={dayIndex}>
-              <td>{day.date}</td>
-              {day.periods.map((p, periodIndex) => (
-                <td
-                  key={periodIndex}
-                  onClick={() => handleCellClick(dayIndex, periodIndex)}
-                  style={{
-                    cursor: canEdit && !miniview ? "pointer" : "default",
-                    opacity: canEdit ? 1 : 0.6,
-                  }}
-                >
-                  {convertState(p.state)}
-                </td>
-              ))}
+          {loading ? (
+            <tr>
+              <td colSpan={9} className="nodata">
+                로딩 중...
+              </td>
             </tr>
-          ))
-        )}
+          ) : attendanceData.length === 0 ? (
+            <tr>
+              <td colSpan={9} className="nodata">
+                출결 정보가 없습니다.
+              </td>
+            </tr>
+          ) : (
+            attendanceData.map((day, dayIndex) => (
+              <tr key={dayIndex}>
+                <td>{day.date}</td>
+                {day.periods.map((p, periodIndex) => (
+                  <td
+                    key={periodIndex}
+                    onClick={() => handleCellClick(dayIndex, periodIndex)}
+                    style={{
+                      cursor: canEdit && !miniview ? "pointer" : "default",
+                      opacity: canEdit ? 1 : 0.6,
+                    }}
+                  >
+                    {convertState(p.state)}
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </AttendanceTableWrapper>

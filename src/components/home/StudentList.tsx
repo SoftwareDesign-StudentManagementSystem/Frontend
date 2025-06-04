@@ -3,6 +3,7 @@ import human from "../../assets/human.svg";
 import ButtonOrange from "../common/ButtonOrange";
 import { useNavigate } from "react-router-dom";
 import { UserInfo } from "../../types/members";
+import useUserStore from "../../stores/useUserStore";
 
 interface StudentListProps {
   students: UserInfo[];
@@ -10,6 +11,7 @@ interface StudentListProps {
 }
 
 const StudentList = ({ students, maxHeight = "400px" }: StudentListProps) => {
+  const { userInfo } = useUserStore();
   const navigate = useNavigate();
   return (
     <StudentListWrapper $maxHeight={maxHeight}>
@@ -24,6 +26,10 @@ const StudentList = ({ students, maxHeight = "400px" }: StudentListProps) => {
           <ButtonOrange
             text={"자세히 보기"}
             onClick={() => {
+              if (userInfo.role === "ROLE_ADMIN") {
+                navigate("/studentInfoByAdmin", { state: student }); // ← 여기에 state로 전달
+                return;
+              }
               navigate(`/studentlobby?id=${student.id}`);
             }}
           />

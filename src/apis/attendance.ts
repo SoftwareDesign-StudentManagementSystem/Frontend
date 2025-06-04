@@ -28,28 +28,50 @@ export const getMyAttendance = async (): Promise<Attendance[]> => {
   return response.data.ieduPage.contents;
 };
 
-// 3. (학년/학기)로 본인 출결 조회 (학생 권한)
+// 3. (학년/학기/월)로 본인 출결 조회 (학생 권한)
 export const getFilteredMyAttendance = async (
   year: number,
   semester: SemesterType,
+  month?: number,
 ): Promise<Attendance[]> => {
+  const semesterNumber = semester === "FIRST_SEMESTER" ? 1 : 2;
   const response = await tokenInstance.get<Attendance[]>(
     `/rest-api/v1/attendance/filter`,
-    { params: { year, semester } },
+    {
+      params: {
+        year,
+        semester: semesterNumber,
+        month,
+        page: 1,
+        size: 9999,
+      },
+    },
   );
   return response.data;
 };
 
-// 4. (학년/학기)로 특정 학생 출결 조회 (학부모/선생님 권한)
+// 4. (학년/학기/월)로 특정 학생 출결 조회 (학부모/선생님 권한)
 export const getFilteredStudentAttendance = async (
   studentId: number,
   year: number,
   semester: SemesterType,
+  month?: number,
 ): Promise<Attendance[]> => {
+  console.log(studentId, year, semester, month);
+
   const response = await tokenInstance.get<Attendance[]>(
     `/rest-api/v1/attendance/filter/${studentId}`,
-    { params: { year, semester } },
+    {
+      params: {
+        year,
+        semester: semester,
+        ...(month ? { month } : {}),
+        page: 1,
+        size: 9999,
+      },
+    },
   );
+
   return response.data;
 };
 

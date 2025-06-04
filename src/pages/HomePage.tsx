@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import ButtonWhite from "../components/common/ButtonWhite";
 import SlideBanner from "../components/home/SlideBanner";
 import { useLoading } from "../stores/LoadingProvider";
+import { getAdminMembersByRole } from "../apis/admin";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -43,11 +44,13 @@ export default function HomePage() {
 
   const [students, setStudents] = useState<UserInfo[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<UserInfo[]>([]);
+  const [parentList, setParentList] = useState<UserInfo[]>([]); // 추가
 
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
         showLoading();
+
         if (userInfo?.role === "ROLE_PARENT") {
           const res = await getMemberDetailInfo();
           console.log("getMemberDetailInfo", res.data);
@@ -58,6 +61,21 @@ export default function HomePage() {
           console.log(res);
           setStudents(res);
           setFilteredStudents(res);
+        } else if (userInfo?.role === "ROLE_ADMIN") {
+          const studentRes = await getAdminMembersByRole({
+            role: "ROLE_STUDENT",
+          });
+          const parentRes = await getAdminMembersByRole({
+            role: "ROLE_PARENT",
+          });
+
+          console.log("관리자용 전체 학생 목록", studentRes);
+          console.log("관리자용 전체 학부모 목록", parentRes);
+
+          setStudents(studentRes);
+          setParentList(parentRes);
+
+          setFilteredStudents(studentRes); // 기본은 학생 기준으로 필터링
         }
       } catch (error) {
         console.error("학생 데이터를 불러오는 중 오류 발생:", error);
@@ -137,6 +155,14 @@ export default function HomePage() {
               }}
             />
           </>
+        )}
+
+        {userInfo.role === "ROLE_ADMIN" && (
+          <Card
+            cardtitle={"학부모 리스트"}
+            headerChildren={<ListHeader />}
+            contentChildren={<StudentList students={parentList} />}
+          />
         )}
       </LeftContentWrapper>
 

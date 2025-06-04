@@ -3,6 +3,7 @@ import logoimg from "../../assets/logo.svg";
 import { useState } from "react";
 import { postFollow } from "../../apis/members";
 import { useNavigate } from "react-router-dom";
+import { useLoading } from "../../stores/LoadingProvider";
 
 const ChildRegisterBox = () => {
   const navigate = useNavigate();
@@ -13,6 +14,8 @@ const ChildRegisterBox = () => {
   const [birthyear, setBirthyear] = useState("");
   const [birthmonth, setBirthmonth] = useState("");
   const [birthday, setBirthday] = useState("");
+
+  const { showLoading, hideLoading } = useLoading();
 
   const handleSubmit = async () => {
     // 입력값 유효성 검사
@@ -65,6 +68,7 @@ const ChildRegisterBox = () => {
     };
 
     try {
+      showLoading();
       const response = await postFollow(reqBody);
       console.log(response);
       alert(
@@ -74,6 +78,8 @@ const ChildRegisterBox = () => {
     } catch (error) {
       console.error(error);
       alert("등록 중 오류가 발생했습니다.");
+    } finally {
+      hideLoading();
     }
   };
 

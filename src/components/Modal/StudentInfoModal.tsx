@@ -1,11 +1,7 @@
 import styled from "styled-components";
-// import 횃불이 from "../../assets/횃불이.svg";
 import { useState } from "react";
-import ButtonOrange from "../common/ButtonOrange";
-import ButtonRed from "../common/ButtonRed";
 import Modal from "./Modal";
 import { UserDetailInfo } from "../../types/members";
-import useUserStore from "../../stores/useUserStore";
 
 const StudentInfoModal = ({
   onClose,
@@ -33,7 +29,6 @@ const StudentInfoModal = ({
 export default StudentInfoModal;
 
 const StudentInfoModalContent = ({
-  onClose,
   studentInfo,
   profileImage,
 }: {
@@ -41,9 +36,8 @@ const StudentInfoModalContent = ({
   studentInfo?: UserDetailInfo;
   profileImage: string;
 }) => {
-  const { userInfo } = useUserStore(); // 로그인 사용자 정보
-  const isReadOnly =
-    userInfo?.role === "ROLE_STUDENT" || userInfo?.role === "ROLE_PARENT";
+  // const { userInfo } = useUserStore(); // 로그인 사용자 정보
+  const isReadOnly = true;
 
   const [name, setName] = useState(studentInfo?.name);
   const [grade, setGrade] = useState(studentInfo?.year?.toString() || "");
@@ -133,22 +127,6 @@ const StudentInfoModalContent = ({
             />
           </div>
         </HorizontalLineWrapper>
-
-        {(userInfo?.role === "ROLE_ADMIN" ||
-          userInfo?.role === "ROLE_TEACHER") && (
-          <HorizontalLineWrapper>
-            <ButtonRed
-              text={"학생 삭제"}
-              onClick={() => {
-                const isConfirmed = window.confirm("정말로 삭제하시겠어요?");
-                if (isConfirmed) {
-                  onClose(); // 삭제 작업 수행
-                }
-              }}
-            />
-            <ButtonOrange text={"학생 정보 수정"} onClick={onClose} />
-          </HorizontalLineWrapper>
-        )}
       </ContentRight>
     </ContentWrapper>
   );

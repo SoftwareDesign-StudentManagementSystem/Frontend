@@ -22,14 +22,14 @@ const AttendanceModalContent = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
-  // 🔹 월별 필터링 상태
-  const [selectedMonth, setSelectedMonth] = useState<string>("전체");
+  // 🔹 현재 월을 기본값으로 설정
+  const getCurrentMonthLabel = () => `${new Date().getMonth() + 1}월`;
+  const [selectedMonth, setSelectedMonth] = useState<string>(
+    getCurrentMonthLabel(),
+  );
 
-  // 🔹 월 옵션 (1~12월 + 전체)
-  const monthOptions = [
-    "전체",
-    ...Array.from({ length: 12 }, (_, i) => `${i + 1}월`),
-  ];
+  // 🔹 월 옵션 (1월 ~ 12월)
+  const monthOptions = Array.from({ length: 12 }, (_, i) => `${i + 1}월`);
 
   return (
     <AttendanceModalContentWrapper>
@@ -42,7 +42,7 @@ const AttendanceModalContent = () => {
             </div>
             <DropDownMenu
               options={monthOptions}
-              defaultSelected={"전체"}
+              defaultSelected={getCurrentMonthLabel()}
               onSelect={(option) => setSelectedMonth(option)}
             />
           </HeaderWrapper>
