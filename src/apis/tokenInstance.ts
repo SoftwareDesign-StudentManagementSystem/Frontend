@@ -46,7 +46,7 @@ tokenInstance.interceptors.response.use(
         if (!isTokenExpiredHandled) {
           isTokenExpiredHandled = true;
 
-          alert("로그인 정보가 만료되었습니다. 다시 로그인해 주세요.");
+          // alert("로그인 정보가 만료되었습니다. 다시 로그인해 주세요.");
           useUserStore
             .getState()
             .setTokenInfo({ accessToken: "", refreshToken: "" });
